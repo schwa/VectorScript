@@ -41,6 +41,7 @@ extension Document {
             effective.fontSize = nil
             effective.letterSpacing = nil
             effective.fontFile = nil
+            effective.lineHeight = nil
             return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
         case .text:
             effective.markerStart = nil

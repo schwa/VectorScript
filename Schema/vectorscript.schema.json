@@ -653,6 +653,11 @@
             },
             "markerEnd": {
               "$ref": "#/$defs/marker"
+            },
+            "lineHeight": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
             }
           }
         },
@@ -754,6 +759,11 @@
             },
             "markerEnd": {
               "$ref": "#/$defs/marker"
+            },
+            "lineHeight": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
             }
           }
         },
@@ -855,6 +865,11 @@
             },
             "markerEnd": {
               "$ref": "#/$defs/marker"
+            },
+            "lineHeight": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
             }
           }
         },
@@ -956,6 +971,11 @@
             },
             "markerEnd": {
               "$ref": "#/$defs/marker"
+            },
+            "lineHeight": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
             }
           }
         },
@@ -1054,6 +1074,11 @@
             },
             "markerEnd": {
               "$ref": "#/$defs/marker"
+            },
+            "lineHeight": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
             }
           }
         },
@@ -1152,6 +1177,11 @@
             },
             "markerEnd": {
               "$ref": "#/$defs/marker"
+            },
+            "lineHeight": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
             }
           }
         },
@@ -1248,6 +1278,11 @@
             },
             "markerEnd": {
               "$ref": "#/$defs/marker"
+            },
+            "lineHeight": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
             }
           }
         },
@@ -1346,6 +1381,11 @@
             },
             "markerEnd": {
               "$ref": "#/$defs/marker"
+            },
+            "lineHeight": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
             }
           }
         },
@@ -1445,6 +1485,11 @@
             },
             "markerEnd": {
               "$ref": "#/$defs/marker"
+            },
+            "lineHeight": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
             }
           }
         },
@@ -1457,7 +1502,8 @@
           ],
           "properties": {
             "text": {
-              "type": "string"
+              "type": "string",
+              "description": "The text; \\n starts a new line."
             },
             "at": {
               "$ref": "#/$defs/point"
@@ -1551,6 +1597,16 @@
             },
             "markerEnd": {
               "$ref": "#/$defs/marker"
+            },
+            "lineHeight": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+            },
+            "width": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "Wrap lines at word breaks to fit this many points."
             }
           }
         },

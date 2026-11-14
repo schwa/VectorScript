@@ -520,16 +520,19 @@ Line markers such as arrowheads are not supported.
 ## 29: No multi-line text
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:m, area:text
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T21:10:51Z
+closed: 2026-11-14T21:10:51Z
 +++
 
 Text cannot span lines or wrap.
+
+- `2026-11-14T21:10:51Z`: Newlines start lines, optional width wraps at word breaks with CTTypesetter, lineHeight style property (default 1.2); anchor applies per line.
 
 ---
 

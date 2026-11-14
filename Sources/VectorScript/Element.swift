@@ -41,8 +41,12 @@ public struct Element: Sendable, Equatable, Codable {
             allowed.insert("at")
             content = .use(Use(name: try container.decode(String.self, type), at: try container.decodeIfPresent(Point.self, "at")))
         case "text":
-            allowed.formUnion(["at", "anchor"])
-            content = .text(Text(string: try container.decode(String.self, type), at: try container.decode(Point.self, "at"), anchor: try container.decodeIfPresent(TextAnchor.self, "anchor") ?? .start))
+            allowed.formUnion(["at", "anchor", "width"])
+            let width = try container.decodeIfPresent(Double.self, "width")
+            if let width, width <= 0 {
+                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath + [AnyKey("width")], debugDescription: "a text width must be positive"))
+            }
+            content = .text(Text(string: try container.decode(String.self, type), at: try container.decode(Point.self, "at"), anchor: try container.decodeIfPresent(TextAnchor.self, "anchor") ?? .start, width: width))
         case "image":
             // Images have no fill or stroke, so style keys would do nothing.
             allowed = [type, "at", "size", "opacity", "transform", "clip", "mask", "blendMode"]
@@ -83,6 +87,7 @@ public struct Element: Sendable, Equatable, Codable {
             if text.anchor != .start {
                 try container.encode(text.anchor, "anchor")
             }
+            try container.encodeIfPresent(text.width, "width")
         case .image(let image):
             try container.encode(image.source, "image")
             if image.at != .zero {

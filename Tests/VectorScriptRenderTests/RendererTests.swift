@@ -329,6 +329,62 @@ struct RendererTests {
         #expect(abs(center - 100) <= 2)
     }
 
+    // Rows that have any ink.
+    func inkRows(_ bitmap: Bitmap) -> [Int] {
+        (0..<bitmap.height).filter { y in (0..<bitmap.width).contains { bitmap[$0, y][3] > 0 } }
+    }
+
+    // Runs of consecutive inked rows: one per line of text.
+    func lineBands(_ bitmap: Bitmap) -> [ClosedRange<Int>] {
+        var bands: [ClosedRange<Int>] = []
+        for row in inkRows(bitmap) {
+            if let last = bands.last, last.upperBound == row - 1 {
+                bands[bands.count - 1] = last.lowerBound...row
+            } else {
+                bands.append(row...row)
+            }
+        }
+        return bands
+    }
+
+    @Test
+    func `newlines start new lines a line height apart`() throws {
+        let bitmap = try render("{ size: [100, 100], elements: [{ text: 'HH\\nHH\\nHH', at: [10, 20], fontSize: 10, lineHeight: 2 }] }")
+        let bands = lineBands(bitmap)
+        #expect(bands.count == 3)
+        #expect(bands.count == 3 && abs(bands[1].upperBound - bands[0].upperBound - 20) <= 1)
+        #expect(bands.count == 3 && abs(bands[2].upperBound - bands[1].upperBound - 20) <= 1)
+    }
+
+    @Test
+    func `width wraps at word breaks`() throws {
+        let wide = try render("{ size: [300, 100], elements: [{ text: 'one two three four', at: [5, 20], fontSize: 12 }] }")
+        let narrow = try render("{ size: [300, 100], elements: [{ text: 'one two three four', at: [5, 20], fontSize: 12, width: 50 }] }")
+        #expect(lineBands(wide).count == 1)
+        #expect(lineBands(narrow).count >= 3)
+        let extent = try #require(inkExtent(narrow, rows: 0..<100))
+        #expect(extent.upperBound <= 5 + 50)
+    }
+
+    @Test
+    func `each wrapped line is anchored`() throws {
+        let bitmap = try render("{ size: [200, 100], elements: [{ text: 'HHHH HH', at: [100, 20], anchor: 'middle', fontSize: 12, width: 40 }] }")
+        let bands = lineBands(bitmap)
+        #expect(bands.count == 2)
+        for band in bands {
+            let extent = try #require(inkExtent(bitmap, rows: band.lowerBound..<(band.upperBound + 1)))
+            #expect(abs(Double(extent.lowerBound + extent.upperBound) / 2 - 100) <= 2)
+        }
+    }
+
+    func inkExtent(_ bitmap: Bitmap, rows: Range<Int>) -> ClosedRange<Int>? {
+        let inked = (0..<bitmap.width).filter { x in rows.contains { bitmap[x, $0][3] > 0 } }
+        guard let first = inked.first, let last = inked.last else {
+            return nil
+        }
+        return first...last
+    }
+
     @Test
     func `an unknown font is an error`() throws {
         let document = try Document(json: Data("{ size: [10, 10], elements: [{ text: 'A', at: [0, 5], font: 'NoSuchFont-Regular' }] }".utf8))

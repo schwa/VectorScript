@@ -105,6 +105,22 @@ struct DocumentTests {
     }
 
     @Test
+    func `decodes text width and line height`() throws {
+        let wrapped = try element("{ text: 'a\\nb', at: [0, 0], width: 80, lineHeight: 1.5 }")
+        #expect(wrapped.content == .text(Text(string: "a\nb", at: .zero, width: 80)))
+        #expect(wrapped.style.lineHeight == 1.5)
+        #expect(elementFailure("{ text: 'a', at: [0, 0], width: 0 }") == "elements[0].width: a text width must be positive")
+        let resolved = try document(elements: "{ group: [{ text: 'a', at: [0, 0] }, { rect: [0, 0, 1, 1] }], lineHeight: 2 }").resolved()
+        guard case .group(let children) = resolved.elements[0].content else {
+            Issue.record("not a group")
+            return
+        }
+        #expect(children[0].style.lineHeight == 2)
+        #expect(children[1].style.lineHeight == nil)
+        #expect(try Document(json: resolved.jsonData()) == resolved)
+    }
+
+    @Test
     func `decodes every blend mode`() throws {
         for mode in BlendMode.allCases {
             #expect(try element("{ circle: [0, 0, 1], blendMode: '\(mode.rawValue)' }").blendMode == mode)

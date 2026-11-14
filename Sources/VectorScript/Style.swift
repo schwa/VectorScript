@@ -27,11 +27,13 @@ public struct Style: Sendable, Equatable, Codable {
     public var letterSpacing: Double?
     // A font file (see FileReference). When set, `font` only picks a face inside it.
     public var fontFile: String?
+    // Distance between baselines, as a multiple of fontSize.
+    public var lineHeight: Double?
     public var markerStart: Marker?
     public var markerMid: Marker?
     public var markerEnd: Marker?
 
-    public init(fill: Paint? = nil, stroke: Paint? = nil, strokeWidth: Double? = nil, strokeCap: StrokeCap? = nil, strokeJoin: StrokeJoin? = nil, strokeMiterLimit: Double? = nil, strokeDash: [Double]? = nil, strokeDashOffset: Double? = nil, fillRule: FillRule? = nil, font: String? = nil, fontSize: Double? = nil, letterSpacing: Double? = nil, fontFile: String? = nil, markerStart: Marker? = nil, markerMid: Marker? = nil, markerEnd: Marker? = nil) {
+    public init(fill: Paint? = nil, stroke: Paint? = nil, strokeWidth: Double? = nil, strokeCap: StrokeCap? = nil, strokeJoin: StrokeJoin? = nil, strokeMiterLimit: Double? = nil, strokeDash: [Double]? = nil, strokeDashOffset: Double? = nil, fillRule: FillRule? = nil, font: String? = nil, fontSize: Double? = nil, letterSpacing: Double? = nil, fontFile: String? = nil, lineHeight: Double? = nil, markerStart: Marker? = nil, markerMid: Marker? = nil, markerEnd: Marker? = nil) {
         self.fill = fill
         self.stroke = stroke
         self.strokeWidth = strokeWidth
@@ -45,15 +47,16 @@ public struct Style: Sendable, Equatable, Codable {
         self.fontSize = fontSize
         self.letterSpacing = letterSpacing
         self.fontFile = fontFile
+        self.lineHeight = lineHeight
         self.markerStart = markerStart
         self.markerMid = markerMid
         self.markerEnd = markerEnd
     }
 
     // What the document root starts from.
-    public static let initial = Style(fill: .color(.black), stroke: Paint.none, strokeWidth: 1, strokeCap: .butt, strokeJoin: .miter, strokeMiterLimit: 4, strokeDash: [], strokeDashOffset: 0, fillRule: .nonzero, font: "Helvetica", fontSize: 16, letterSpacing: 0)
+    public static let initial = Style(fill: .color(.black), stroke: Paint.none, strokeWidth: 1, strokeCap: .butt, strokeJoin: .miter, strokeMiterLimit: 4, strokeDash: [], strokeDashOffset: 0, fillRule: .nonzero, font: "Helvetica", fontSize: 16, letterSpacing: 0, lineHeight: 1.2)
 
-    static let keys: Set<String> = ["fill", "stroke", "strokeWidth", "strokeCap", "strokeJoin", "strokeMiterLimit", "strokeDash", "strokeDashOffset", "fillRule", "font", "fontSize", "letterSpacing", "fontFile", "markerStart", "markerMid", "markerEnd"]
+    static let keys: Set<String> = ["fill", "stroke", "strokeWidth", "strokeCap", "strokeJoin", "strokeMiterLimit", "strokeDash", "strokeDashOffset", "fillRule", "font", "fontSize", "letterSpacing", "fontFile", "lineHeight", "markerStart", "markerMid", "markerEnd"]
 
     public var isEmpty: Bool {
         self == Style()
@@ -75,6 +78,7 @@ public struct Style: Sendable, Equatable, Codable {
             fontSize: fontSize ?? other.fontSize,
             letterSpacing: letterSpacing ?? other.letterSpacing,
             fontFile: fontFile ?? other.fontFile,
+            lineHeight: lineHeight ?? other.lineHeight,
             markerStart: markerStart ?? other.markerStart,
             markerMid: markerMid ?? other.markerMid,
             markerEnd: markerEnd ?? other.markerEnd
@@ -97,6 +101,7 @@ public struct Style: Sendable, Equatable, Codable {
         fontSize = try container.decodeIfPresent(Double.self, "fontSize")
         letterSpacing = try container.decodeIfPresent(Double.self, "letterSpacing")
         fontFile = try container.decodeIfPresent(String.self, "fontFile")
+        lineHeight = try container.decodeIfPresent(Double.self, "lineHeight")
         markerStart = try container.decodeIfPresent(Marker.self, "markerStart")
         markerMid = try container.decodeIfPresent(Marker.self, "markerMid")
         markerEnd = try container.decodeIfPresent(Marker.self, "markerEnd")
@@ -117,6 +122,7 @@ public struct Style: Sendable, Equatable, Codable {
         try container.encodeIfPresent(fontSize, "fontSize")
         try container.encodeIfPresent(letterSpacing, "letterSpacing")
         try container.encodeIfPresent(fontFile, "fontFile")
+        try container.encodeIfPresent(lineHeight, "lineHeight")
         try container.encodeIfPresent(markerStart, "markerStart")
         try container.encodeIfPresent(markerMid, "markerMid")
         try container.encodeIfPresent(markerEnd, "markerEnd")

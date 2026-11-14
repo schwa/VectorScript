@@ -96,7 +96,7 @@ An element has one type key, which holds its main value.
 | path | `{ path: "M 0 0 L 10 0 Q 15 5 10 10 Z" }`: SVG path data, `M L H V C S Q T A Z`, absolute and relative |
 | group | `{ group: [elements] }` |
 | use | `{ use: "name", at: [x, y] }`: draws the element called `name` in `defs` |
-| text | `{ text: "Hi", at: [x, y], anchor: "middle" }`: one line. `at` is on the baseline; `anchor` is `start`, `middle` or `end` |
+| text | `{ text: "Hi", at: [x, y], anchor: "middle", width: 120 }`: `\n` starts a new line. `at` is on the first baseline; `anchor` (`start`, `middle` or `end`) places each line; `width`, if set, wraps lines at word breaks to fit |
 | image | `{ image: "wood.png", at: [x, y], size: [w, h] }`: a bitmap. See below |
 
 Every element can also have these keys:
@@ -115,6 +115,7 @@ Every element can also have these keys:
 | `font` | A system font's PostScript, family or full name. Default Helvetica. An unknown font is an error. | yes |
 | `fontSize` | number. Default 16. | yes |
 | `letterSpacing` | extra points between characters; negative tightens. Default 0. | yes |
+| `lineHeight` | distance between baselines, as a multiple of `fontSize`. Default 1.2. | yes |
 | `fontFile` | a font file (TTF, OTF, TTC), found like an image source. When set, `font` only picks a face in the file, and the first face is used when none matches. Makes text the same on every machine. | yes |
 | `markerStart`, `markerMid`, `markerEnd` | a marker, see below | yes |
 | `opacity` | 0...1, applied to the element as a whole | no |
@@ -151,6 +152,9 @@ shows the element, black hides it, and gray shows part of it. Transparent mask c
 In `alpha` mode only the opacity of the mask content counts. Like a clip, a mask is in the element's own
 coordinates. Its elements start from the default style. Luminance is computed from sRGB values. Masks are drawn
 at device resolution, and at 4 pixels per point in PDF output.
+
+Text is laid out by CoreText. Trailing spaces and the letter spacing after a line's last character do not count
+when a line is anchored.
 
 ## Examples
 

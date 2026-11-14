@@ -1,0 +1,7 @@
+{ size: [200, 120], background: "#fff", elements: [
+  { line: [100, 0, 100, 120], stroke: "#ccc" },
+  { text: "Line one\nLine two\nThree", at: [10, 20], fontSize: 12 },
+  { text: "Wrapped to a narrow width, centered line by line.", at: [150, 20], anchor: "middle", width: 80, fontSize: 11, fill: "#c33" },
+  { text: "Tight\nleading", at: [10, 85], fontSize: 14, lineHeight: 0.9, font: "Helvetica-Bold", fill: "#36c" },
+  { text: "end anchored\nlines", at: [190, 100], anchor: "end", fontSize: 10, letterSpacing: 1 }
+] }

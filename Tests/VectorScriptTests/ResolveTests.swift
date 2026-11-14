@@ -13,6 +13,7 @@ struct ResolveTests {
         expected.fontSize = nil
         expected.letterSpacing = nil
         expected.fontFile = nil
+        expected.lineHeight = nil
         #expect(resolved.elements[0].style == expected)
         #expect(resolved.isResolved)
     }
