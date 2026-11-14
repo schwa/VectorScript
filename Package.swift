@@ -12,6 +12,7 @@ let package = Package(
     products: [
         .library(name: "VectorScript", targets: ["VectorScript"]),
         .library(name: "VectorScriptRender", targets: ["VectorScriptRender"]),
+        .library(name: "VectorScriptSwiftUI", targets: ["VectorScriptSwiftUI"]),
         .executable(name: "vectorscript", targets: ["VectorScriptCLI"]),
     ],
     dependencies: [
@@ -33,6 +34,8 @@ let package = Package(
                 .product(name: "GoldenImage", package: "GoldenImage"),
             ]
         ),
+        .target(name: "VectorScriptSwiftUI", dependencies: ["VectorScript", "VectorScriptRender"]),
+        .testTarget(name: "VectorScriptSwiftUITests", dependencies: ["VectorScript", "VectorScriptSwiftUI"]),
         .executableTarget(
             name: "VectorScriptCLI",
             dependencies: [

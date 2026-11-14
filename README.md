@@ -26,6 +26,7 @@ It does much of what SVG does, in far less format. Path data uses the SVG path s
 | --- | --- |
 | `VectorScript` | The format: model types, JSON5 decoding and encoding, path and transform parsers, `resolved()`. No CoreGraphics. |
 | `VectorScriptRender` | Draws documents with CoreGraphics and CoreText. Writes PNG, JPEG and PDF. |
+| `VectorScriptSwiftUI` | `VectorScriptView`: shows a document in SwiftUI, drawn as vectors at the view's size. |
 | `vectorscript` | The command line tool. |
 
 ```swift
@@ -35,6 +36,16 @@ import VectorScriptRender
 let document = try Document(contentsOf: url)
 let image = try Renderer(document: document).cgImage(scale: 2)
 ```
+
+```swift
+import VectorScriptSwiftUI
+
+VectorScriptView(contentsOf: url)
+    .frame(width: 256, height: 256)
+```
+
+`VectorScriptView` draws with the CoreGraphics renderer in a `Canvas`, so it supports every feature. Its ideal size is
+the document's size. Errors (a bad file, a missing image or font) show in the view.
 
 ## Command line
 

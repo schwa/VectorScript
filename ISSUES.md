@@ -722,16 +722,19 @@ ModelScript (~/Projects/Scratch/ModelScript) has no textures or UVs and cannot r
 ## 40: No SwiftUI renderer
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:m, area:render
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T21:12:26Z
+closed: 2026-11-14T21:12:26Z
 +++
 
 Documents can only be drawn through CoreGraphics; there is no SwiftUI view or GraphicsContext renderer.
+
+- `2026-11-14T21:12:26Z`: VectorScriptSwiftUI product with VectorScriptView: a Canvas that draws through the CoreGraphics renderer via withCGContext, so every feature works and it stays vector at any size. No separate renderer written against GraphicsContext's own drawing calls; that would duplicate the CoreGraphics one.
 
 ---
 
