@@ -113,6 +113,7 @@ Every element can also have these keys:
 | `fillRule` | `nonzero`, `evenodd` | yes |
 | `font` | A system font's PostScript, family or full name. Default Helvetica. An unknown font is an error. | yes |
 | `fontSize` | number. Default 16. | yes |
+| `letterSpacing` | extra points between characters; negative tightens. Default 0. | yes |
 | `opacity` | 0...1, applied to the element as a whole | no |
 | `transform` | see below | no |
 | `clip` | a shape: `{ circle: [...] }`, `{ path: "...", fillRule: "evenodd" }` | no |

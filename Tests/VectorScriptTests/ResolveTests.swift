@@ -11,6 +11,7 @@ struct ResolveTests {
         var expected = Style.initial
         expected.font = nil
         expected.fontSize = nil
+        expected.letterSpacing = nil
         #expect(resolved.elements[0].style == expected)
         #expect(resolved.isResolved)
     }
@@ -39,6 +40,19 @@ struct ResolveTests {
         }
         #expect(children[0].style.font == "Menlo")
         #expect(children[0].style.fontSize == 9)
+    }
+
+    @Test
+    func `letter spacing inherits and defaults to zero`() throws {
+        let resolved = try document(elements: "{ group: [{ text: 'A', at: [0, 0] }, { circle: [0, 0, 1] }], letterSpacing: 2 }, { text: 'B', at: [0, 0] }").resolved()
+        guard case .group(let children) = resolved.elements[0].content else {
+            Issue.record("not a group")
+            return
+        }
+        #expect(children[0].style.letterSpacing == 2)
+        #expect(children[1].style.letterSpacing == nil)
+        #expect(resolved.elements[1].style.letterSpacing == 0)
+        #expect(try Document(json: resolved.jsonData()) == resolved)
     }
 
     @Test

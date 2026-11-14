@@ -219,6 +219,33 @@ struct RendererTests {
         #expect(bitmap[50, 35][3] == 0)
     }
 
+    // The x range covered by ink in row `y`.
+    func inkExtent(_ bitmap: Bitmap, row y: Int) -> ClosedRange<Int>? {
+        let inked = (0..<bitmap.width).filter { bitmap[$0, y][3] > 0 }
+        guard let first = inked.first, let last = inked.last else {
+            return nil
+        }
+        return first...last
+    }
+
+    @Test
+    func `letter spacing widens text`() throws {
+        let plain = try render("{ size: [200, 40], elements: [{ text: 'HHHH', at: [10, 30], fontSize: 20 }] }")
+        let spaced = try render("{ size: [200, 40], elements: [{ text: 'HHHH', at: [10, 30], fontSize: 20, letterSpacing: 10 }] }")
+        let plainExtent = try #require(inkExtent(plain, row: 20))
+        let spacedExtent = try #require(inkExtent(spaced, row: 20))
+        // Three gaps of 10 points each.
+        #expect(abs(spacedExtent.count - plainExtent.count - 30) <= 2)
+    }
+
+    @Test
+    func `letter spacing keeps middle anchored text centered`() throws {
+        let bitmap = try render("{ size: [200, 40], elements: [{ text: 'HHHH', at: [100, 30], anchor: 'middle', fontSize: 20, letterSpacing: 12 }] }")
+        let extent = try #require(inkExtent(bitmap, row: 20))
+        let center = Double(extent.lowerBound + extent.upperBound) / 2
+        #expect(abs(center - 100) <= 2)
+    }
+
     @Test
     func `an unknown font is an error`() throws {
         let document = try Document(json: Data("{ size: [10, 10], elements: [{ text: 'A', at: [0, 5], font: 'NoSuchFont-Regular' }] }".utf8))

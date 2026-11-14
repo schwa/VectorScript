@@ -30,6 +30,7 @@ extension Document {
         case .shape:
             effective.font = nil
             effective.fontSize = nil
+            effective.letterSpacing = nil
             return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask)
         case .text:
             return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask)

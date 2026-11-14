@@ -30,6 +30,6 @@ struct GoldenTests {
 
     @Test
     func `there is a golden case for every feature area`() {
-        #expect(Set(Self.cases) == ["clipping", "images", "masks", "paint", "paths", "patterns", "shapes", "strokes", "structure", "text", "transforms"])
+        #expect(Set(Self.cases) == ["clipping", "images", "letter-spacing", "masks", "paint", "paths", "patterns", "shapes", "strokes", "structure", "text", "transforms"])
     }
 }

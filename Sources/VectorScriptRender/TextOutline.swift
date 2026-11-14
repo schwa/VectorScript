@@ -8,7 +8,12 @@ extension Text {
     func cgPath(style: Style) throws -> CGPath {
         let name = style.font ?? "Helvetica"
         let font = try Self.font(named: name, size: style.fontSize ?? 16)
-        let attributed = NSAttributedString(string: string, attributes: [NSAttributedString.Key(kCTFontAttributeName as String): font])
+        let attributed = NSMutableAttributedString(string: string, attributes: [NSAttributedString.Key(kCTFontAttributeName as String): font])
+        if let spacing = style.letterSpacing, spacing != 0, let last = string.indices.last {
+            // Space after every character but the last, so anchors measure the visible line.
+            let length = NSRange(string.startIndex..<last, in: string).length
+            attributed.addAttribute(NSAttributedString.Key(kCTKernAttributeName as String), value: spacing, range: NSRange(location: 0, length: length))
+        }
         let line = CTLineCreateWithAttributedString(attributed)
         let width = CTLineGetTypographicBounds(line, nil, nil, nil)
         let startX: Double = switch anchor {

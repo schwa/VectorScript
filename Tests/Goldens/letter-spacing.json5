@@ -1,0 +1,8 @@
+{ size: [200, 120], background: "#fff", elements: [
+  { line: [100, 0, 100, 120], stroke: "#ccc" },
+  { group: [
+      { text: "TIGHT", at: [100, 30], anchor: "middle", letterSpacing: -2 },
+      { text: "NORMAL", at: [100, 65], anchor: "middle" },
+      { text: "WIDE", at: [100, 100], anchor: "middle", letterSpacing: 8, fill: "#c33" }
+    ], font: "Helvetica-Bold", fontSize: 20 }
+] }

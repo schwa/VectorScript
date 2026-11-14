@@ -547,16 +547,19 @@ Text cannot use a font from a file, so output depends on the fonts installed on 
 ## 31: No letter spacing
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:xs, area:text
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T20:56:44Z
+closed: 2026-11-14T20:56:44Z
 +++
 
 Text cannot set letter spacing.
+
+- `2026-11-14T20:56:44Z`: letterSpacing style property (inherited, default 0), applied with CoreText kerning between characters.
 
 ---
 

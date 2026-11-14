@@ -14,6 +14,7 @@
 
     { text: "Georgia", at: [20, 160], font: "Georgia", fontSize: 26, fill: "#3b8fd9" },
     { text: "Menlo", at: [200, 160], font: "Menlo-Bold", fontSize: 24, fill: "#4bb06a" },
+    { text: "LETTER SPACING", at: [340, 128], anchor: "end", font: "Helvetica", fontSize: 10, letterSpacing: 1.5, fill: "#888" },
     { text: "OUTLINE", at: [20, 205], font: "Helvetica-Bold", fontSize: 34, fill: "none", stroke: "#8a5cc2", strokeWidth: 1.5 },
     { text: "GRADIENT", at: [200, 205], font: "Helvetica-Bold", fontSize: 30,
       fill: { linearGradient: { from: [0, 0], to: [0, 1], stops: [[0, "#ffd65a"], [1, "#d9483b"]] } }, stroke: "#5b1a8c", strokeWidth: 1 },

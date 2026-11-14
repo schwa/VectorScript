@@ -23,8 +23,10 @@ public struct Style: Sendable, Equatable, Codable {
     public var fillRule: FillRule?
     public var font: String?
     public var fontSize: Double?
+    // Extra points between characters; negative tightens.
+    public var letterSpacing: Double?
 
-    public init(fill: Paint? = nil, stroke: Paint? = nil, strokeWidth: Double? = nil, strokeCap: StrokeCap? = nil, strokeJoin: StrokeJoin? = nil, strokeMiterLimit: Double? = nil, strokeDash: [Double]? = nil, strokeDashOffset: Double? = nil, fillRule: FillRule? = nil, font: String? = nil, fontSize: Double? = nil) {
+    public init(fill: Paint? = nil, stroke: Paint? = nil, strokeWidth: Double? = nil, strokeCap: StrokeCap? = nil, strokeJoin: StrokeJoin? = nil, strokeMiterLimit: Double? = nil, strokeDash: [Double]? = nil, strokeDashOffset: Double? = nil, fillRule: FillRule? = nil, font: String? = nil, fontSize: Double? = nil, letterSpacing: Double? = nil) {
         self.fill = fill
         self.stroke = stroke
         self.strokeWidth = strokeWidth
@@ -36,12 +38,13 @@ public struct Style: Sendable, Equatable, Codable {
         self.fillRule = fillRule
         self.font = font
         self.fontSize = fontSize
+        self.letterSpacing = letterSpacing
     }
 
     // What the document root starts from.
-    public static let initial = Style(fill: .color(.black), stroke: Paint.none, strokeWidth: 1, strokeCap: .butt, strokeJoin: .miter, strokeMiterLimit: 4, strokeDash: [], strokeDashOffset: 0, fillRule: .nonzero, font: "Helvetica", fontSize: 16)
+    public static let initial = Style(fill: .color(.black), stroke: Paint.none, strokeWidth: 1, strokeCap: .butt, strokeJoin: .miter, strokeMiterLimit: 4, strokeDash: [], strokeDashOffset: 0, fillRule: .nonzero, font: "Helvetica", fontSize: 16, letterSpacing: 0)
 
-    static let keys: Set<String> = ["fill", "stroke", "strokeWidth", "strokeCap", "strokeJoin", "strokeMiterLimit", "strokeDash", "strokeDashOffset", "fillRule", "font", "fontSize"]
+    static let keys: Set<String> = ["fill", "stroke", "strokeWidth", "strokeCap", "strokeJoin", "strokeMiterLimit", "strokeDash", "strokeDashOffset", "fillRule", "font", "fontSize", "letterSpacing"]
 
     public var isEmpty: Bool {
         self == Style()
@@ -60,7 +63,8 @@ public struct Style: Sendable, Equatable, Codable {
             strokeDashOffset: strokeDashOffset ?? other.strokeDashOffset,
             fillRule: fillRule ?? other.fillRule,
             font: font ?? other.font,
-            fontSize: fontSize ?? other.fontSize
+            fontSize: fontSize ?? other.fontSize,
+            letterSpacing: letterSpacing ?? other.letterSpacing
         )
     }
 
@@ -78,6 +82,7 @@ public struct Style: Sendable, Equatable, Codable {
         fillRule = try container.decodeIfPresent(FillRule.self, "fillRule")
         font = try container.decodeIfPresent(String.self, "font")
         fontSize = try container.decodeIfPresent(Double.self, "fontSize")
+        letterSpacing = try container.decodeIfPresent(Double.self, "letterSpacing")
     }
 
     public func encode(to encoder: any Encoder) throws {
@@ -93,5 +98,6 @@ public struct Style: Sendable, Equatable, Codable {
         try container.encodeIfPresent(fillRule, "fillRule")
         try container.encodeIfPresent(font, "font")
         try container.encodeIfPresent(fontSize, "fontSize")
+        try container.encodeIfPresent(letterSpacing, "letterSpacing")
     }
 }
