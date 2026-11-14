@@ -683,15 +683,16 @@ A resolved document expands every use, so repeated content is duplicated instead
 status: open
 priority: high
 kind: feature
-labels: effort:l, area:interop
+labels: effort:l, area:interop, needs-design
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T20:43:52Z
 +++
 
 ModelScript (~/Projects/Scratch/ModelScript) has no textures or UVs and cannot reference VectorScript graphics.
 
 - `2026-11-14T19:52:23Z`: Related: #33 (parameters), which would let ModelScript pass values into textures.
+- `2026-11-14T20:43:52Z`: Investigated ModelScript: meshes carry only per-corner palette colors (palette index plus a shading tag packed into alpha), materials hold opacity, metallic and roughness, and there are no UVs anywhere: not in SwiftMesh solids, CSG, or the GLB writer. Punting: using VectorScript textures first needs a UV and texture-mapping design in ModelScript. Questions: (1) How should UVs be produced: per-primitive mapping, a projection set on the palette entry (planar, box or cylindrical, with scale and offset), or both? (2) Should a palette entry reference a VectorScript file (for example "hull": { "texture": "plating.json5", "size": 512 }) that is rendered and embedded in the .glb as a PNG? (3) Must UVs survive CSG booleans, or is projection after CSG enough?
 
 ---
 
