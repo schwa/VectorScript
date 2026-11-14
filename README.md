@@ -57,6 +57,9 @@ vectorscript render panel.json5 --size 1024x1024   # replaces the document size
 vectorscript validate *.json5                      # exits 1 on any error
 vectorscript resolve panel.json5                   # prints the resolved document
 vectorscript render panel.json5 --set SIZE=512 --set PLATE=#5b7c99   # override parameters
+vectorscript render spin.json5 --animate -o spin.gif      # every frame: animated GIF, or .png for animated PNG
+vectorscript render spin.json5 --frames frames/          # every frame as frame-0001.png, ...
+vectorscript render spin.json5 --time 1.5 -o still.png   # one frame
 ```
 
 Errors name the place in the file: `panel.json5: elements[3].fill: unknown color 'redd'`.
@@ -191,7 +194,7 @@ when a line is anchored.
 
 ## Examples
 
-`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`, `images`, `blend-modes`, `markers`, `filters`, `parameters`,
+`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`, `images`, `blend-modes`, `markers`, `filters`, `parameters`, `animation`,
 `structure`, `transforms`, `clipping`, `text` and `viewbox`. It also has some textures: `brick-wall`,
 `circuit-board` and `hazard-panel`.
 
@@ -284,6 +287,9 @@ clamped: `easeIn`, `easeOut`, `easeInOut` and `smoothstep`. `fract(x)` is the pa
 `"lerp(10, 90, easeInOut(pingpong($TIME / $DURATION * 2)))"` moves from 10 to 90 and back, easing at both ends.
 
 `DocumentSource(contentsOf:)` keeps the JSON so that `document(at: time)` can read the document at any time.
+`frames()`, `writeAnimation(to:format:)` and `writeFrames(to:)` render every frame. A looping animation's
+frames run from time 0 up to one step before the duration, so the loop does not repeat a frame. A
+non-looping animation also includes the last frame, at the duration.
 
 ### Resolved documents
 

@@ -862,16 +862,19 @@ Animated expressions need easing curves written out by hand. Expected: easing fu
 ## 46: Animated documents cannot be rendered to animations
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:m, area:render, subtask
 depends: 44
 created: 2026-11-14T21:49:37Z
-updated: 2026-11-14T21:49:48Z
+updated: 2026-11-14T21:54:18Z
+closed: 2026-11-14T21:54:18Z
 +++
 
 The renderer and CLI draw one still image. Expected: frames at each time step, written as an animated PNG, an animated GIF, or numbered PNG frames. Part of #34.
+
+- `2026-11-14T21:54:18Z`: DocumentSource.frames, writeAnimation (animated PNG or GIF) and writeFrames; CLI render --animate, --frames DIR and --time; GIF still output.
 
 ---
 

@@ -51,6 +51,17 @@ struct ParameterOptions: ParsableArguments {
     }
 }
 
+func loadSource(_ path: String, parameters: ParameterOptions) throws -> DocumentSource {
+    let values = try parameters.parameters()
+    do {
+        return try DocumentSource(contentsOf: URL(filePath: path), parameters: values)
+    } catch let error as DocumentError {
+        throw Failure(description: "\(path): \(error)")
+    } catch {
+        throw Failure(description: "\(path): \(error.localizedDescription)")
+    }
+}
+
 func load(_ path: String, parameters: ParameterOptions = ParameterOptions()) throws -> Document {
     let values = try parameters.parameters()
     do {
@@ -63,7 +74,7 @@ func load(_ path: String, parameters: ParameterOptions = ParameterOptions()) thr
 }
 
 struct Render: ParsableCommand {
-    static let configuration = CommandConfiguration(abstract: "Render a document to PNG, JPEG or PDF.")
+    static let configuration = CommandConfiguration(abstract: "Render a document to PNG, JPEG, GIF or PDF, or an animated document to an animated PNG or GIF.")
 
     @Argument(help: "The input .json or .json5 file.")
     var input: String
@@ -71,8 +82,17 @@ struct Render: ParsableCommand {
     @Option(name: .shortAndLong, help: "Output file. Default: the input with the format's extension.")
     var output: String?
 
-    @Option(help: "Output format: png, jpeg or pdf. Default: from the output extension, else png.")
+    @Option(help: "Output format: png, jpeg, gif or pdf. Default: from the output extension, else png.")
     var format: OutputFormat?
+
+    @Flag(help: "Write every frame of an animated document as one animated PNG or GIF.")
+    var animate = false
+
+    @Option(help: ArgumentHelp("Write every frame of an animated document as numbered PNGs in this directory.", valueName: "directory"))
+    var frames: String?
+
+    @Option(help: "For a still image of an animated document: the time in seconds. Default 0.")
+    var time: Double = 0
 
     @Option(help: "Pixels per point (bitmap formats).")
     var scale: Double = 1
@@ -83,7 +103,26 @@ struct Render: ParsableCommand {
     @OptionGroup var parameters: ParameterOptions
 
     func run() throws {
-        let document = try load(input, parameters: parameters)
+        guard scale > 0 else {
+            throw Failure(description: "--scale must be positive")
+        }
+        let source = try loadSource(input, parameters: parameters)
+        if let frames {
+            let urls = try failing { try source.writeFrames(to: URL(filePath: frames), size: size?.size, scale: scale) }
+            print("\(urls.count) frames in \(frames)")
+            return
+        }
+        if animate {
+            let formatName = format?.rawValue ?? output.map { URL(filePath: $0).pathExtension } ?? "png"
+            guard let animationFormat = AnimationFormat(pathExtension: formatName) else {
+                throw Failure(description: "--animate writes png or gif, not \(formatName)")
+            }
+            let outputURL = output.map { URL(filePath: $0) } ?? URL(filePath: input).deletingPathExtension().appendingPathExtension(animationFormat.rawValue)
+            try failing { try source.writeAnimation(to: outputURL, format: animationFormat, size: size?.size, scale: scale) }
+            print(outputURL.path)
+            return
+        }
+        let document = try failing { try source.document(at: time) }
         let outputURL: URL
         let resolvedFormat: OutputFormat
         if let output {
@@ -99,15 +138,17 @@ struct Render: ParsableCommand {
             resolvedFormat = format ?? .png
             outputURL = URL(filePath: input).deletingPathExtension().appendingPathExtension(resolvedFormat.pathExtension)
         }
-        guard scale > 0 else {
-            throw Failure(description: "--scale must be positive")
-        }
+        try failing { try Renderer(document: document).write(to: outputURL, format: resolvedFormat, size: size?.size, scale: scale) }
+        print(outputURL.path)
+    }
+
+    // Names the input in errors.
+    private func failing<T>(_ body: () throws -> T) throws -> T {
         do {
-            try Renderer(document: document).write(to: outputURL, format: resolvedFormat, size: size?.size, scale: scale)
+            return try body()
         } catch {
             throw Failure(description: "\(input): \(error)")
         }
-        print(outputURL.path)
     }
 }
 

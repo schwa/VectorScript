@@ -72,6 +72,21 @@ struct CommandLineTests {
     }
 
     @Test
+    func `animates, writes frames and renders one time`() throws {
+        let input = try temporaryFile("spin.json5", contents: "{ animation: { duration: 1, fps: 5 }, size: [10, 10], elements: [{ rect: ['$TIME * 10', 0, 2, 2] }] }")
+        let directory = input.deletingLastPathComponent()
+        #expect(try run(["render", input.path, "--animate", "-o", directory.appending(path: "spin.gif").path]).status == 0)
+        let gif = try #require(CGImageSourceCreateWithURL(directory.appending(path: "spin.gif") as CFURL, nil))
+        #expect(CGImageSourceGetCount(gif) == 5)
+        let frames = try run(["render", input.path, "--frames", directory.appending(path: "frames").path])
+        #expect(frames.output.contains("5 frames"))
+        #expect(try run(["render", input.path, "--time", "0.5", "-o", directory.appending(path: "half.png").path]).status == 0)
+        let failed = try run(["render", input.path, "--animate", "-o", directory.appending(path: "spin.pdf").path])
+        #expect(failed.status != 0)
+        #expect(failed.output.contains("--animate writes png or gif"))
+    }
+
+    @Test
     func `validate reports the coding path and fails`() throws {
         let input = try temporaryFile("bad.json5", contents: "{ size: [4, 4], elements: [{ circle: [1, 1, 1], fil: 'red' }] }")
         let result = try run(["validate", input.path])

@@ -5,13 +5,14 @@ import UniformTypeIdentifiers
 import VectorScript
 
 public enum OutputFormat: String, Sendable, CaseIterable {
-    case png, jpeg, pdf
+    case png, jpeg, gif, pdf
 
     // The format for a file extension, if it is one this package writes.
     public init?(pathExtension: String) {
         switch pathExtension.lowercased() {
         case "png": self = .png
         case "jpg", "jpeg": self = .jpeg
+        case "gif": self = .gif
         case "pdf": self = .pdf
         default: return nil
         }
@@ -27,10 +28,14 @@ public extension Renderer {
         switch format {
         case .pdf:
             return try pdfData(size: size)
-        case .png, .jpeg:
+        case .png, .jpeg, .gif:
             let image = try cgImage(size: size, scale: scale)
             let data = NSMutableData()
-            let type = format == .png ? UTType.png : UTType.jpeg
+            let type: UTType = switch format {
+            case .jpeg: .jpeg
+            case .gif: .gif
+            default: .png
+            }
             guard let destination = CGImageDestinationCreateWithData(data as CFMutableData, type.identifier as CFString, 1, nil) else {
                 throw RenderError.cannotCreateImage
             }

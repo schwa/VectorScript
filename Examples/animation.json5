@@ -1,0 +1,36 @@
+// Animation: an animation block, and expressions that read $TIME (seconds) and $DURATION.
+// vectorscript render animation.json5 --animate -o animation.gif   (or .png for an animated PNG)
+// vectorscript render animation.json5 --frames frames/              (numbered PNGs)
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  animation: { duration: 3, fps: 30, loop: true },
+  parameters: {
+    T: "$TIME / $DURATION",
+    SWEEP: "$T * 360",
+    PULSE: "pingpong($T * 3)",
+    SLIDE: "lerp(40, 216, easeInOut(pingpong($T)))"
+  },
+  size: [256, 256],
+  background: "#0d1b12",
+  defs: {
+    glow: { radialGradient: { stops: [[0, "#5dff8a"], [1, "#5dff8a00"]] } }
+  },
+  elements: [
+    // A radar: rings, a turning sweep, and a blip that pulses.
+    { group: [
+        { circle: [128, 128, 100] }, { circle: [128, 128, 66] }, { circle: [128, 128, 33] },
+        { line: [28, 128, 228, 128] }, { line: [128, 28, 128, 228] }
+      ], fill: "none", stroke: "#1f5a32", strokeWidth: 1.5 },
+    { path: "M 128 128 L 228 128 A 100 100 0 0 0 198.7 57.3 Z",
+      fill: { linearGradient: { from: [0.6, 0], to: [0.9, 1], stops: [[0, "#5dff8a00"], [1, "#5dff8a99"]] } },
+      transform: "rotate({$SWEEP} 128 128)" },
+    { line: [128, 128, 228, 128], stroke: "#5dff8a", strokeWidth: 2, transform: "rotate({$SWEEP} 128 128)" },
+    { circle: [170, 95, "4 + 6 * $PULSE"], fill: "$glow", opacity: "1 - $PULSE * 0.6" },
+    { circle: [170, 95, 3], fill: "#bfffd0" },
+
+    // A bar that eases back and forth, and a counter of the frame's time.
+    { rect: [32, 236, 192, 6], radius: 3, fill: "#1f5a32" },
+    { circle: ["$SLIDE", 239, 6], fill: "#5dff8a", filter: { dropShadow: { blur: 3, color: "#5dff8a" } } },
+    { text: "SCAN", at: [32, 22], font: "Menlo-Bold", fontSize: 12, fill: "#5dff8a", opacity: "0.4 + 0.6 * step(fract($T * 4), 2)" }
+  ]
+}
