@@ -1,0 +1,35 @@
+// Pattern paints: a tile of elements that repeats. The tile is [0, 0, width, height] in the painted shape's
+// coordinates, clipped to that rectangle, and moved by its transform. Its elements start from the default style.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [360, 280],
+  background: "#fff",
+  defs: {
+    checker: { pattern: { size: [20, 20], elements: [
+        { rect: [0, 0, 20, 20], fill: "#eee" },
+        { rect: [0, 0, 10, 10], fill: "#bbb" },
+        { rect: [10, 10, 10, 10], fill: "#bbb" }
+      ] } },
+    // Diagonal stripes: horizontal stripes in a rotated tile.
+    hazard: { pattern: { size: [24, 24], transform: "rotate(45)", elements: [
+        { rect: [0, 0, 24, 24], fill: "#f2c230" },
+        { rect: [0, 0, 24, 12], fill: "#222" }
+      ] } },
+    dots: { pattern: { size: [16, 16], elements: [ { circle: [8, 8, 4], fill: "#3b8fd9" } ] } },
+    // Tiles can hold any element, including uses and other paints.
+    scales: { pattern: { size: [30, 15], elements: [
+        { rect: [0, 0, 30, 15], fill: "#0b5d4b" },
+        { path: "M 0 15 A 15 15 0 0 1 30 15 Z", fill: "$scale" },
+        { path: "M -15 0 A 15 15 0 0 1 15 0 Z M 15 0 A 15 15 0 0 1 45 0 Z", fill: "$scale" }
+      ] } },
+    scale: { linearGradient: { from: [0, 0], to: [0, 1], stops: [[0, "#2fa27e"], [1, "#0b5d4b"]] } }
+  },
+  elements: [
+    { rect: [20, 20, 150, 110], fill: "$checker" },
+    { rect: [190, 20, 150, 110], radius: 16, fill: "$hazard" },
+    { circle: [95, 200, 60], fill: "$dots", stroke: "#123", strokeWidth: 2 },
+    { rect: [190, 150, 150, 110], fill: "$scales" },
+    // A pattern on a stroke and on text.
+    { text: "TILE", at: [95, 212], anchor: "middle", font: "Helvetica-Bold", fontSize: 40, fill: "$hazard", stroke: "#000", strokeWidth: 1 }
+  ]
+}

@@ -45,13 +45,22 @@ extension Document {
     }
 
     private func resolve(_ paint: Paint?) throws(DocumentError) -> Paint? {
-        guard case .reference(let name) = paint else {
+        switch paint {
+        case .reference(let name):
+            guard case .paint(let definition) = defs[name] else {
+                throw .invalid(path: "", message: "no paint named '\(name)' in defs")
+            }
+            return try resolve(definition)
+        case .pattern(var pattern):
+            // Pattern contents start from the initial style, not from the element being painted.
+            pattern.elements = try pattern.elements.map { element throws(DocumentError) in
+                try resolve(element, inherited: .initial, overrides: Style())
+            }
+            pattern.transform = pattern.transform.map { Transform(matrix: $0.matrix) }
+            return .pattern(pattern)
+        default:
             return paint
         }
-        guard case .paint(let definition) = defs[name] else {
-            throw .invalid(path: "", message: "no paint named '\(name)' in defs")
-        }
-        return definition
     }
 
     public var isResolved: Bool {
@@ -90,8 +99,20 @@ extension Document {
                 throw fail("style is incomplete")
             }
             for paint in [fill, stroke] {
-                if case .reference = paint {
+                switch paint {
+                case .reference:
                     throw fail("paint is a reference")
+                case .pattern(let pattern):
+                    if let transform = pattern.transform {
+                        guard transform.operations.count == 1, case .matrix = transform.operations[0] else {
+                            throw fail("pattern transform is not one matrix")
+                        }
+                    }
+                    for (index, child) in pattern.elements.enumerated() {
+                        try checkResolved(child, path: "\(path).pattern.elements[\(index)]")
+                    }
+                default:
+                    break
                 }
             }
             if case .text = element.content {

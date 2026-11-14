@@ -188,6 +188,45 @@
               }
             }
           }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "pattern"
+          ],
+          "properties": {
+            "pattern": {
+              "type": "object",
+              "description": "A tile of elements, clipped to [0, 0, width, height] and repeated in the painted element's user space.",
+              "additionalProperties": false,
+              "required": [
+                "size",
+                "elements"
+              ],
+              "properties": {
+                "size": {
+                  "type": "array",
+                  "description": "[width, height] of one tile",
+                  "items": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "transform": {
+                  "$ref": "#/$defs/transform"
+                },
+                "elements": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/element"
+                  }
+                }
+              }
+            }
+          }
         }
       ]
     },

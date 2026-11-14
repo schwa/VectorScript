@@ -132,6 +132,39 @@ struct RendererTests {
     }
 
     @Test
+    func `patterns repeat their tile`() throws {
+        // A 10 x 10 tile with a red 5 x 5 square in its top left corner.
+        let bitmap = try render("{ size: [40, 20], elements: [{ rect: [0, 0, 40, 20], fill: { pattern: { size: [10, 10], elements: [{ rect: [0, 0, 5, 5], fill: 'red' }] } } }] }")
+        #expect(bitmap[2, 2] == red)
+        #expect(bitmap[32, 12] == red)
+        #expect(bitmap[7, 2] == clear)
+        #expect(bitmap[32, 17] == clear)
+    }
+
+    @Test
+    func `pattern tiles clip their contents`() throws {
+        let bitmap = try render("{ size: [20, 10], elements: [{ rect: [0, 0, 20, 10], fill: { pattern: { size: [10, 10], elements: [{ rect: [5, 0, 10, 10], fill: 'red' }] } } }] }")
+        #expect(bitmap[2, 5] == clear)
+        #expect(bitmap[7, 5] == red)
+        #expect(bitmap[12, 5] == clear)
+    }
+
+    @Test
+    func `pattern transforms move the tiles`() throws {
+        let bitmap = try render("{ size: [20, 20], elements: [{ rect: [0, 0, 20, 20], fill: { pattern: { size: [20, 20], transform: 'translate(10 10)', elements: [{ rect: [0, 0, 5, 5], fill: 'red' }] } } }] }")
+        #expect(bitmap[2, 2] == clear)
+        #expect(bitmap[12, 12] == red)
+    }
+
+    @Test
+    func `tiny pattern tiles are an error`() throws {
+        let document = try Document(json: Data("{ size: [1000, 1000], elements: [{ rect: [0, 0, 1000, 1000], fill: { pattern: { size: [0.5, 0.5], elements: [] } } }] }".utf8))
+        #expect(throws: RenderError.self) {
+            try Renderer(document: document).cgImage()
+        }
+    }
+
+    @Test
     func `a use clip ignores at`() throws {
         let bitmap = try render("{ size: [20, 20], defs: { box: { rect: [0, 0, 20, 20] } }, elements: [{ use: 'box', at: [5, 0], fill: 'red', clip: { rect: [0, 0, 10, 20] } }] }")
         #expect(bitmap[2, 10] == clear)

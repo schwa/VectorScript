@@ -403,18 +403,20 @@ README.md does not describe the format, and there are no files in Examples/. Eve
 ## 23: No pattern fills
 
 +++
-status: open
+status: closed
 priority: high
 kind: feature
 labels: effort:m, area:paint
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T20:43:32Z
+closed: 2026-11-14T20:43:32Z
 +++
 
 Tiled pattern paints are not supported.
 
 - `2026-11-14T19:52:23Z`: Related: needed for #37 (SVG lowering to VectorScript).
+- `2026-11-14T20:43:32Z`: Pattern paints: tile of elements, optional transform; CGPattern for PDF, pixel-grid tiling for bitmaps.
 
 ---
 

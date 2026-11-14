@@ -8,6 +8,7 @@ public enum RenderError: Error, Equatable, CustomStringConvertible {
     case cannotCreateContext
     case cannotCreateImage
     case cannotWrite(URL)
+    case tooManyPatternTiles(Int)
 
     public var description: String {
         switch self {
@@ -15,6 +16,7 @@ public enum RenderError: Error, Equatable, CustomStringConvertible {
         case .cannotCreateContext: "cannot create a drawing context"
         case .cannotCreateImage: "cannot create an image"
         case .cannotWrite(let url): "cannot write \(url.path)"
+        case .tooManyPatternTiles(let count): "a pattern needs \(count) tiles here (the limit is \(Renderer.maximumPatternTiles)); make its tile bigger"
         }
     }
 }
@@ -84,7 +86,7 @@ public struct Renderer: Sendable {
         return data as Data
     }
 
-    private func draw(_ element: Element, in context: CGContext) throws {
+    func draw(_ element: Element, in context: CGContext) throws {
         context.saveGState()
         defer {
             context.restoreGState()
@@ -109,9 +111,9 @@ public struct Renderer: Sendable {
         }
         switch element.content {
         case .shape(let shape):
-            paint(shape.cgPath, style: element.style, in: context)
+            try paint(shape.cgPath, style: element.style, in: context)
         case .text(let text):
-            paint(try text.cgPath(style: element.style), style: element.style, in: context)
+            try paint(try text.cgPath(style: element.style), style: element.style, in: context)
         case .group(let children):
             for child in children {
                 try draw(child, in: context)
@@ -121,10 +123,10 @@ public struct Renderer: Sendable {
         }
     }
 
-    private func paint(_ path: CGPath, style: Style, in context: CGContext) {
+    private func paint(_ path: CGPath, style: Style, in context: CGContext) throws {
         let fillRule = (style.fillRule ?? .nonzero).cgFillRule
         if let fill = style.fill {
-            paint(fill, area: path, bounds: path.boundingBoxOfPath, fillRule: fillRule, in: context)
+            try paint(fill, area: path, bounds: path.boundingBoxOfPath, fillRule: fillRule, in: context)
         }
         guard let stroke = style.stroke, stroke != .none, let width = style.strokeWidth, width > 0 else {
             return
@@ -143,11 +145,11 @@ public struct Renderer: Sendable {
         }
         context.beginPath()
         // Gradients on strokes map onto the shape's bounding box, as in SVG.
-        paint(stroke, area: outline, bounds: path.boundingBoxOfPath, fillRule: .winding, in: context)
+        try paint(stroke, area: outline, bounds: path.boundingBoxOfPath, fillRule: .winding, in: context)
         context.restoreGState()
     }
 
-    private func paint(_ paint: Paint, area: CGPath, bounds: CGRect, fillRule: CGPathFillRule, in context: CGContext) {
+    private func paint(_ paint: Paint, area: CGPath, bounds: CGRect, fillRule: CGPathFillRule, in context: CGContext) throws {
         switch paint {
         case .none, .reference:
             return
@@ -175,6 +177,8 @@ public struct Renderer: Sendable {
             Self.applyUnits(gradient.units, bounds: bounds, in: context)
             context.drawRadialGradient(cgGradient, startCenter: (gradient.focus ?? gradient.center).cgPoint, startRadius: 0, endCenter: gradient.center.cgPoint, endRadius: gradient.radius, options: [.drawsBeforeStartLocation, .drawsAfterEndLocation])
             context.restoreGState()
+        case .pattern(let pattern):
+            try fill(area, fillRule: fillRule, with: pattern, in: context)
         }
     }
 

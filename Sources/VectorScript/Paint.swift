@@ -3,10 +3,11 @@ public enum Paint: Sendable, Equatable, Codable {
     case color(Color)
     case linearGradient(LinearGradient)
     case radialGradient(RadialGradient)
+    case pattern(Pattern)
     // "$name": a paint in the document's defs.
     case reference(String)
 
-    static let typeKeys: Set<String> = ["linearGradient", "radialGradient"]
+    static let typeKeys: Set<String> = ["linearGradient", "radialGradient", "pattern"]
 
     public init(from decoder: any Decoder) throws {
         if let text = try? decoder.singleValueContainer().decode(String.self) {
@@ -22,10 +23,13 @@ public enum Paint: Sendable, Equatable, Codable {
         let container = try decoder.container(keyedBy: AnyKey.self)
         let type = try container.singleKey(from: Self.typeKeys, what: "a paint")
         try container.rejectUnknownKeys(allowed: [type])
-        if type == "linearGradient" {
+        switch type {
+        case "linearGradient":
             self = .linearGradient(try container.decode(LinearGradient.self, type))
-        } else {
+        case "radialGradient":
             self = .radialGradient(try container.decode(RadialGradient.self, type))
+        default:
+            self = .pattern(try container.decode(Pattern.self, type))
         }
     }
 
@@ -45,6 +49,9 @@ public enum Paint: Sendable, Equatable, Codable {
         case .radialGradient(let gradient):
             var container = encoder.container(keyedBy: AnyKey.self)
             try container.encode(gradient, "radialGradient")
+        case .pattern(let pattern):
+            var container = encoder.container(keyedBy: AnyKey.self)
+            try container.encode(pattern, "pattern")
         }
     }
 }

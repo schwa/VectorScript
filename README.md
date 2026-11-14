@@ -124,7 +124,7 @@ A clip is in the element's own coordinates, after its transform. On a `use`, `at
 
 ## Examples
 
-`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`,
+`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`,
 `structure`, `transforms`, `clipping`, `text` and `viewbox`. It also has some textures: `brick-wall`,
 `circuit-board` and `hazard-panel`.
 
@@ -142,6 +142,20 @@ A clip is in the element's own coordinates, after its transform. On a `use`, `at
 
 Gradient coordinates are fractions of the shape's bounding box. With `units: "user"` they are user space
 coordinates instead. Each stop is `[offset, color]`, with the offset in 0...1.
+
+* A pattern: a tile of elements that repeats.
+
+```json5
+{ pattern: { size: [20, 20], transform: "rotate(45)", elements: [
+    { rect: [0, 0, 20, 20], fill: "#fc3" },
+    { rect: [0, 0, 20, 10], fill: "#222" }
+] } }
+```
+
+The tile covers `[0, 0, width, height]` in the painted shape's user space, and its `transform` moves the tile.
+Anything outside the tile is clipped off. The elements in a tile start from the default style: they do not inherit
+from the shape that is painted. A pattern cannot use itself. Bitmaps draw the tiles on a pixel grid, so rotated
+tiles meet without seams. PDF output keeps the tiles as vectors.
 
 ### Transforms
 
