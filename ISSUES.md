@@ -881,16 +881,19 @@ The renderer and CLI draw one still image. Expected: frames at each time step, w
 ## 47: VectorScriptView does not animate
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:s, area:render, subtask
 depends: 44
 created: 2026-11-14T21:49:37Z
-updated: 2026-11-14T21:49:48Z
+updated: 2026-11-14T21:55:52Z
+closed: 2026-11-14T21:55:52Z
 +++
 
 VectorScriptView draws an animated document at time 0 only. Part of #34.
+
+- `2026-11-14T21:55:52Z`: VectorScriptView(source, time:) and (contentsOf:time:) play animated documents with TimelineView at the document's fps, or show a fixed time. The animation type is now DocumentAnimation, to avoid SwiftUI's Animation.
 
 ---
 

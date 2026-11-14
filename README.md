@@ -44,6 +44,10 @@ VectorScriptView(contentsOf: url)
     .frame(width: 256, height: 256)
 ```
 
+`VectorScriptView(contentsOf:)` and `VectorScriptView(source)` play an animated document, looping or holding the
+last frame as its `animation` block says. Pass `time:` to show one frame instead, for example to scrub.
+`VectorScriptView(document)` shows a still `Document`.
+
 `VectorScriptView` draws with the CoreGraphics renderer in a `Canvas`, so it supports every feature. Its ideal size is
 the document's size. Errors (a bad file, a missing image or font) show in the view.
 

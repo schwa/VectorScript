@@ -44,6 +44,29 @@ struct VectorScriptViewTests {
     }
 
     @Test
+    func `a fixed time shows that frame`() throws {
+        let source = try DocumentSource(json: Data("{ animation: { duration: 1 }, size: [20, 10], elements: [{ rect: ['$TIME * 20', 0, 5, 10], fill: 'red' }] }".utf8))
+        let (image, bytes) = try pixels(VectorScriptView(source, time: 0.5), size: CGSize(width: 20, height: 10))
+        #expect(pixel(bytes, width: image.width, x: 12, y: 5) == [255, 0, 0, 255])
+        #expect(pixel(bytes, width: image.width, x: 2, y: 5)[3] == 0)
+    }
+
+    @Test
+    func `a playing animation draws a frame`() throws {
+        // ImageRenderer takes one snapshot of the timeline; it should show the animated content, not an error.
+        let source = try DocumentSource(json: Data("{ animation: { duration: 1 }, size: [20, 10], elements: [{ rect: [0, 0, 20, 10], fill: 'blue', opacity: '1 - $TIME * 0' }] }".utf8))
+        let (image, bytes) = try pixels(VectorScriptView(source), size: CGSize(width: 20, height: 10))
+        #expect(pixel(bytes, width: image.width, x: 10, y: 5) == [0, 0, 255, 255])
+    }
+
+    @Test
+    func `a still source draws as it is`() throws {
+        let source = try DocumentSource(json: Data("{ size: [10, 10], elements: [{ rect: [0, 0, 10, 10], fill: 'red' }] }".utf8))
+        let (image, bytes) = try pixels(VectorScriptView(source), size: CGSize(width: 10, height: 10))
+        #expect(pixel(bytes, width: image.width, x: 5, y: 5) == [255, 0, 0, 255])
+    }
+
+    @Test
     func `render errors show in the view`() throws {
         let view = VectorScriptView(try document("{ size: [40, 20], elements: [{ image: '/nonexistent.png' }] }"))
         let (image, bytes) = try pixels(view, size: CGSize(width: 40, height: 20))

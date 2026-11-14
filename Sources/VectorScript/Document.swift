@@ -11,7 +11,7 @@ public struct Document: Sendable, Equatable, Codable {
     public var preserveAspectRatio: AspectRatio
     public var background: Color?
     // Present when the document is animated.
-    public var animation: Animation?
+    public var animation: DocumentAnimation?
     public var defs: [String: Definition]
     public var elements: [Element]
     // Where the document was read from; relative image paths resolve against it. Not part of the JSON.
@@ -68,7 +68,7 @@ public struct Document: Sendable, Equatable, Codable {
         viewBox = try container.decodeIfPresent(Rect.self, "viewBox")
         preserveAspectRatio = try container.decodeIfPresent(AspectRatio.self, "preserveAspectRatio") ?? .none
         background = try container.decodeIfPresent(Color.self, "background")
-        animation = try container.decodeIfPresent(Animation.self, "animation")
+        animation = try container.decodeIfPresent(DocumentAnimation.self, "animation")
         defs = try container.decodeIfPresent([String: Definition].self, "defs") ?? [:]
         // Parameters and defs share one namespace; a color parameter is a paint that "$NAME" can use.
         let environment = decoder.parameters

@@ -1,6 +1,7 @@
 // Marks a document as animated. Expressions read the time as $TIME (seconds, 0 up to duration) and the length
 // as $DURATION.
-public struct Animation: Sendable, Equatable, Codable {
+// Named to stay clear of SwiftUI's Animation.
+public struct DocumentAnimation: Sendable, Equatable, Codable {
     // Seconds.
     public var duration: Double
     public var framesPerSecond: Double

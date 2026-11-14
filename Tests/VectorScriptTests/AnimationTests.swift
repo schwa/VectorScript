@@ -13,7 +13,7 @@ struct AnimationTests {
     @Test
     func `decodes the animation block`() throws {
         let document = try Document(json: spinner)
-        #expect(document.animation == Animation(duration: 2, framesPerSecond: 10, loops: true))
+        #expect(document.animation == DocumentAnimation(duration: 2, framesPerSecond: 10, loops: true))
         #expect(try Document(json: document.jsonData()) == document)
         #expect(failure("{ animation: { duration: 0 }, size: [1, 1], elements: [] }") == "animation: an animation's duration must be positive")
         #expect(failure("{ animation: { duration: 1, speed: 2 }, size: [1, 1], elements: [] }") == "animation: unknown key 'speed'")
@@ -51,11 +51,11 @@ struct AnimationTests {
 
     @Test
     func `frame times`() {
-        let looping = Animation(duration: 1, framesPerSecond: 4)
+        let looping = DocumentAnimation(duration: 1, framesPerSecond: 4)
         #expect(looping.frameCount == 4)
         #expect((0..<4).map { looping.time(ofFrame: $0) } == [0, 0.25, 0.5, 0.75])
         #expect(looping.time(atElapsed: 2.25) == 0.25)
-        let once = Animation(duration: 1, framesPerSecond: 4, loops: false)
+        let once = DocumentAnimation(duration: 1, framesPerSecond: 4, loops: false)
         #expect(once.frameCount == 5)
         #expect(once.time(ofFrame: 4) == 1)
         #expect(once.time(atElapsed: 3) == 1)

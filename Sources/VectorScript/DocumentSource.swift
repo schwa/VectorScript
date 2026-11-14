@@ -7,7 +7,7 @@ public struct DocumentSource: Sendable {
     public var baseURL: URL?
     public var parameters: [String: ParameterValue]
     // Read once to check the JSON and to find the animation.
-    public let animation: Animation?
+    public let animation: DocumentAnimation?
 
     public init(json: Data, baseURL: URL? = nil, parameters: [String: ParameterValue] = [:]) throws {
         self.json = json
