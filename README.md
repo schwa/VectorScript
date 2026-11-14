@@ -264,6 +264,22 @@ operation is the outermost one. A `use` places its definition at `at` after its 
 * Expressions are evaluated when the document is read, so a `Document` holds plain numbers. Encoding it writes
   the evaluated values, and color parameters appear as paints in `defs`.
 
+### Animation
+
+```json5
+{ animation: { duration: 2, fps: 30, loop: true },
+  parameters: { SPIN: "$TIME / $DURATION * 360" },
+  size: [128, 128],
+  elements: [{ rect: [-20, -20, 40, 40], fill: "#fc3", transform: "translate(64 64) rotate({$SPIN})" }] }
+```
+
+An `animation` block makes a document animated. `duration` is in seconds and is required. `fps` defaults to 30,
+and `loop` defaults to true. Expressions read the time as `$TIME`, from 0 up to the duration, and the length as
+`$DURATION`. A still document sees both as 0. Because any number can be an expression, anything can move:
+positions, sizes, angles, opacity, gradient stops, filter amounts.
+
+`DocumentSource(contentsOf:)` keeps the JSON so that `document(at: time)` can read the document at any time.
+
 ### Resolved documents
 
 `document.resolved()` gives the same drawing with nothing left to look up:

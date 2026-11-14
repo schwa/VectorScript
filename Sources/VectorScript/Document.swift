@@ -10,6 +10,8 @@ public struct Document: Sendable, Equatable, Codable {
     public var viewBox: Rect?
     public var preserveAspectRatio: AspectRatio
     public var background: Color?
+    // Present when the document is animated.
+    public var animation: Animation?
     public var defs: [String: Definition]
     public var elements: [Element]
     // Where the document was read from; relative image paths resolve against it. Not part of the JSON.
@@ -30,12 +32,14 @@ public struct Document: Sendable, Equatable, Codable {
     //
     // Expressions are evaluated while reading, so the document holds plain numbers: encoding it writes the
     // evaluated values, not the parameters.
-    public init(json: Data, baseURL: URL? = nil, parameters: [String: ParameterValue] = [:]) throws {
+    //
+    // `time` is what $TIME reads, in seconds; see `DocumentSource` to read one document at many times.
+    public init(json: Data, baseURL: URL? = nil, parameters: [String: ParameterValue] = [:], time: Double = 0) throws {
         let decoder = JSONDecoder()
         decoder.allowsJSON5 = true
         do {
             let header = try decoder.decode(ParametersHeader.self, from: json)
-            decoder.userInfo[.vectorScriptParameters] = try ParameterEnvironment.make(defaults: header.parameters, overrides: parameters)
+            decoder.userInfo[.vectorScriptParameters] = try ParameterEnvironment.make(defaults: header.parameters, overrides: parameters, time: time, duration: header.duration ?? 0)
             self = try decoder.decode(Document.self, from: json)
         } catch let error as DecodingError {
             throw DocumentError(error)
@@ -55,7 +59,7 @@ public struct Document: Sendable, Equatable, Codable {
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: AnyKey.self)
-        try container.rejectUnknownKeys(allowed: ["$schema", "version", "parameters", "size", "viewBox", "preserveAspectRatio", "background", "defs", "elements"])
+        try container.rejectUnknownKeys(allowed: ["$schema", "version", "parameters", "animation", "size", "viewBox", "preserveAspectRatio", "background", "defs", "elements"])
         version = try container.decodeIfPresent(Int.self, "version") ?? Self.currentVersion
         guard version == Self.currentVersion else {
             throw DocumentError.unsupportedVersion(version)
@@ -64,6 +68,7 @@ public struct Document: Sendable, Equatable, Codable {
         viewBox = try container.decodeIfPresent(Rect.self, "viewBox")
         preserveAspectRatio = try container.decodeIfPresent(AspectRatio.self, "preserveAspectRatio") ?? .none
         background = try container.decodeIfPresent(Color.self, "background")
+        animation = try container.decodeIfPresent(Animation.self, "animation")
         defs = try container.decodeIfPresent([String: Definition].self, "defs") ?? [:]
         // Parameters and defs share one namespace; a color parameter is a paint that "$NAME" can use.
         let environment = decoder.parameters
@@ -92,6 +97,7 @@ public struct Document: Sendable, Equatable, Codable {
             try container.encode(preserveAspectRatio, "preserveAspectRatio")
         }
         try container.encodeIfPresent(background, "background")
+        try container.encodeIfPresent(animation, "animation")
         if !defs.isEmpty {
             try container.encode(defs, "defs")
         }

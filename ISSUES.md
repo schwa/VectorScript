@@ -825,15 +825,18 @@ The viewer (Examples/VectorScriptViewer) parses the document from its source tex
 ## 44: Documents have no time parameter or animation block
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:s, area:format, subtask
 created: 2026-11-14T21:49:37Z
-updated: 2026-11-14T21:49:48Z
+updated: 2026-11-14T21:51:16Z
+closed: 2026-11-14T21:51:16Z
 +++
 
 A document cannot say it is animated or how long it runs, and expressions cannot read the time. Expected: an animation block (duration, fps, loop) and reserved TIME and DURATION parameters, plus a way to read the same document again at another time. Part of #34.
+
+- `2026-11-14T21:51:16Z`: animation block (duration, fps, loop), reserved TIME and DURATION parameters, Document(json:time:), DocumentSource for reading at any time.
 
 ---
 

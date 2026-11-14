@@ -20,7 +20,13 @@
       "type": "object",
       "description": "Parameter defaults: numbers, \"#\" colors, or expressions. A color parameter is a paint. Names share the defs namespace.",
       "propertyNames": {
-        "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+        "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+        "not": {
+          "enum": [
+            "TIME",
+            "DURATION"
+          ]
+        }
       },
       "additionalProperties": {
         "anyOf": [
@@ -31,6 +37,30 @@
             "type": "string"
           }
         ]
+      }
+    },
+    "animation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "duration"
+      ],
+      "description": "Makes the document animated. Expressions read $TIME (seconds) and $DURATION.",
+      "properties": {
+        "duration": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "seconds"
+        },
+        "fps": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "frames per second, default 30"
+        },
+        "loop": {
+          "type": "boolean",
+          "description": "play again from the start; default true"
+        }
       }
     },
     "size": {

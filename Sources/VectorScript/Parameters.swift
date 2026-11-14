@@ -61,13 +61,19 @@ public final class ParameterEnvironment: Sendable {
         }
     }
 
+    // Set by the renderer: the time in seconds and the animation's length (0 for a still document).
+    static let reservedNames: Set<String> = ["TIME", "DURATION"]
+
     // Defaults from the document, replaced by `overrides`. Parameters may read each other, in any order.
-    static func make(defaults: [String: ParameterValue], overrides: [String: ParameterValue]) throws -> ParameterEnvironment {
+    static func make(defaults: [String: ParameterValue], overrides: [String: ParameterValue], time: Double, duration: Double) throws -> ParameterEnvironment {
+        for name in overrides.keys.sorted() where reservedNames.contains(name) {
+            throw DocumentError.invalid(path: "parameters", message: "\(name) is set by the renderer; pass a time instead")
+        }
         for name in overrides.keys.sorted() where defaults[name] == nil {
             throw DocumentError.invalid(path: "parameters", message: "'\(name)' is set from outside but is not a parameter of the document")
         }
         let values = defaults.merging(overrides) { _, override in override }
-        var numbers: [String: Double] = [:]
+        var numbers: [String: Double] = ["TIME": time, "DURATION": duration]
         var colors: [String: Color] = [:]
         var expressions: [String: NumberExpression] = [:]
         for (name, value) in values {
