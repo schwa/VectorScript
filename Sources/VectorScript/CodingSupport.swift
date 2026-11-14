@@ -23,7 +23,7 @@ extension Decoder {
     }
 
     func numbers(count: Int) throws -> [Double] {
-        let numbers = try [Double](from: self)
+        let numbers = try [Number](from: self).map(\.value)
         guard numbers.count == count else {
             throw corrupted("expected \(count) numbers, found \(numbers.count)")
         }
@@ -32,8 +32,8 @@ extension Decoder {
 
     // A value that is one number or a list of `count` numbers.
     func numberOrNumbers(count: Int) throws -> [Double] {
-        if let number = try? singleValueContainer().decode(Double.self) {
-            return [number]
+        if (try? unkeyedContainer()) == nil {
+            return [try Number(from: self).value]
         }
         return try numbers(count: count)
     }

@@ -78,7 +78,7 @@ public enum TransformOperation: Sendable, Equatable, Codable {
         case "matrix":
             arguments = try value.numbers(count: 6)
         default:
-            arguments = [try value.singleValueContainer().decode(Double.self)]
+            arguments = [try Number(from: value).value]
         }
         do {
             try self.init(name: type, arguments: arguments)
@@ -172,7 +172,8 @@ public struct Transform: Sendable, Equatable, Codable {
     }
 
     public init(from decoder: any Decoder) throws {
-        if let text = try? decoder.singleValueContainer().decode(String.self) {
+        if let source = try? decoder.singleValueContainer().decode(String.self) {
+            let text = try decoder.substitutingExpressions(in: source)
             do {
                 try self.init(parsing: text)
             } catch {

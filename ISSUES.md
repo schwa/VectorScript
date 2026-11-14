@@ -598,13 +598,14 @@ Text cannot follow a path.
 ## 33: No parameters or expressions
 
 +++
-status: open
+status: closed
 priority: medium
 kind: feature
 labels: effort:l, area:format
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T21:32:11Z
+updated: 2026-11-14T21:43:06Z
+closed: 2026-11-14T21:43:06Z
 +++
 
 Documents cannot declare parameters or use expressions in place of numbers, as ModelScript does with $NAME and {expression}.
@@ -615,6 +616,7 @@ Documents cannot declare parameters or use expressions in place of numbers, as M
 - `2026-11-14T21:32:11Z`: Question 2 (decision): Should expressions be allowed in every number position, including inside compact arrays (circle: ["$W / 2", 64, "$R"]) and as {expr} inside path and transform strings, as ModelScript paths do? Or only in plain number fields?
 - `2026-11-14T21:33:15Z`: Answer 1: shared
 - `2026-11-14T21:33:42Z`: Answer 2: yes
+- `2026-11-14T21:43:06Z`: parameters block (numbers, #colors, expressions; any order, cycles caught); expressions in every number position and {expr} in path and transform strings; color parameters share the defs namespace as paints; overrides via Document(contentsOf:parameters:) and --set NAME=VALUE. Lists are not supported.
 
 ---
 

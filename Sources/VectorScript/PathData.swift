@@ -59,7 +59,7 @@ public struct PathData: Sendable, Equatable, Codable {
     }
 
     public init(from decoder: any Decoder) throws {
-        let text = try decoder.singleValueContainer().decode(String.self)
+        let text = try decoder.substitutingExpressions(in: try decoder.singleValueContainer().decode(String.self))
         do {
             try self.init(parsing: text)
         } catch {

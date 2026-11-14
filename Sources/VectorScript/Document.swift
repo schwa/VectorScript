@@ -25,11 +25,17 @@ public struct Document: Sendable, Equatable, Codable {
         self.elements = elements
     }
 
-    // Reads JSON5 (so plain JSON too). Errors are `DocumentError`.
-    public init(json: Data, baseURL: URL? = nil) throws {
+    // Reads JSON5 (so plain JSON too). Errors are `DocumentError`. `parameters` replace the defaults in the
+    // document's "parameters" block; naming one the document does not declare is an error.
+    //
+    // Expressions are evaluated while reading, so the document holds plain numbers: encoding it writes the
+    // evaluated values, not the parameters.
+    public init(json: Data, baseURL: URL? = nil, parameters: [String: ParameterValue] = [:]) throws {
         let decoder = JSONDecoder()
         decoder.allowsJSON5 = true
         do {
+            let header = try decoder.decode(ParametersHeader.self, from: json)
+            decoder.userInfo[.vectorScriptParameters] = try ParameterEnvironment.make(defaults: header.parameters, overrides: parameters)
             self = try decoder.decode(Document.self, from: json)
         } catch let error as DecodingError {
             throw DocumentError(error)
@@ -37,8 +43,8 @@ public struct Document: Sendable, Equatable, Codable {
         self.baseURL = baseURL
     }
 
-    public init(contentsOf url: URL) throws {
-        try self.init(json: try Data(contentsOf: url), baseURL: url)
+    public init(contentsOf url: URL, parameters: [String: ParameterValue] = [:]) throws {
+        try self.init(json: try Data(contentsOf: url), baseURL: url, parameters: parameters)
     }
 
     public func jsonData(prettyPrinted: Bool = true) throws -> Data {
@@ -49,7 +55,7 @@ public struct Document: Sendable, Equatable, Codable {
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: AnyKey.self)
-        try container.rejectUnknownKeys(allowed: ["$schema", "version", "size", "viewBox", "preserveAspectRatio", "background", "defs", "elements"])
+        try container.rejectUnknownKeys(allowed: ["$schema", "version", "parameters", "size", "viewBox", "preserveAspectRatio", "background", "defs", "elements"])
         version = try container.decodeIfPresent(Int.self, "version") ?? Self.currentVersion
         guard version == Self.currentVersion else {
             throw DocumentError.unsupportedVersion(version)
@@ -59,6 +65,14 @@ public struct Document: Sendable, Equatable, Codable {
         preserveAspectRatio = try container.decodeIfPresent(AspectRatio.self, "preserveAspectRatio") ?? .none
         background = try container.decodeIfPresent(Color.self, "background")
         defs = try container.decodeIfPresent([String: Definition].self, "defs") ?? [:]
+        // Parameters and defs share one namespace; a color parameter is a paint that "$NAME" can use.
+        let environment = decoder.parameters
+        for name in Set(environment.numbers.keys).union(environment.colors.keys).sorted() where defs[name] != nil {
+            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [AnyKey("defs"), AnyKey(name)], debugDescription: "'\(name)' is both a parameter and a definition"))
+        }
+        for (name, color) in environment.colors {
+            defs[name] = .paint(.color(color))
+        }
         elements = try container.decode([Element].self, "elements")
         guard size.width > 0, size.height > 0 else {
             throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [AnyKey("size")], debugDescription: "size must be positive"))

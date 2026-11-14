@@ -10,7 +10,7 @@ public struct GradientStop: Sendable, Equatable, Codable {
 
     public init(from decoder: any Decoder) throws {
         var container = try decoder.unkeyedContainer()
-        offset = try container.decode(Double.self)
+        offset = try container.decode(Number.self).value
         color = try container.decode(Color.self)
         guard container.isAtEnd else {
             throw decoder.corrupted("a stop is [offset, color]")
@@ -90,7 +90,7 @@ public struct RadialGradient: Sendable, Equatable, Codable {
         let container = try decoder.container(keyedBy: AnyKey.self)
         try container.rejectUnknownKeys(allowed: ["center", "radius", "focus", "stops", "units"])
         center = try container.decodeIfPresent(Point.self, "center") ?? Point(x: 0.5, y: 0.5)
-        radius = try container.decodeIfPresent(Double.self, "radius") ?? 0.5
+        radius = try container.decodeNumberIfPresent("radius") ?? 0.5
         focus = try container.decodeIfPresent(Point.self, "focus")
         stops = try container.decode([GradientStop].self, "stops")
         units = try container.decodeIfPresent(GradientUnits.self, "units") ?? .boundingBox

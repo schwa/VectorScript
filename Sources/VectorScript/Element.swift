@@ -46,7 +46,7 @@ public struct Element: Sendable, Equatable, Codable {
         case "text":
             allowed.formUnion(["at", "anchor", "width", "onPath", "offset"])
             let string = try container.decode(String.self, type)
-            let width = try container.decodeIfPresent(Double.self, "width")
+            let width = try container.decodeNumberIfPresent("width")
             if let width, width <= 0 {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath + [AnyKey("width")], debugDescription: "a text width must be positive"))
             }
@@ -59,7 +59,7 @@ public struct Element: Sendable, Equatable, Codable {
                 guard !string.contains("\n") else {
                     throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath + [AnyKey(type)], debugDescription: "text on a path is one line"))
                 }
-                content = .text(Text(string: string, anchor: anchor, onPath: onPath, offset: try container.decodeIfPresent(Double.self, "offset") ?? 0))
+                content = .text(Text(string: string, anchor: anchor, onPath: onPath, offset: try container.decodeNumberIfPresent("offset") ?? 0))
             } else {
                 if container.contains(AnyKey("offset")) {
                     throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath + [AnyKey("offset")], debugDescription: "offset needs onPath"))
@@ -80,7 +80,7 @@ public struct Element: Sendable, Equatable, Codable {
         }
         try container.rejectUnknownKeys(allowed: allowed)
         style = try Style(from: decoder)
-        opacity = try container.decodeIfPresent(Double.self, "opacity")
+        opacity = try container.decodeNumberIfPresent("opacity")
         transform = try container.decodeIfPresent(Transform.self, "transform")
         clip = try container.decodeIfPresent(Clip.self, "clip")
         mask = try container.decodeIfPresent(Mask.self, "mask")

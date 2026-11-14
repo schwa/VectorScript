@@ -10,17 +10,20 @@ public enum MarkerOrientation: Sendable, Equatable, Codable {
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let degrees = try? container.decode(Double.self) {
-            self = .angle(degrees)
-            return
-        }
-        switch try container.decode(String.self) {
+        switch try? container.decode(String.self) {
         case "auto":
             self = .auto
         case "auto-start-reverse":
             self = .autoStartReverse
-        case let other:
-            throw decoder.corrupted("unknown orient '\(other)' (expected auto, auto-start-reverse or a number)")
+        case let text?:
+            // Any other string must be an expression.
+            do {
+                self = .angle(try decoder.parameters.evaluate(text))
+            } catch {
+                throw decoder.corrupted("unknown orient '\(text)' (expected auto, auto-start-reverse or a number): \(error)")
+            }
+        case nil:
+            self = .angle(try container.decode(Double.self))
         }
     }
 

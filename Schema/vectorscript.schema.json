@@ -16,11 +16,35 @@
     "version": {
       "const": 1
     },
+    "parameters": {
+      "type": "object",
+      "description": "Parameter defaults: numbers, \"#\" colors, or expressions. A color parameter is a paint. Names share the defs namespace.",
+      "propertyNames": {
+        "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+      },
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      }
+    },
     "size": {
       "type": "array",
       "items": {
-        "type": "number",
-        "exclusiveMinimum": 0
+        "anyOf": [
+          {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          {
+            "$ref": "#/$defs/expression"
+          }
+        ]
       },
       "minItems": 2,
       "maxItems": 2,
@@ -29,7 +53,14 @@
     "viewBox": {
       "type": "array",
       "items": {
-        "type": "number"
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "$ref": "#/$defs/expression"
+          }
+        ]
       },
       "minItems": 4,
       "maxItems": 4,
@@ -67,7 +98,14 @@
     "point": {
       "type": "array",
       "items": {
-        "type": "number"
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "$ref": "#/$defs/expression"
+          }
+        ]
       },
       "minItems": 2,
       "maxItems": 2,
@@ -119,9 +157,16 @@
                     "type": "array",
                     "prefixItems": [
                       {
-                        "type": "number",
-                        "minimum": 0,
-                        "maximum": 1
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "$ref": "#/$defs/expression"
+                          }
+                        ]
                       },
                       {
                         "$ref": "#/$defs/color"
@@ -159,8 +204,15 @@
                   "$ref": "#/$defs/point"
                 },
                 "radius": {
-                  "type": "number",
-                  "minimum": 0
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    {
+                      "$ref": "#/$defs/expression"
+                    }
+                  ]
                 },
                 "focus": {
                   "$ref": "#/$defs/point"
@@ -172,9 +224,16 @@
                     "type": "array",
                     "prefixItems": [
                       {
-                        "type": "number",
-                        "minimum": 0,
-                        "maximum": 1
+                        "anyOf": [
+                          {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          {
+                            "$ref": "#/$defs/expression"
+                          }
+                        ]
                       },
                       {
                         "$ref": "#/$defs/color"
@@ -214,8 +273,15 @@
                   "type": "array",
                   "description": "[width, height] of one tile",
                   "items": {
-                    "type": "number",
-                    "exclusiveMinimum": 0
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      {
+                        "$ref": "#/$defs/expression"
+                      }
+                    ]
                   },
                   "minItems": 2,
                   "maxItems": 2
@@ -259,7 +325,14 @@
             "translate": {
               "type": "array",
               "items": {
-                "type": "number"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               },
               "minItems": 2,
               "maxItems": 2,
@@ -277,12 +350,26 @@
             "rotate": {
               "oneOf": [
                 {
-                  "type": "number"
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "$ref": "#/$defs/expression"
+                    }
+                  ]
                 },
                 {
                   "type": "array",
                   "items": {
-                    "type": "number"
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "$ref": "#/$defs/expression"
+                      }
+                    ]
                   },
                   "minItems": 3,
                   "maxItems": 3,
@@ -303,12 +390,26 @@
             "scale": {
               "oneOf": [
                 {
-                  "type": "number"
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "$ref": "#/$defs/expression"
+                    }
+                  ]
                 },
                 {
                   "type": "array",
                   "items": {
-                    "type": "number"
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "$ref": "#/$defs/expression"
+                      }
+                    ]
                   },
                   "minItems": 2,
                   "maxItems": 2,
@@ -326,7 +427,14 @@
           ],
           "properties": {
             "skewX": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             }
           }
         },
@@ -338,7 +446,14 @@
           ],
           "properties": {
             "skewY": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             }
           }
         },
@@ -352,7 +467,14 @@
             "matrix": {
               "type": "array",
               "items": {
-                "type": "number"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               },
               "minItems": 6,
               "maxItems": 6,
@@ -391,7 +513,14 @@
             "rect": {
               "type": "array",
               "items": {
-                "type": "number"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               },
               "minItems": 4,
               "maxItems": 4,
@@ -400,13 +529,27 @@
             "radius": {
               "oneOf": [
                 {
-                  "type": "number",
-                  "minimum": 0
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    {
+                      "$ref": "#/$defs/expression"
+                    }
+                  ]
                 },
                 {
                   "type": "array",
                   "items": {
-                    "type": "number"
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "$ref": "#/$defs/expression"
+                      }
+                    ]
                   },
                   "minItems": 2,
                   "maxItems": 2,
@@ -429,7 +572,14 @@
             "circle": {
               "type": "array",
               "items": {
-                "type": "number"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               },
               "minItems": 3,
               "maxItems": 3,
@@ -450,7 +600,14 @@
             "ellipse": {
               "type": "array",
               "items": {
-                "type": "number"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               },
               "minItems": 4,
               "maxItems": 4,
@@ -471,7 +628,14 @@
             "line": {
               "type": "array",
               "items": {
-                "type": "number"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               },
               "minItems": 4,
               "maxItems": 4,
@@ -548,7 +712,14 @@
             "rect": {
               "type": "array",
               "items": {
-                "type": "number"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               },
               "minItems": 4,
               "maxItems": 4,
@@ -557,13 +728,27 @@
             "radius": {
               "oneOf": [
                 {
-                  "type": "number",
-                  "minimum": 0
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    {
+                      "$ref": "#/$defs/expression"
+                    }
+                  ]
                 },
                 {
                   "type": "array",
                   "items": {
-                    "type": "number"
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "$ref": "#/$defs/expression"
+                      }
+                    ]
                   },
                   "minItems": 2,
                   "maxItems": 2,
@@ -578,8 +763,15 @@
               "$ref": "#/$defs/paint"
             },
             "strokeWidth": {
-              "type": "number",
-              "minimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeCap": {
               "enum": [
@@ -596,18 +788,39 @@
               ]
             },
             "strokeMiterLimit": {
-              "type": "number",
-              "minimum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeDash": {
               "type": "array",
               "items": {
-                "type": "number",
-                "minimum": 0
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               }
             },
             "strokeDashOffset": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "fillRule": {
               "$ref": "#/$defs/fillRule"
@@ -617,13 +830,27 @@
               "description": "System font PostScript, family or full name. Default Helvetica."
             },
             "fontSize": {
-              "type": "number",
-              "exclusiveMinimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "opacity": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "transform": {
               "$ref": "#/$defs/transform"
@@ -635,8 +862,15 @@
               "$ref": "#/$defs/mask"
             },
             "letterSpacing": {
-              "type": "number",
-              "description": "Extra points between characters; negative tightens. Default 0."
+              "description": "Extra points between characters; negative tightens. Default 0.",
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
@@ -655,9 +889,16 @@
               "$ref": "#/$defs/marker"
             },
             "lineHeight": {
-              "type": "number",
-              "exclusiveMinimum": 0,
-              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2.",
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "filter": {
               "$ref": "#/$defs/filterList"
@@ -674,7 +915,14 @@
             "circle": {
               "type": "array",
               "items": {
-                "type": "number"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               },
               "minItems": 3,
               "maxItems": 3,
@@ -687,8 +935,15 @@
               "$ref": "#/$defs/paint"
             },
             "strokeWidth": {
-              "type": "number",
-              "minimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeCap": {
               "enum": [
@@ -705,18 +960,39 @@
               ]
             },
             "strokeMiterLimit": {
-              "type": "number",
-              "minimum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeDash": {
               "type": "array",
               "items": {
-                "type": "number",
-                "minimum": 0
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               }
             },
             "strokeDashOffset": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "fillRule": {
               "$ref": "#/$defs/fillRule"
@@ -726,13 +1002,27 @@
               "description": "System font PostScript, family or full name. Default Helvetica."
             },
             "fontSize": {
-              "type": "number",
-              "exclusiveMinimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "opacity": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "transform": {
               "$ref": "#/$defs/transform"
@@ -744,8 +1034,15 @@
               "$ref": "#/$defs/mask"
             },
             "letterSpacing": {
-              "type": "number",
-              "description": "Extra points between characters; negative tightens. Default 0."
+              "description": "Extra points between characters; negative tightens. Default 0.",
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
@@ -764,9 +1061,16 @@
               "$ref": "#/$defs/marker"
             },
             "lineHeight": {
-              "type": "number",
-              "exclusiveMinimum": 0,
-              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2.",
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "filter": {
               "$ref": "#/$defs/filterList"
@@ -783,7 +1087,14 @@
             "ellipse": {
               "type": "array",
               "items": {
-                "type": "number"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               },
               "minItems": 4,
               "maxItems": 4,
@@ -796,8 +1107,15 @@
               "$ref": "#/$defs/paint"
             },
             "strokeWidth": {
-              "type": "number",
-              "minimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeCap": {
               "enum": [
@@ -814,18 +1132,39 @@
               ]
             },
             "strokeMiterLimit": {
-              "type": "number",
-              "minimum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeDash": {
               "type": "array",
               "items": {
-                "type": "number",
-                "minimum": 0
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               }
             },
             "strokeDashOffset": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "fillRule": {
               "$ref": "#/$defs/fillRule"
@@ -835,13 +1174,27 @@
               "description": "System font PostScript, family or full name. Default Helvetica."
             },
             "fontSize": {
-              "type": "number",
-              "exclusiveMinimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "opacity": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "transform": {
               "$ref": "#/$defs/transform"
@@ -853,8 +1206,15 @@
               "$ref": "#/$defs/mask"
             },
             "letterSpacing": {
-              "type": "number",
-              "description": "Extra points between characters; negative tightens. Default 0."
+              "description": "Extra points between characters; negative tightens. Default 0.",
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
@@ -873,9 +1233,16 @@
               "$ref": "#/$defs/marker"
             },
             "lineHeight": {
-              "type": "number",
-              "exclusiveMinimum": 0,
-              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2.",
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "filter": {
               "$ref": "#/$defs/filterList"
@@ -892,7 +1259,14 @@
             "line": {
               "type": "array",
               "items": {
-                "type": "number"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               },
               "minItems": 4,
               "maxItems": 4,
@@ -905,8 +1279,15 @@
               "$ref": "#/$defs/paint"
             },
             "strokeWidth": {
-              "type": "number",
-              "minimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeCap": {
               "enum": [
@@ -923,18 +1304,39 @@
               ]
             },
             "strokeMiterLimit": {
-              "type": "number",
-              "minimum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeDash": {
               "type": "array",
               "items": {
-                "type": "number",
-                "minimum": 0
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               }
             },
             "strokeDashOffset": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "fillRule": {
               "$ref": "#/$defs/fillRule"
@@ -944,13 +1346,27 @@
               "description": "System font PostScript, family or full name. Default Helvetica."
             },
             "fontSize": {
-              "type": "number",
-              "exclusiveMinimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "opacity": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "transform": {
               "$ref": "#/$defs/transform"
@@ -962,8 +1378,15 @@
               "$ref": "#/$defs/mask"
             },
             "letterSpacing": {
-              "type": "number",
-              "description": "Extra points between characters; negative tightens. Default 0."
+              "description": "Extra points between characters; negative tightens. Default 0.",
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
@@ -982,9 +1405,16 @@
               "$ref": "#/$defs/marker"
             },
             "lineHeight": {
-              "type": "number",
-              "exclusiveMinimum": 0,
-              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2.",
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "filter": {
               "$ref": "#/$defs/filterList"
@@ -1011,8 +1441,15 @@
               "$ref": "#/$defs/paint"
             },
             "strokeWidth": {
-              "type": "number",
-              "minimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeCap": {
               "enum": [
@@ -1029,18 +1466,39 @@
               ]
             },
             "strokeMiterLimit": {
-              "type": "number",
-              "minimum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeDash": {
               "type": "array",
               "items": {
-                "type": "number",
-                "minimum": 0
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               }
             },
             "strokeDashOffset": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "fillRule": {
               "$ref": "#/$defs/fillRule"
@@ -1050,13 +1508,27 @@
               "description": "System font PostScript, family or full name. Default Helvetica."
             },
             "fontSize": {
-              "type": "number",
-              "exclusiveMinimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "opacity": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "transform": {
               "$ref": "#/$defs/transform"
@@ -1068,8 +1540,15 @@
               "$ref": "#/$defs/mask"
             },
             "letterSpacing": {
-              "type": "number",
-              "description": "Extra points between characters; negative tightens. Default 0."
+              "description": "Extra points between characters; negative tightens. Default 0.",
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
@@ -1088,9 +1567,16 @@
               "$ref": "#/$defs/marker"
             },
             "lineHeight": {
-              "type": "number",
-              "exclusiveMinimum": 0,
-              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2.",
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "filter": {
               "$ref": "#/$defs/filterList"
@@ -1117,8 +1603,15 @@
               "$ref": "#/$defs/paint"
             },
             "strokeWidth": {
-              "type": "number",
-              "minimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeCap": {
               "enum": [
@@ -1135,18 +1628,39 @@
               ]
             },
             "strokeMiterLimit": {
-              "type": "number",
-              "minimum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeDash": {
               "type": "array",
               "items": {
-                "type": "number",
-                "minimum": 0
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               }
             },
             "strokeDashOffset": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "fillRule": {
               "$ref": "#/$defs/fillRule"
@@ -1156,13 +1670,27 @@
               "description": "System font PostScript, family or full name. Default Helvetica."
             },
             "fontSize": {
-              "type": "number",
-              "exclusiveMinimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "opacity": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "transform": {
               "$ref": "#/$defs/transform"
@@ -1174,8 +1702,15 @@
               "$ref": "#/$defs/mask"
             },
             "letterSpacing": {
-              "type": "number",
-              "description": "Extra points between characters; negative tightens. Default 0."
+              "description": "Extra points between characters; negative tightens. Default 0.",
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
@@ -1194,9 +1729,16 @@
               "$ref": "#/$defs/marker"
             },
             "lineHeight": {
-              "type": "number",
-              "exclusiveMinimum": 0,
-              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2.",
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "filter": {
               "$ref": "#/$defs/filterList"
@@ -1221,8 +1763,15 @@
               "$ref": "#/$defs/paint"
             },
             "strokeWidth": {
-              "type": "number",
-              "minimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeCap": {
               "enum": [
@@ -1239,18 +1788,39 @@
               ]
             },
             "strokeMiterLimit": {
-              "type": "number",
-              "minimum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeDash": {
               "type": "array",
               "items": {
-                "type": "number",
-                "minimum": 0
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               }
             },
             "strokeDashOffset": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "fillRule": {
               "$ref": "#/$defs/fillRule"
@@ -1260,13 +1830,27 @@
               "description": "System font PostScript, family or full name. Default Helvetica."
             },
             "fontSize": {
-              "type": "number",
-              "exclusiveMinimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "opacity": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "transform": {
               "$ref": "#/$defs/transform"
@@ -1278,8 +1862,15 @@
               "$ref": "#/$defs/mask"
             },
             "letterSpacing": {
-              "type": "number",
-              "description": "Extra points between characters; negative tightens. Default 0."
+              "description": "Extra points between characters; negative tightens. Default 0.",
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
@@ -1298,9 +1889,16 @@
               "$ref": "#/$defs/marker"
             },
             "lineHeight": {
-              "type": "number",
-              "exclusiveMinimum": 0,
-              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2.",
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "filter": {
               "$ref": "#/$defs/filterList"
@@ -1327,8 +1925,15 @@
               "$ref": "#/$defs/paint"
             },
             "strokeWidth": {
-              "type": "number",
-              "minimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeCap": {
               "enum": [
@@ -1345,18 +1950,39 @@
               ]
             },
             "strokeMiterLimit": {
-              "type": "number",
-              "minimum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeDash": {
               "type": "array",
               "items": {
-                "type": "number",
-                "minimum": 0
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               }
             },
             "strokeDashOffset": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "fillRule": {
               "$ref": "#/$defs/fillRule"
@@ -1366,13 +1992,27 @@
               "description": "System font PostScript, family or full name. Default Helvetica."
             },
             "fontSize": {
-              "type": "number",
-              "exclusiveMinimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "opacity": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "transform": {
               "$ref": "#/$defs/transform"
@@ -1384,8 +2024,15 @@
               "$ref": "#/$defs/mask"
             },
             "letterSpacing": {
-              "type": "number",
-              "description": "Extra points between characters; negative tightens. Default 0."
+              "description": "Extra points between characters; negative tightens. Default 0.",
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
@@ -1404,9 +2051,16 @@
               "$ref": "#/$defs/marker"
             },
             "lineHeight": {
-              "type": "number",
-              "exclusiveMinimum": 0,
-              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2.",
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "filter": {
               "$ref": "#/$defs/filterList"
@@ -1434,8 +2088,15 @@
               "$ref": "#/$defs/paint"
             },
             "strokeWidth": {
-              "type": "number",
-              "minimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeCap": {
               "enum": [
@@ -1452,18 +2113,39 @@
               ]
             },
             "strokeMiterLimit": {
-              "type": "number",
-              "minimum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeDash": {
               "type": "array",
               "items": {
-                "type": "number",
-                "minimum": 0
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               }
             },
             "strokeDashOffset": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "fillRule": {
               "$ref": "#/$defs/fillRule"
@@ -1473,13 +2155,27 @@
               "description": "System font PostScript, family or full name. Default Helvetica."
             },
             "fontSize": {
-              "type": "number",
-              "exclusiveMinimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "opacity": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "transform": {
               "$ref": "#/$defs/transform"
@@ -1491,8 +2187,15 @@
               "$ref": "#/$defs/mask"
             },
             "letterSpacing": {
-              "type": "number",
-              "description": "Extra points between characters; negative tightens. Default 0."
+              "description": "Extra points between characters; negative tightens. Default 0.",
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
@@ -1511,9 +2214,16 @@
               "$ref": "#/$defs/marker"
             },
             "lineHeight": {
-              "type": "number",
-              "exclusiveMinimum": 0,
-              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2.",
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "filter": {
               "$ref": "#/$defs/filterList"
@@ -1548,8 +2258,15 @@
               "$ref": "#/$defs/paint"
             },
             "strokeWidth": {
-              "type": "number",
-              "minimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeCap": {
               "enum": [
@@ -1566,18 +2283,39 @@
               ]
             },
             "strokeMiterLimit": {
-              "type": "number",
-              "minimum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "strokeDash": {
               "type": "array",
               "items": {
-                "type": "number",
-                "minimum": 0
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               }
             },
             "strokeDashOffset": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "fillRule": {
               "$ref": "#/$defs/fillRule"
@@ -1587,13 +2325,27 @@
               "description": "System font PostScript, family or full name. Default Helvetica."
             },
             "fontSize": {
-              "type": "number",
-              "exclusiveMinimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "opacity": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "transform": {
               "$ref": "#/$defs/transform"
@@ -1605,8 +2357,15 @@
               "$ref": "#/$defs/mask"
             },
             "letterSpacing": {
-              "type": "number",
-              "description": "Extra points between characters; negative tightens. Default 0."
+              "description": "Extra points between characters; negative tightens. Default 0.",
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
@@ -1625,14 +2384,28 @@
               "$ref": "#/$defs/marker"
             },
             "lineHeight": {
-              "type": "number",
-              "exclusiveMinimum": 0,
-              "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+              "description": "Distance between baselines as a multiple of fontSize. Default 1.2.",
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "width": {
-              "type": "number",
-              "exclusiveMinimum": 0,
-              "description": "Wrap lines at word breaks to fit this many points."
+              "description": "Wrap lines at word breaks to fit this many points.",
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "filter": {
               "$ref": "#/$defs/filterList"
@@ -1642,8 +2415,15 @@
               "description": "SVG path data the text runs along, one line, instead of at. Glyphs past either end are left out."
             },
             "offset": {
-              "type": "number",
-              "description": "Distance along onPath that anchor places the text against. Default 0."
+              "description": "Distance along onPath that anchor places the text against. Default 0.",
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             }
           },
           "oneOf": [
@@ -1705,16 +2485,30 @@
               "type": "array",
               "description": "[width, height]; default the image's pixel size",
               "items": {
-                "type": "number",
-                "exclusiveMinimum": 0
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  },
+                  {
+                    "$ref": "#/$defs/expression"
+                  }
+                ]
               },
               "minItems": 2,
               "maxItems": 2
             },
             "opacity": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             },
             "transform": {
               "$ref": "#/$defs/transform"
@@ -1805,7 +2599,14 @@
                   ]
                 },
                 {
-                  "type": "number"
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "$ref": "#/$defs/expression"
+                    }
+                  ]
                 }
               ]
             }
@@ -1831,7 +2632,14 @@
                   ]
                 },
                 {
-                  "type": "number"
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "$ref": "#/$defs/expression"
+                    }
+                  ]
                 }
               ]
             }
@@ -1850,9 +2658,16 @@
           ],
           "properties": {
             "blur": {
-              "type": "number",
-              "minimum": 0,
-              "description": "Gaussian blur radius (standard deviation)"
+              "description": "Gaussian blur radius (standard deviation)",
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             }
           }
         },
@@ -1871,8 +2686,15 @@
                   "$ref": "#/$defs/point"
                 },
                 "blur": {
-                  "type": "number",
-                  "minimum": 0
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    {
+                      "$ref": "#/$defs/expression"
+                    }
+                  ]
                 },
                 "color": {
                   "$ref": "#/$defs/color"
@@ -1889,9 +2711,16 @@
           ],
           "properties": {
             "grayscale": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             }
           }
         },
@@ -1903,9 +2732,16 @@
           ],
           "properties": {
             "sepia": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             }
           }
         },
@@ -1917,9 +2753,16 @@
           ],
           "properties": {
             "invert": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             }
           }
         },
@@ -1931,8 +2774,15 @@
           ],
           "properties": {
             "saturate": {
-              "type": "number",
-              "minimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             }
           }
         },
@@ -1944,8 +2794,15 @@
           ],
           "properties": {
             "brightness": {
-              "type": "number",
-              "minimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             }
           }
         },
@@ -1957,8 +2814,15 @@
           ],
           "properties": {
             "contrast": {
-              "type": "number",
-              "minimum": 0
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             }
           }
         },
@@ -1970,8 +2834,15 @@
           ],
           "properties": {
             "hueRotate": {
-              "type": "number",
-              "description": "degrees"
+              "description": "degrees",
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/$defs/expression"
+                }
+              ]
             }
           }
         }
@@ -1990,6 +2861,10 @@
           }
         }
       ]
+    },
+    "expression": {
+      "type": "string",
+      "description": "An expression in place of a number, such as \"$W / 2\". Reads $NAME parameters; supports + - * / %, comparisons, && || !, and functions such as min, max, sqrt, sin, if."
     }
   }
 }

@@ -1,0 +1,47 @@
+// Parameters and expressions. "parameters" holds defaults: numbers, "#" colors, or expressions that may read
+// other parameters in any order. Anywhere a number goes, a string expression can go instead, and {expression}
+// works inside path data and transform strings. A color parameter is a paint, so fill: "$PLATE" works.
+// Override from outside: vectorscript render parameters.json5 --set SIZE=512 --set PLATE=#5b7c99 --set BOLTS=6
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  parameters: {
+    SIZE: 256,
+    MARGIN: "$SIZE * 0.06",
+    INNER: "$SIZE - 2 * $MARGIN",
+    RADIUS: "$SIZE * 0.05",
+    BOLTS: 4,
+    BOLT: "$SIZE * 0.025",
+    PLATE: "#6d757c",
+    STRIPE: "#f2c230",
+    SLANT: 40
+  },
+  size: ["$SIZE", "$SIZE"],
+  background: "#2b2f33",
+  defs: {
+    bolt: { circle: [0, 0, "$BOLT"], fill: "#c9ced3", stroke: "#3d4349", strokeWidth: "$BOLT / 4" }
+  },
+  elements: [
+    { rect: ["$MARGIN", "$MARGIN", "$INNER", "$INNER"], radius: "$RADIUS", fill: "$PLATE" },
+
+    // A band of stripes, slanted by SLANT degrees, clipped to the middle third.
+    { rect: [0, 0, "$SIZE", "$SIZE"], fill: { pattern: { size: ["$SIZE / 8", "$SIZE / 8"], transform: "rotate({$SLANT})", elements: [
+        { rect: [0, 0, "$SIZE / 8", "$SIZE / 16"], fill: "$STRIPE" },
+        { rect: [0, "$SIZE / 16", "$SIZE / 8", "$SIZE / 16"], fill: "#222" }
+      ] } },
+      clip: { rect: ["$MARGIN * 2", "$SIZE / 3", "$SIZE - 4 * $MARGIN", "$SIZE / 3"], radius: "$RADIUS / 2" } },
+
+    // Bolts along the top and bottom edges: BOLTS of each, evenly spaced.
+    { group: [
+        { use: "bolt", at: ["$MARGIN * 2", "$MARGIN * 2"] },
+        { use: "bolt", at: ["$SIZE - $MARGIN * 2", "$MARGIN * 2"] },
+        { use: "bolt", at: ["$MARGIN * 2", "$SIZE - $MARGIN * 2"] },
+        { use: "bolt", at: ["$SIZE - $MARGIN * 2", "$SIZE - $MARGIN * 2"] },
+        { use: "bolt", at: ["$SIZE / 2", "$MARGIN * 2"], opacity: "if($BOLTS > 4, 1, 0)" },
+        { use: "bolt", at: ["$SIZE / 2", "$SIZE - $MARGIN * 2"], opacity: "if($BOLTS > 4, 1, 0)" }
+      ] },
+
+    // A path built from parameters with {expression}.
+    { path: "M {$MARGIN * 2} {$SIZE * 0.78} h {$INNER - 2 * $MARGIN} l {-$SIZE * 0.05} {$SIZE * 0.06} h {-($INNER - 2 * $MARGIN) + $SIZE * 0.1} z", fill: "#00000040" },
+    { text: "ZONE 4", at: ["$SIZE / 2", "$SIZE * 0.25"], anchor: "middle", font: "Helvetica-Bold", fontSize: "$SIZE * 0.09", fill: "$STRIPE" }
+  ]
+}

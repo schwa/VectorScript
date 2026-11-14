@@ -56,6 +56,7 @@ vectorscript render panel.json5 -o big.png --scale 4
 vectorscript render panel.json5 --size 1024x1024   # replaces the document size
 vectorscript validate *.json5                      # exits 1 on any error
 vectorscript resolve panel.json5                   # prints the resolved document
+vectorscript render panel.json5 --set SIZE=512 --set PLATE=#5b7c99   # override parameters
 ```
 
 Errors name the place in the file: `panel.json5: elements[3].fill: unknown color 'redd'`.
@@ -190,7 +191,7 @@ when a line is anchored.
 
 ## Examples
 
-`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`, `images`, `blend-modes`, `markers`, `filters`,
+`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`, `images`, `blend-modes`, `markers`, `filters`, `parameters`,
 `structure`, `transforms`, `clipping`, `text` and `viewbox`. It also has some textures: `brick-wall`,
 `circuit-board` and `hazard-panel`.
 
@@ -236,6 +237,32 @@ transform: { rotate: 45 }
 The operations are `translate: [x, y]`, `rotate: degrees` or `rotate: [degrees, cx, cy]`, `scale: s` or
 `scale: [sx, sy]`, `skewX: degrees`, `skewY: degrees` and `matrix: [a, b, c, d, e, f]`. As in SVG, the first
 operation is the outermost one. A `use` places its definition at `at` after its own transform.
+
+### Parameters and expressions
+
+```json5
+{ parameters: { SIZE: 256, MARGIN: "$SIZE * 0.06", PLATE: "#6d757c" },
+  size: ["$SIZE", "$SIZE"],
+  elements: [
+    { rect: ["$MARGIN", "$MARGIN", "$SIZE - 2 * $MARGIN", "$SIZE - 2 * $MARGIN"], fill: "$PLATE" },
+    { path: "M {$MARGIN} 0 L {$SIZE / 2} {$SIZE}", transform: "rotate({$SIZE / 32})" }
+  ] }
+```
+
+* `parameters` holds defaults. A value is a number, a `#` color, or an expression. Expressions may read other
+  parameters, in any order; a parameter that needs itself is an error.
+* Anywhere a number goes, a string expression can go instead, including inside compact arrays. Inside path data
+  and transform strings, write `{expression}`.
+* Parameters share the `defs` namespace. A color parameter is a paint, so `fill: "$PLATE"` works, and a name
+  cannot be both a parameter and a definition.
+* Expressions have `+ - * / %`, unary `-` and `!`, comparisons (`== != < <= > >=`) and `&& ||`, which give 1 or
+  0. The functions are `min`, `max`, `abs`, `sqrt`, `pow`, `sin`, `cos`, `tan`, `asin`, `acos`, `atan`,
+  `atan2`, `floor`, `ceil`, `round`, `sign`, `degrees`, `radians`, `clamp(x, lo, hi)`, `lerp(a, b, t)` and
+  `if(condition, then, else)`, which evaluates only the branch it takes. `pi` is a constant. Trig is in radians.
+* `Document(contentsOf:parameters:)` and `vectorscript render --set NAME=VALUE` replace defaults. Setting a name
+  that the document does not declare is an error.
+* Expressions are evaluated when the document is read, so a `Document` holds plain numbers. Encoding it writes
+  the evaluated values, and color parameters appear as paints in `defs`.
 
 ### Resolved documents
 

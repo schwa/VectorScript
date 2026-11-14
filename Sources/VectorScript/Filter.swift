@@ -37,14 +37,14 @@ public enum Filter: Sendable, Equatable, Codable {
         if type == "dropShadow" {
             let shadow = try container.nestedContainer(keyedBy: AnyKey.self, forKey: AnyKey(type))
             try shadow.rejectUnknownKeys(allowed: ["offset", "blur", "color"])
-            let blur = try shadow.decodeIfPresent(Double.self, "blur") ?? 0
+            let blur = try shadow.decodeNumberIfPresent("blur") ?? 0
             guard blur >= 0 else {
                 throw shadow.corrupted("a shadow's blur cannot be negative")
             }
             self = .dropShadow(offset: try shadow.decodeIfPresent(Point.self, "offset") ?? .zero, blur: blur, color: try shadow.decodeIfPresent(Color.self, "color") ?? Color(red: 0, green: 0, blue: 0, alpha: 0.5))
             return
         }
-        let value = try container.decode(Double.self, type)
+        let value = try container.decodeNumber(type)
         let valueDecoder = try container.superDecoder(forKey: AnyKey(type))
         switch type {
         case "blur":

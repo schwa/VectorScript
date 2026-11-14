@@ -29,9 +29,32 @@ struct Failure: Error, CustomStringConvertible {
     var description: String
 }
 
-func load(_ path: String) throws -> Document {
+// --set NAME=VALUE, where VALUE is a number, a "#" color, or an expression.
+struct ParameterOptions: ParsableArguments {
+    @Option(name: .customLong("set"), help: ArgumentHelp("Set a document parameter: NAME=VALUE, where VALUE is a number, a #color or an expression. Repeatable.", valueName: "name=value"))
+    var assignments: [String] = []
+
+    func parameters() throws -> [String: ParameterValue] {
+        var result: [String: ParameterValue] = [:]
+        for assignment in assignments {
+            guard let equals = assignment.firstIndex(of: "="), equals != assignment.startIndex else {
+                throw Failure(description: "--set \(assignment): expected NAME=VALUE")
+            }
+            let name = String(assignment[..<equals])
+            do {
+                result[name] = try ParameterValue(parsing: String(assignment[assignment.index(after: equals)...]))
+            } catch {
+                throw Failure(description: "--set \(assignment): \(error)")
+            }
+        }
+        return result
+    }
+}
+
+func load(_ path: String, parameters: ParameterOptions = ParameterOptions()) throws -> Document {
+    let values = try parameters.parameters()
     do {
-        return try Document(contentsOf: URL(filePath: path))
+        return try Document(contentsOf: URL(filePath: path), parameters: values)
     } catch let error as DocumentError {
         throw Failure(description: "\(path): \(error)")
     } catch {
@@ -57,8 +80,10 @@ struct Render: ParsableCommand {
     @Option(help: "Output size WIDTHxHEIGHT in points, replacing the document size.")
     var size: OutputSize?
 
+    @OptionGroup var parameters: ParameterOptions
+
     func run() throws {
-        let document = try load(input)
+        let document = try load(input, parameters: parameters)
         let outputURL: URL
         let resolvedFormat: OutputFormat
         if let output {
@@ -92,11 +117,13 @@ struct Validate: ParsableCommand {
     @Argument(help: "Input files.")
     var inputs: [String]
 
+    @OptionGroup var parameters: ParameterOptions
+
     func run() throws {
         var failed = false
         for input in inputs {
             do {
-                _ = try load(input).resolved()
+                _ = try load(input, parameters: parameters).resolved()
                 print("\(input): ok")
             } catch {
                 FileHandle.standardError.write(Data("\(error)\n".utf8))
@@ -118,8 +145,10 @@ struct Resolve: ParsableCommand {
     @Flag(help: "Keep uses as shared instances of resolved definitions instead of expanding them.")
     var instances = false
 
+    @OptionGroup var parameters: ParameterOptions
+
     func run() throws {
-        let data = try load(input).resolved(keepingInstances: instances).jsonData()
+        let data = try load(input, parameters: parameters).resolved(keepingInstances: instances).jsonData()
         print(String(decoding: data, as: UTF8.self))
     }
 }
