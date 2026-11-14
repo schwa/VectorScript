@@ -246,6 +246,12 @@ operation is the outermost one. A `use` places its definition at `at` after its 
 * each transform is one matrix,
 * groups have no style.
 
+`document.resolved(keepingInstances: true)` keeps uses instead of expanding them. Each `use` then names a
+resolved definition in the result's `defs`, and uses whose definitions resolve the same way share one. A
+definition that resolves differently at different uses, because of style overrides or inheritance, gets one entry
+for each way: `dot`, `dot-2`, and so on. A use keeps its `at`, transform, opacity, clip, mask, blend mode and
+filter, and has no style. `vectorscript resolve --instances` prints this form.
+
 A resolved document is still a valid VectorScript document, and it encodes to JSON like any other. It is the
 level that other formats can lower to. The renderer draws resolved documents, and it resolves any document
 that is not resolved yet.

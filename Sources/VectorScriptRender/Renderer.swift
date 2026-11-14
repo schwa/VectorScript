@@ -146,8 +146,19 @@ public struct Renderer: Sendable {
             }
         case .image(let image):
             try draw(image, in: context)
-        case .use:
-            preconditionFailure("Renderer only draws resolved documents")
+        case .use(let use):
+            // A resolved use names a resolved definition (resolved(keepingInstances: true)).
+            guard case .element(let definition) = document.defs[use.name] else {
+                preconditionFailure("Renderer only draws resolved documents")
+            }
+            context.saveGState()
+            defer {
+                context.restoreGState()
+            }
+            if let at = use.at {
+                context.translateBy(x: at.x, y: at.y)
+            }
+            try draw(definition, in: context)
         }
     }
 

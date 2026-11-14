@@ -148,6 +148,15 @@ struct RendererTests {
     }
 
     @Test
+    func `instanced documents draw the same as flat ones`() throws {
+        let json = "{ size: [40, 40], defs: { dot: { rect: [0, 0, 6, 6] }, row: { group: [{ use: 'dot' }, { use: 'dot', at: [10, 0], fill: 'blue' }] } }, elements: [{ use: 'row', at: [2, 2], fill: 'red' }, { use: 'row', at: [2, 20], fill: 'red', opacity: 0.5, transform: 'rotate(5 20 20)' }] }"
+        let document = try Document(json: Data(json.utf8))
+        let flat = Bitmap(try Renderer(document: document.resolved()).cgImage())
+        let instanced = Bitmap(try Renderer(document: document.resolved(keepingInstances: true)).cgImage())
+        #expect(flat.bytes == instanced.bytes)
+    }
+
+    @Test
     func `uses draw their definition`() throws {
         let bitmap = try render("{ size: [20, 20], defs: { dot: { rect: [0, 0, 4, 4] } }, elements: [{ use: 'dot', at: [10, 10], fill: 'red' }] }")
         #expect(bitmap[12, 12] == red)

@@ -115,8 +115,11 @@ struct Resolve: ParsableCommand {
     @Argument(help: "The input file.")
     var input: String
 
+    @Flag(help: "Keep uses as shared instances of resolved definitions instead of expanding them.")
+    var instances = false
+
     func run() throws {
-        let data = try load(input).resolved().jsonData()
+        let data = try load(input).resolved(keepingInstances: instances).jsonData()
         print(String(decoding: data, as: UTF8.self))
     }
 }

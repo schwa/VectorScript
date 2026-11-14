@@ -693,13 +693,14 @@ The SVG package (~/Projects/Scratch/SVG) has its own DisplayList. It cannot yet 
 ## 38: No instances in resolved documents
 
 +++
-status: open
+status: closed
 priority: medium
 kind: feature
 labels: effort:m, area:format
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T21:32:11Z
+updated: 2026-11-14T21:37:04Z
+closed: 2026-11-14T21:37:04Z
 +++
 
 A resolved document expands every use, so repeated content is duplicated instead of drawn from one shared definition.
@@ -712,6 +713,7 @@ A resolved document expands every use, so repeated content is duplicated instead
 - `2026-11-14T21:33:51Z`: Answer 1: dont care
 - `2026-11-14T21:34:00Z`: Answer 2: dont care
 - `2026-11-14T21:34:08Z`: Answer 3: yes
+- `2026-11-14T21:37:04Z`: resolved(keepingInstances: true): uses name resolved definitions in defs, shared when they resolve the same, suffixed (dot-2) when they differ; uses keep at and element-wide properties. Default stays flat. CLI: vectorscript resolve --instances.
 
 ---
 

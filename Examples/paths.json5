@@ -1,28 +1,9 @@
-// SVG path data: every command, absolute (upper case) and relative (lower case), with implicit repeats.
 {
-  $schema: "../Schema/vectorscript.schema.json",
-  size: [360, 240],
-  background: "#fff",
+  $schema: "https://github.com/schwa/VectorScript/vectorscript.schema.json",
+  size: [256, 256],
+  background: "#203040",
   elements: [
-    // M L H V Z, and the same shape written relatively.
-    { path: "M 20 20 L 100 20 V 80 H 60 L 20 60 Z", fill: "#d9483b" },
-    { path: "m 120 20 l 80 0 v 60 h -40 l -40 -20 z", fill: "#d9483b" },
-
-    // Implicit repeats: numbers after M are lines, after L more lines.
-    { path: "M 220 80 240 20 260 80 280 20 300 80 320 20 340 80", fill: "none", stroke: "#3b8fd9", strokeWidth: 3 },
-
-    // C and S: S mirrors the previous control point.
-    { path: "M 20 160 C 20 110 80 110 80 160 S 140 210 140 160", fill: "none", stroke: "#222", strokeWidth: 3 },
-    // Q and T: T mirrors the previous quadratic control point.
-    { path: "M 160 160 Q 185 110 210 160 T 260 160 T 310 160", fill: "none", stroke: "#4bb06a", strokeWidth: 3 },
-
-    // A: radii, x-axis rotation, large-arc flag, sweep flag, end point. Flags may be packed: "a20 20 0 01..".
-    // Same radii and end points; only the large-arc flag differs.
-    { path: "M 20 225 A 30 20 0 0 1 60 225", fill: "none", stroke: "#8a5cc2", strokeWidth: 3 },
-    { path: "M 90 225 A 30 20 0 1 1 130 225", fill: "none", stroke: "#8a5cc2", strokeWidth: 3 },
-    { path: "M 160 230 a20,10 30 0130,0 a20,10 -30 0130,0 l 30 -20", fill: "none", stroke: "#f0a830", strokeWidth: 3 },
-
-    // Compact numbers: "20-20" is two numbers, "-.5.5" is two numbers.
-    { path: "M300 200l20-20-.5.5 20 20z", fill: "#0a8f8f" }
+    { circle: [128, 128, 80], fill: { radialGradient: { focus: [0.35, 0.35], stops: [[0, "#ffe9a8"], [1, "#f0a830"]] } } },
+    { text: "VectorScript", at: [128, 236], anchor: "middle", font: "Helvetica-Bold", fontSize: 22, fill: "#fff" }
   ]
 }
