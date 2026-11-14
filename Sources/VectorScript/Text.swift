@@ -10,11 +10,17 @@ public struct Text: Sendable, Equatable {
     public var anchor: TextAnchor
     // When set, lines wrap at word breaks to fit this many points.
     public var width: Double?
+    // When set, the text runs along this path instead of from `at`: one line, each glyph turned to follow it.
+    public var onPath: PathData?
+    // Distance along `onPath` that `anchor` places the text against.
+    public var offset: Double
 
-    public init(string: String, at: Point, anchor: TextAnchor = .start, width: Double? = nil) {
+    public init(string: String, at: Point = .zero, anchor: TextAnchor = .start, width: Double? = nil, onPath: PathData? = nil, offset: Double = 0) {
         self.string = string
         self.at = at
         self.anchor = anchor
         self.width = width
+        self.onPath = onPath
+        self.offset = offset
     }
 }

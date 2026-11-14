@@ -1,0 +1,8 @@
+{ size: [200, 120], background: "#fff", elements: [
+  { path: "M 10 60 Q 100 -10 190 60", fill: "none", stroke: "#ddd" },
+  { text: "Text along a curve", onPath: "M 10 60 Q 100 -10 190 60", offset: 30, fontSize: 14, fill: "#c33" },
+  { circle: [60, 90, 22], fill: "none", stroke: "#ddd" },
+  { text: "ROUND AND ROUND", onPath: "M 38 90 A 22 22 0 1 1 82 90 A 22 22 0 1 1 38 90", fontSize: 7, letterSpacing: 1, font: "Helvetica-Bold", fill: "#36c" },
+  { path: "M 120 110 L 190 75", fill: "none", stroke: "#ddd" },
+  { text: "slanted, cut off at the end", onPath: "M 120 110 L 190 75", fontSize: 9 }
+] }

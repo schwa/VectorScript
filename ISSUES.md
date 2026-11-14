@@ -579,16 +579,19 @@ Text cannot set letter spacing.
 ## 32: No text on a path
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:l, area:text
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T21:19:50Z
+closed: 2026-11-14T21:19:50Z
 +++
 
 Text cannot follow a path.
+
+- `2026-11-14T21:19:50Z`: Text onPath (SVG path data) with offset; glyphs placed by their midpoints along a flattened copy and turned to the tangent; anchor relative to offset.
 
 ---
 

@@ -386,6 +386,38 @@ struct RendererTests {
     }
 
     @Test
+    func `text on a straight path matches plain text`() throws {
+        let plain = try render("{ size: [120, 40], elements: [{ text: 'Hello', at: [10, 30], fontSize: 20 }] }")
+        let onPath = try render("{ size: [120, 40], elements: [{ text: 'Hello', onPath: 'M 0 30 L 120 30', offset: 10, fontSize: 20 }] }")
+        #expect(inkExtent(plain, rows: 0..<40) == inkExtent(onPath, rows: 0..<40))
+        #expect(lineBands(plain) == lineBands(onPath))
+    }
+
+    @Test
+    func `text on a vertical path runs down it`() throws {
+        let bitmap = try render("{ size: [40, 120], elements: [{ text: 'HHHHH', onPath: 'M 20 10 L 20 110', fontSize: 14 }] }")
+        let bands = lineBands(bitmap)
+        // Turned 90 degrees, the text is tall and narrow.
+        let extent = try #require(inkExtent(bitmap, rows: 0..<120))
+        #expect(extent.count < 20)
+        #expect((bands.last?.upperBound ?? 0) - (bands.first?.lowerBound ?? 0) > 40)
+    }
+
+    @Test
+    func `glyphs past the end of the path are dropped`() throws {
+        let short = try render("{ size: [200, 40], elements: [{ text: 'HHHHHHHHHH', onPath: 'M 10 30 L 40 30', fontSize: 20 }] }")
+        let extent = try #require(inkExtent(short, rows: 0..<40))
+        #expect(extent.upperBound < 60)
+    }
+
+    @Test
+    func `middle anchor centers on the offset`() throws {
+        let bitmap = try render("{ size: [200, 40], elements: [{ text: 'HHHH', onPath: 'M 0 30 L 200 30', offset: 100, anchor: 'middle', fontSize: 20 }] }")
+        let extent = try #require(inkExtent(bitmap, rows: 0..<40))
+        #expect(abs(Double(extent.lowerBound + extent.upperBound) / 2 - 100) <= 2)
+    }
+
+    @Test
     func `an unknown font is an error`() throws {
         let document = try Document(json: Data("{ size: [10, 10], elements: [{ text: 'A', at: [0, 5], font: 'NoSuchFont-Regular' }] }".utf8))
         #expect(throws: RenderError.unknownFont("NoSuchFont-Regular")) {

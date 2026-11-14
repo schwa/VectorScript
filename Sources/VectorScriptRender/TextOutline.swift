@@ -11,17 +11,63 @@ extension Text {
         let spacing = style.letterSpacing ?? 0
         let lineAdvance = (style.lineHeight ?? 1.2) * CTFontGetSize(font)
         let path = CGMutablePath()
-        for (index, line) in lines(font: font, spacing: spacing).enumerated() {
-            // Trailing spaces and the spacing after the last character do not count toward the anchor.
-            let width = CTLineGetTypographicBounds(line, nil, nil, nil) - CTLineGetTrailingWhitespaceWidth(line) - (CTLineGetGlyphCount(line) > 0 ? spacing : 0)
-            let startX: Double = switch anchor {
-            case .start: at.x
-            case .middle: at.x - width / 2
-            case .end: at.x - width
+        if let onPath {
+            if let line = lines(font: font, spacing: spacing).first {
+                add(line, font: font, along: PathWalker(Shape.path(onPath).cgPath), start: anchored(offset, width: width(of: line, spacing: spacing)), to: path)
             }
+            return path
+        }
+        for (index, line) in lines(font: font, spacing: spacing).enumerated() {
+            let startX = anchored(at.x, width: width(of: line, spacing: spacing))
             add(line, font: font, origin: Point(x: startX, y: at.y + Double(index) * lineAdvance), to: path)
         }
         return path
+    }
+
+    // Trailing spaces and the spacing after the last character do not count toward the anchor.
+    private func width(of line: CTLine, spacing: Double) -> Double {
+        CTLineGetTypographicBounds(line, nil, nil, nil) - CTLineGetTrailingWhitespaceWidth(line) - (CTLineGetGlyphCount(line) > 0 ? spacing : 0)
+    }
+
+    private func anchored(_ position: Double, width: Double) -> Double {
+        switch anchor {
+        case .start: position
+        case .middle: position - width / 2
+        case .end: position - width
+        }
+    }
+
+    // Places each glyph with the middle of its advance on the path, turned to the path's direction there. Glyphs
+    // whose middle falls off either end are left out, as in SVG.
+    private func add(_ line: CTLine, font: CTFont, along walker: PathWalker, start: Double, to path: CGMutablePath) {
+        for run in CTLineGetGlyphRuns(line) as? [CTRun] ?? [] {
+            let runFont = Self.font(of: run, fallback: font)
+            let count = CTRunGetGlyphCount(run)
+            var glyphs = [CGGlyph](repeating: 0, count: count)
+            var positions = [CGPoint](repeating: .zero, count: count)
+            var advances = [CGSize](repeating: .zero, count: count)
+            CTRunGetGlyphs(run, CFRange(location: 0, length: count), &glyphs)
+            CTRunGetPositions(run, CFRange(location: 0, length: count), &positions)
+            CTRunGetAdvances(run, CFRange(location: 0, length: count), &advances)
+            for index in 0..<count {
+                let middle = start + positions[index].x + advances[index].width / 2
+                guard let glyph = CTFontCreatePathForGlyph(runFont, glyphs[index], nil), let place = walker.place(at: middle) else {
+                    continue
+                }
+                // Flip the glyph to y down, center it on the point, turn it, then move it there.
+                let transform = CGAffineTransform(translationX: place.point.x, y: place.point.y).rotated(by: place.angle).translatedBy(x: -advances[index].width / 2, y: -positions[index].y).scaledBy(x: 1, y: -1)
+                path.addPath(glyph, transform: transform)
+            }
+        }
+    }
+
+    static func font(of run: CTRun, fallback: CTFont) -> CTFont {
+        let attributes = CTRunGetAttributes(run) as NSDictionary
+        if let value = attributes[kCTFontAttributeName] as CFTypeRef?, CFGetTypeID(value) == CTFontGetTypeID() {
+            // Checked by type ID, so the cast cannot fail.
+            return value as! CTFont
+        }
+        return fallback
     }
 
     // One CTLine per "\n"-separated paragraph, or more when `width` wraps it.
@@ -52,13 +98,8 @@ extension Text {
         let baseline = origin.y
         let runs = CTLineGetGlyphRuns(line) as? [CTRun] ?? []
         for run in runs {
-            let attributes = CTRunGetAttributes(run) as NSDictionary
             // Font substitution can give a run its own font.
-            var runFont = font
-            if let value = attributes[kCTFontAttributeName] as CFTypeRef?, CFGetTypeID(value) == CTFontGetTypeID() {
-                // Checked by type ID, so the cast cannot fail.
-                runFont = value as! CTFont
-            }
+            let runFont = Self.font(of: run, fallback: font)
             let count = CTRunGetGlyphCount(run)
             var glyphs = [CGGlyph](repeating: 0, count: count)
             var positions = [CGPoint](repeating: .zero, count: count)

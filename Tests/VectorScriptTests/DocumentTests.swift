@@ -121,6 +121,19 @@ struct DocumentTests {
     }
 
     @Test
+    func `decodes text on a path`() throws {
+        let onPath = try element("{ text: 'around', onPath: 'M 0 0 L 100 0', offset: 10, anchor: 'middle' }")
+        #expect(onPath.content == .text(Text(string: "around", anchor: .middle, onPath: try PathData(parsing: "M 0 0 L 100 0"), offset: 10)))
+        #expect(elementFailure("{ text: 'a', onPath: 'M 0 0 L 1 0', at: [0, 0] }") == "elements[0].at: text on a path has no at; use offset")
+        #expect(elementFailure("{ text: 'a', onPath: 'M 0 0 L 1 0', width: 10 }") == "elements[0].width: text on a path cannot wrap")
+        #expect(elementFailure("{ text: 'a\\nb', onPath: 'M 0 0 L 1 0' }") == "elements[0].text: text on a path is one line")
+        #expect(elementFailure("{ text: 'a', at: [0, 0], offset: 3 }") == "elements[0].offset: offset needs onPath")
+        #expect(elementFailure("{ text: 'a', onPath: 'Q' }").hasPrefix("elements[0].onPath: bad path"))
+        let original = try document(elements: "{ text: 'a', onPath: 'M 0 0 Q 5 5 10 0', offset: 2 }, { text: 'b', onPath: 'M 0 0 L 1 0' }")
+        #expect(try Document(json: original.jsonData()) == original)
+    }
+
+    @Test
     func `decodes filters`() throws {
         let single = try element("{ circle: [0, 0, 1], filter: { blur: 2 } }")
         #expect(single.filter == FilterList([.blur(2)]))

@@ -44,12 +44,28 @@ public struct Element: Sendable, Equatable, Codable {
             allowed.insert("at")
             content = .use(Use(name: try container.decode(String.self, type), at: try container.decodeIfPresent(Point.self, "at")))
         case "text":
-            allowed.formUnion(["at", "anchor", "width"])
+            allowed.formUnion(["at", "anchor", "width", "onPath", "offset"])
+            let string = try container.decode(String.self, type)
             let width = try container.decodeIfPresent(Double.self, "width")
             if let width, width <= 0 {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath + [AnyKey("width")], debugDescription: "a text width must be positive"))
             }
-            content = .text(Text(string: try container.decode(String.self, type), at: try container.decode(Point.self, "at"), anchor: try container.decodeIfPresent(TextAnchor.self, "anchor") ?? .start, width: width))
+            let onPath = try container.decodeIfPresent(PathData.self, "onPath")
+            let anchor = try container.decodeIfPresent(TextAnchor.self, "anchor") ?? .start
+            if let onPath {
+                for (key, message) in [("at", "text on a path has no at; use offset"), ("width", "text on a path cannot wrap")] where container.contains(AnyKey(key)) {
+                    throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath + [AnyKey(key)], debugDescription: message))
+                }
+                guard !string.contains("\n") else {
+                    throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath + [AnyKey(type)], debugDescription: "text on a path is one line"))
+                }
+                content = .text(Text(string: string, anchor: anchor, onPath: onPath, offset: try container.decodeIfPresent(Double.self, "offset") ?? 0))
+            } else {
+                if container.contains(AnyKey("offset")) {
+                    throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath + [AnyKey("offset")], debugDescription: "offset needs onPath"))
+                }
+                content = .text(Text(string: string, at: try container.decode(Point.self, "at"), anchor: anchor, width: width))
+            }
         case "image":
             // Images have no fill or stroke, so style keys would do nothing.
             allowed = [type, "at", "size", "opacity", "transform", "clip", "mask", "blendMode", "filter"]
@@ -87,7 +103,14 @@ public struct Element: Sendable, Equatable, Codable {
             try container.encodeIfPresent(use.at, "at")
         case .text(let text):
             try container.encode(text.string, "text")
-            try container.encode(text.at, "at")
+            if let onPath = text.onPath {
+                try container.encode(onPath, "onPath")
+                if text.offset != 0 {
+                    try container.encode(text.offset, "offset")
+                }
+            } else {
+                try container.encode(text.at, "at")
+            }
             if text.anchor != .start {
                 try container.encode(text.anchor, "anchor")
             }

@@ -180,6 +180,11 @@ Filters apply first, before the element's clip, mask, opacity and blend mode, so
 filtered element is drawn as pixels: at device resolution in bitmaps, and at 4 pixels per point in PDF output.
 Colors are filtered in sRGB, as CSS does.
 
+Text can run along a path instead: `{ text: "Hello", onPath: "M 0 50 Q 50 0 100 50", offset: 10 }`. `onPath` is
+SVG path data, and `offset` is the distance along it that `anchor` places the text against (default 0). Each glyph
+sits with the middle of its width on the path, turned to the path's direction there. Glyphs that fall off either
+end are left out. Text on a path is one line, and it takes no `at` or `width`.
+
 Text is laid out by CoreText. Trailing spaces and the letter spacing after a line's last character do not count
 when a line is anchored.
 

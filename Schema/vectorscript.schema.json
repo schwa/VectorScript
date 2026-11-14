@@ -1524,8 +1524,7 @@
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "text",
-            "at"
+            "text"
           ],
           "properties": {
             "text": {
@@ -1637,8 +1636,56 @@
             },
             "filter": {
               "$ref": "#/$defs/filterList"
+            },
+            "onPath": {
+              "type": "string",
+              "description": "SVG path data the text runs along, one line, instead of at. Glyphs past either end are left out."
+            },
+            "offset": {
+              "type": "number",
+              "description": "Distance along onPath that anchor places the text against. Default 0."
             }
-          }
+          },
+          "oneOf": [
+            {
+              "required": [
+                "at"
+              ],
+              "not": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "onPath"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "offset"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "required": [
+                "onPath"
+              ],
+              "not": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "at"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "width"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "type": "object",
