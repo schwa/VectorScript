@@ -17,6 +17,9 @@ struct ExpressionTests {
         ("1 && 0", 0), ("0 || 2", 1), ("!0", 1), ("1 == 1 && 2 != 3", 1), ("1.5e2", 150),
         ("min(4, 2, 8)", 2), ("max(1, 9)", 9), ("pow(2, 10)", 1024), ("round(2.5)", 3), ("floor(-1.5)", -2),
         ("clamp(12, 0, 10)", 10), ("lerp(0, 10, 0.25)", 2.5), ("degrees(pi)", 180), ("sign(-4)", -1), ("abs(-3) + sqrt(16)", 7),
+        ("easeIn(0.5)", 0.25), ("easeOut(0.5)", 0.75), ("easeInOut(0.25)", 0.125), ("easeInOut(0.75)", 0.875),
+        ("easeInOut(1)", 1), ("easeIn(2)", 1), ("smoothstep(0.5)", 0.5), ("fract(2.25)", 0.25), ("fract(-0.25)", 0.75),
+        ("pingpong(0.25)", 0.5), ("pingpong(0.5)", 1), ("pingpong(1.75)", 0.5), ("step(0.99, 4)", 0.75), ("step(1, 4)", 1),
     ])
     func `evaluates expressions`(text: String, expected: Double) throws {
         #expect(abs(try evaluate(text) - expected) < 1e-9)
@@ -34,7 +37,7 @@ struct ExpressionTests {
         #expect(try evaluate("0 && $MISSING") == 0)
     }
 
-    @Test(arguments: ["1 +", "(1", "foo", "foo(1)", "$", "1 / 0", "min()", "pow(1)", "2 $X"])
+    @Test(arguments: ["1 +", "(1", "foo", "foo(1)", "$", "1 / 0", "min()", "pow(1)", "2 $X", "step(0.5, 0)", "easeIn(1, 2)"])
     func `rejects bad expressions`(text: String) {
         #expect(throws: NumberExpression.Error.self) {
             try evaluate(text, ["X": 1])

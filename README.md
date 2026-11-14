@@ -278,6 +278,11 @@ and `loop` defaults to true. Expressions read the time as `$TIME`, from 0 up to 
 `$DURATION`. A still document sees both as 0. Because any number can be an expression, anything can move:
 positions, sizes, angles, opacity, gradient stops, filter amounts.
 
+Expressions have easing functions for animation. Each takes `t` from 0 to 1 and gives 0 to 1, with inputs
+clamped: `easeIn`, `easeOut`, `easeInOut` and `smoothstep`. `fract(x)` is the part after the decimal point.
+`pingpong(x)` goes from 0 up to 1 and back over each unit. `step(t, n)` holds `t` to `n` steps. For example,
+`"lerp(10, 90, easeInOut(pingpong($TIME / $DURATION * 2)))"` moves from 10 to 90 and back, easing at both ends.
+
 `DocumentSource(contentsOf:)` keeps the JSON so that `document(at: time)` can read the document at any time.
 
 ### Resolved documents

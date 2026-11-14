@@ -843,16 +843,19 @@ A document cannot say it is animated or how long it runs, and expressions cannot
 ## 45: Expressions have no easing functions
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:xs, area:format, subtask
 depends: 44
 created: 2026-11-14T21:49:37Z
-updated: 2026-11-14T21:49:48Z
+updated: 2026-11-14T21:52:00Z
+closed: 2026-11-14T21:52:00Z
 +++
 
 Animated expressions need easing curves written out by hand. Expected: easing functions such as easeIn, easeOut, easeInOut, pingpong and step in expressions. Part of #34.
+
+- `2026-11-14T21:52:00Z`: easeIn, easeOut, easeInOut, smoothstep, fract, pingpong and step(t, n) in expressions.
 
 ---
 
