@@ -582,15 +582,16 @@ Text cannot follow a path.
 status: open
 priority: medium
 kind: feature
-labels: effort:l, area:format
+labels: effort:l, area:format, needs-design
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T20:51:36Z
 +++
 
 Documents cannot declare parameters or use expressions in place of numbers, as ModelScript does with $NAME and {expression}.
 
 - `2026-11-14T19:52:23Z`: Related: #39. ModelScript already has $NAME parameters and expressions.
+- `2026-11-14T20:51:36Z`: Read ModelScript's ModelExpressions.swift (Scalar: a number or an expression string; $NAME parameters with defaults in "parameters", overridden through decoder userInfo; presets). Porting it is clear work, but two format decisions come first, so punting. (1) Sigil clash: VectorScript already uses "$name" for paints in defs, and ModelScript uses "$NAME" for parameters. Either parameters share the namespace with defs (a color parameter is a paint, so fill: "$HULL" works either way and a name cannot be both), or parameters get another syntax. Which? (2) Where expressions are allowed: ModelScript accepts an expression string anywhere a number is decoded. In VectorScript that means inside compact arrays too, for example circle: ["$W / 2", 64, "$R"], and inside path data and transform strings as {expression}, as ModelScript paths do. Is that the scope, or only top-level number fields? Proposal if you just want a yes or no: share the defs namespace (a parameter is a number, color or list def, and "$NAME" means the same thing everywhere), allow expressions in every number position including arrays and {expr} in path and transform strings, defaults in a top-level "parameters" object, and overrides from Document(contentsOf:parameters:) and vectorscript render --set NAME=VALUE.
 
 ---
 
@@ -669,15 +670,16 @@ The SVG package (~/Projects/Scratch/SVG) has its own DisplayList. It cannot yet 
 status: open
 priority: medium
 kind: feature
-labels: effort:m, area:format
+labels: effort:m, area:format, needs-design
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T20:51:00Z
 +++
 
 A resolved document expands every use, so repeated content is duplicated instead of drawn from one shared definition.
 
 - `2026-11-14T19:52:23Z`: Related: needed for #37 (SVG lowering to VectorScript).
+- `2026-11-14T20:51:00Z`: Looked at how resolved() expands use. Punting: keeping instances changes what a resolved document is, and that needs a format decision. Resolved styles are baked into each element, but a use can override style and inherits from wherever it sits, so one definition can resolve differently at each use. Questions: (1) Should a resolved document keep defs (of resolved elements) and allow use only when the use adds no style and its inherited style matches what the definition was resolved with, and expand it otherwise? Or should resolve create one resolved definition per distinct (definition, effective style) pair, named for example dot#1, dot#2? (2) Should instancing be on by default, or an option such as resolved(keepingInstances: true), so the current fully flat form stays available? (3) Is a resolved use limited to transform plus at, with no opacity, clip or mask, or may it keep those?
 
 ---
 
