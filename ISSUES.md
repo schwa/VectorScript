@@ -626,13 +626,16 @@ Documents cannot declare parameters or use expressions in place of numbers, as M
 status: open
 priority: low
 kind: feature
-labels: effort:xl, area:format
+labels: effort:xl, area:format, has-subtasks
 milestone: later
+depends: 44, 45, 46, 47, 48
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T21:49:48Z
 +++
 
 Documents are static; nothing can change over time.
+
+- `2026-11-14T21:49:48Z`: Split into #44 (time and animation block), #45 (easing), #46 (render and CLI output), #47 (SwiftUI view), #48 (viewer playback). Keyframe tracks, motion along a path and color interpolation are left for later.
 
 ---
 
@@ -722,13 +725,14 @@ A resolved document expands every use, so repeated content is duplicated instead
 ## 39: ModelScript cannot use VectorScript
 
 +++
-status: open
+status: closed
 priority: high
 kind: feature
 labels: effort:l, area:interop
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T21:32:11Z
+updated: 2026-11-14T21:45:29Z
+closed: 2026-11-14T21:45:29Z
 +++
 
 ModelScript (~/Projects/Scratch/ModelScript) has no textures or UVs and cannot reference VectorScript graphics.
@@ -738,6 +742,7 @@ ModelScript (~/Projects/Scratch/ModelScript) has no textures or UVs and cannot r
 - `2026-11-14T21:32:10Z`: Question 1 (design): How should ModelScript produce UVs: per-primitive mapping, a projection set on the palette entry (planar, box or cylindrical, with scale and offset), or both?
 - `2026-11-14T21:32:10Z`: Question 2 (decision): Should a palette entry reference a VectorScript file, rendered and embedded in the .glb as a PNG? For example "hull": { "texture": "plating.json5", "size": 512 }.
 - `2026-11-14T21:32:10Z`: Question 3 (decision): Must UVs survive CSG booleans, or is projecting them after CSG enough?
+- `2026-11-14T21:45:29Z`: Not a VectorScript problem: texture and UV support belongs in ModelScript.
 
 ---
 
@@ -814,6 +819,85 @@ closed: 2026-11-14T20:53:15Z
 The viewer (Examples/VectorScriptViewer) parses the document from its source text without a file URL. Image elements with a path relative to the document, such as { image: "assets/bricks.png" }, fail to load with: image 'assets/bricks.png' is relative, but the document has no file URL. Absolute paths and data: URIs work.
 
 - `2026-11-14T20:53:15Z`: Preview passes the document's file URL as the base URL and re-renders when it changes. macOS app sandbox turned off so sibling image files can be read. iOS still only gets the document itself, so relative images there need absolute paths or data URIs.
+
+---
+
+## 44: Documents have no time parameter or animation block
+
++++
+status: open
+priority: low
+kind: feature
+labels: effort:s, area:format, subtask
+created: 2026-11-14T21:49:37Z
+updated: 2026-11-14T21:49:48Z
++++
+
+A document cannot say it is animated or how long it runs, and expressions cannot read the time. Expected: an animation block (duration, fps, loop) and reserved TIME and DURATION parameters, plus a way to read the same document again at another time. Part of #34.
+
+---
+
+## 45: Expressions have no easing functions
+
++++
+status: open
+priority: low
+kind: feature
+labels: effort:xs, area:format, subtask
+depends: 44
+created: 2026-11-14T21:49:37Z
+updated: 2026-11-14T21:49:48Z
++++
+
+Animated expressions need easing curves written out by hand. Expected: easing functions such as easeIn, easeOut, easeInOut, pingpong and step in expressions. Part of #34.
+
+---
+
+## 46: Animated documents cannot be rendered to animations
+
++++
+status: open
+priority: low
+kind: feature
+labels: effort:m, area:render, subtask
+depends: 44
+created: 2026-11-14T21:49:37Z
+updated: 2026-11-14T21:49:48Z
++++
+
+The renderer and CLI draw one still image. Expected: frames at each time step, written as an animated PNG, an animated GIF, or numbered PNG frames. Part of #34.
+
+---
+
+## 47: VectorScriptView does not animate
+
++++
+status: open
+priority: low
+kind: feature
+labels: effort:s, area:render, subtask
+depends: 44
+created: 2026-11-14T21:49:37Z
+updated: 2026-11-14T21:49:48Z
++++
+
+VectorScriptView draws an animated document at time 0 only. Part of #34.
+
+---
+
+## 48: Viewer cannot play animated documents
+
++++
+status: open
+priority: low
+kind: feature
+labels: effort:s, area:viewer, subtask
+depends: 47
+created: 2026-11-14T21:49:37Z
+updated: 2026-11-14T21:49:48Z
++++
+
+The viewer shows an animated document at time 0 only, with no way to play it or move through time. Part of #34.
 
 ---
 
