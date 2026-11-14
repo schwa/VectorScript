@@ -12,6 +12,7 @@ struct ResolveTests {
         expected.font = nil
         expected.fontSize = nil
         expected.letterSpacing = nil
+        expected.fontFile = nil
         #expect(resolved.elements[0].style == expected)
         #expect(resolved.isResolved)
     }
@@ -40,6 +41,18 @@ struct ResolveTests {
         }
         #expect(children[0].style.font == "Menlo")
         #expect(children[0].style.fontSize == 9)
+    }
+
+    @Test
+    func `font files inherit to text only`() throws {
+        let resolved = try document(elements: "{ group: [{ text: 'A', at: [0, 0] }, { circle: [0, 0, 1] }], fontFile: 'fonts/a.ttf' }").resolved()
+        guard case .group(let children) = resolved.elements[0].content else {
+            Issue.record("not a group")
+            return
+        }
+        #expect(children[0].style.fontFile == "fonts/a.ttf")
+        #expect(children[1].style.fontFile == nil)
+        #expect(try Document(json: resolved.jsonData()) == resolved)
     }
 
     @Test

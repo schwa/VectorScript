@@ -5,9 +5,8 @@ import VectorScript
 
 extension Text {
     // Glyph outlines in user space (y down), with the baseline through `at`.
-    func cgPath(style: Style) throws -> CGPath {
-        let name = style.font ?? "Helvetica"
-        let font = try Self.font(named: name, size: style.fontSize ?? 16)
+    func cgPath(style: Style, baseURL: URL?) throws -> CGPath {
+        let font = try Self.font(for: style, baseURL: baseURL)
         let attributed = NSMutableAttributedString(string: string, attributes: [NSAttributedString.Key(kCTFontAttributeName as String): font])
         if let spacing = style.letterSpacing, spacing != 0, let last = string.indices.last {
             // Space after every character but the last, so anchors measure the visible line.
@@ -46,6 +45,33 @@ extension Text {
             }
         }
         return path
+    }
+
+    static func font(for style: Style, baseURL: URL?) throws -> CTFont {
+        let size = style.fontSize ?? 16
+        guard let fontFile = style.fontFile else {
+            return try font(named: style.font ?? "Helvetica", size: size)
+        }
+        let url: URL
+        do {
+            url = try FileReference.url(for: fontFile, relativeTo: baseURL)
+        } catch {
+            throw RenderError.cannotLoadFont(file: fontFile, reason: error.description)
+        }
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            throw RenderError.cannotLoadFont(file: fontFile, reason: "no file at \(url.path)")
+        }
+        guard let descriptors = CTFontManagerCreateFontDescriptorsFromURL(url as CFURL) as? [CTFontDescriptor], let first = descriptors.first else {
+            throw RenderError.cannotLoadFont(file: fontFile, reason: "not a font file CoreText can read")
+        }
+        // A collection holds several faces; `font` picks one by name. It is always set once resolved, so a name
+        // that matches no face falls back to the first face.
+        let descriptor = descriptors.first { descriptor in
+            [kCTFontNameAttribute, kCTFontFamilyNameAttribute, kCTFontDisplayNameAttribute].contains { attribute in
+                (CTFontDescriptorCopyAttribute(descriptor, attribute) as? String)?.caseInsensitiveCompare(style.font ?? "") == .orderedSame
+            }
+        } ?? first
+        return CTFontCreateWithFontDescriptor(descriptor, size, nil)
     }
 
     static func font(named name: String, size: Double) throws -> CTFont {

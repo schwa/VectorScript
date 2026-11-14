@@ -11,6 +11,7 @@ public enum RenderError: Error, Equatable, CustomStringConvertible {
     case tooManyPatternTiles(Int)
     case maskTooLarge(width: Int, height: Int)
     case cannotLoadImage(source: String, reason: String)
+    case cannotLoadFont(file: String, reason: String)
 
     public var description: String {
         switch self {
@@ -19,6 +20,7 @@ public enum RenderError: Error, Equatable, CustomStringConvertible {
         case .cannotCreateImage: "cannot create an image"
         case .cannotWrite(let url): "cannot write \(url.path)"
         case .cannotLoadImage(let source, let reason): "cannot load image '\(source.count > 60 ? source.prefix(60) + "…" : source)': \(reason)"
+        case .cannotLoadFont(let file, let reason): "cannot load font file '\(file)': \(reason)"
         case .maskTooLarge(let width, let height): "a mask needs a \(width) x \(height) pixel image, which is too big"
         case .tooManyPatternTiles(let count): "a pattern needs \(count) tiles here (the limit is \(Renderer.maximumPatternTiles)); make its tile bigger"
         }
@@ -124,7 +126,7 @@ public struct Renderer: Sendable {
         case .shape(let shape):
             try paint(shape.cgPath, style: element.style, in: context)
         case .text(let text):
-            try paint(try text.cgPath(style: element.style), style: element.style, in: context)
+            try paint(try text.cgPath(style: element.style, baseURL: document.baseURL), style: element.style, in: context)
         case .group(let children):
             for child in children {
                 try draw(child, in: context)

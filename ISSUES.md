@@ -534,16 +534,19 @@ Text cannot span lines or wrap.
 ## 30: No font files
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:s, area:text
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T21:01:04Z
+closed: 2026-11-14T21:01:04Z
 +++
 
 Text cannot use a font from a file, so output depends on the fonts installed on the machine.
+
+- `2026-11-14T21:01:04Z`: fontFile style property (inherited), loaded with CoreText from a path relative to the document, absolute path or file: URL; font picks a face in collections.
 
 ---
 

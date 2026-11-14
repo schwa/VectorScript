@@ -635,6 +635,10 @@
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
+            },
+            "fontFile": {
+              "type": "string",
+              "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
             }
           }
         },
@@ -723,6 +727,10 @@
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
+            },
+            "fontFile": {
+              "type": "string",
+              "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
             }
           }
         },
@@ -811,6 +819,10 @@
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
+            },
+            "fontFile": {
+              "type": "string",
+              "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
             }
           }
         },
@@ -899,6 +911,10 @@
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
+            },
+            "fontFile": {
+              "type": "string",
+              "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
             }
           }
         },
@@ -984,6 +1000,10 @@
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
+            },
+            "fontFile": {
+              "type": "string",
+              "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
             }
           }
         },
@@ -1069,6 +1089,10 @@
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
+            },
+            "fontFile": {
+              "type": "string",
+              "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
             }
           }
         },
@@ -1152,6 +1176,10 @@
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
+            },
+            "fontFile": {
+              "type": "string",
+              "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
             }
           }
         },
@@ -1237,6 +1265,10 @@
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
+            },
+            "fontFile": {
+              "type": "string",
+              "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
             }
           }
         },
@@ -1323,6 +1355,10 @@
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
+            },
+            "fontFile": {
+              "type": "string",
+              "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
             }
           }
         },
@@ -1416,6 +1452,10 @@
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
+            },
+            "fontFile": {
+              "type": "string",
+              "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
             }
           }
         },

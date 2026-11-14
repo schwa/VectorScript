@@ -31,6 +31,7 @@ extension Document {
             effective.font = nil
             effective.fontSize = nil
             effective.letterSpacing = nil
+            effective.fontFile = nil
             return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
         case .text:
             return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)

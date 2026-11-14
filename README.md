@@ -114,6 +114,7 @@ Every element can also have these keys:
 | `font` | A system font's PostScript, family or full name. Default Helvetica. An unknown font is an error. | yes |
 | `fontSize` | number. Default 16. | yes |
 | `letterSpacing` | extra points between characters; negative tightens. Default 0. | yes |
+| `fontFile` | a font file (TTF, OTF, TTC), found like an image source. When set, `font` only picks a face in the file, and the first face is used when none matches. Makes text the same on every machine. | yes |
 | `opacity` | 0...1, applied to the element as a whole | no |
 | `transform` | see below | no |
 | `clip` | a shape: `{ circle: [...] }`, `{ path: "...", fillRule: "evenodd" }` | no |

@@ -38,15 +38,10 @@ public struct RasterImage: Sendable, Equatable {
             }
             return .data(data)
         }
-        if source.hasPrefix("file:"), let url = URL(string: source) {
-            return .file(url)
-        }
-        if source.hasPrefix("/") {
-            return .file(URL(filePath: source))
-        }
-        guard let baseURL else {
+        do {
+            return .file(try FileReference.url(for: source, relativeTo: baseURL))
+        } catch {
             throw .relativePathWithoutBase(source)
         }
-        return .file(URL(filePath: source, relativeTo: baseURL.deletingLastPathComponent()).standardizedFileURL)
     }
 }
