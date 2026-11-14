@@ -709,6 +709,37 @@ Documents can only be drawn through CoreGraphics; there is no SwiftUI view or Gr
 
 ---
 
+## 41: Viewer source editor has no syntax highlighting
+
++++
+status: open
+priority: low
+kind: enhancement
+labels: effort:m, area:viewer
+milestone: viewer
+created: 2026-11-14T19:58:49Z
++++
+
+The JSON5 source in the viewer (Examples/VectorScriptViewer) is plain monospaced text. Keys, strings, numbers, comments and punctuation all look the same.
+
+---
+
+## 42: Viewer is not a document-based app
+
++++
+status: open
+priority: medium
+kind: enhancement
+labels: effort:m, area:viewer
+milestone: viewer
+created: 2026-11-14T19:58:49Z
+updated: 2026-11-14T19:58:49Z
++++
+
+The viewer (Examples/VectorScriptViewer) is a single WindowGroup with its own open, save and reload handling. There is no File > New, no recent documents, no multiple documents in separate windows, no autosave or versions, and no system handling of unsaved changes when closing a window or quitting.
+
+---
+
 ## Milestone: v1
 
 +++
@@ -728,5 +759,16 @@ created: 2026-11-14T19:15:38Z
 +++
 
 Features beyond v1, including parity with SVG's DisplayList.
+
+---
+
+## Milestone: viewer
+
++++
+status: open
+created: 2026-11-14T19:58:44Z
++++
+
+The example viewer and editor app.
 
 ---

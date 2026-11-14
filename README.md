@@ -49,6 +49,17 @@ vectorscript resolve panel.json5                   # prints the resolved documen
 
 Errors name the place in the file: `panel.json5: elements[3].fill: unknown color 'redd'`.
 
+## Viewer
+
+`Examples/VectorScriptViewer` is a macOS and iOS app that shows and edits a document. Open or drop a `.json` or
+`.json5` file. The source is on the left and the render is on the right. The render changes as you type, and ⌘S
+saves. When the source has an error, the app shows the error and keeps the last good render. Changes that other
+editors make to the file are reloaded when there are no unsaved edits in the app.
+
+```sh
+xcb build VectorScriptViewer/VectorScriptViewer
+```
+
 ## Format
 
 Files are JSON5, so comments, unquoted keys, single quotes and trailing commas are fine. Plain JSON is valid.
