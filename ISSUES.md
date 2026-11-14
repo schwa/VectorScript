@@ -601,16 +601,20 @@ Text cannot follow a path.
 status: open
 priority: medium
 kind: feature
-labels: effort:l, area:format, needs-design
+labels: effort:l, area:format
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T20:51:36Z
+updated: 2026-11-14T21:32:11Z
 +++
 
 Documents cannot declare parameters or use expressions in place of numbers, as ModelScript does with $NAME and {expression}.
 
 - `2026-11-14T19:52:23Z`: Related: #39. ModelScript already has $NAME parameters and expressions.
 - `2026-11-14T20:51:36Z`: Read ModelScript's ModelExpressions.swift (Scalar: a number or an expression string; $NAME parameters with defaults in "parameters", overridden through decoder userInfo; presets). Porting it is clear work, but two format decisions come first, so punting. (1) Sigil clash: VectorScript already uses "$name" for paints in defs, and ModelScript uses "$NAME" for parameters. Either parameters share the namespace with defs (a color parameter is a paint, so fill: "$HULL" works either way and a name cannot be both), or parameters get another syntax. Which? (2) Where expressions are allowed: ModelScript accepts an expression string anywhere a number is decoded. In VectorScript that means inside compact arrays too, for example circle: ["$W / 2", 64, "$R"], and inside path data and transform strings as {expression}, as ModelScript paths do. Is that the scope, or only top-level number fields? Proposal if you just want a yes or no: share the defs namespace (a parameter is a number, color or list def, and "$NAME" means the same thing everywhere), allow expressions in every number position including arrays and {expr} in path and transform strings, defaults in a top-level "parameters" object, and overrides from Document(contentsOf:parameters:) and vectorscript render --set NAME=VALUE.
+- `2026-11-14T21:32:10Z`: Question 1 (decision): Should parameters share the defs namespace, so a color parameter is a paint and "$NAME" means the same thing everywhere (a name cannot be both)? Or should parameters get their own syntax?
+- `2026-11-14T21:32:11Z`: Question 2 (decision): Should expressions be allowed in every number position, including inside compact arrays (circle: ["$W / 2", 64, "$R"]) and as {expr} inside path and transform strings, as ModelScript paths do? Or only in plain number fields?
+- `2026-11-14T21:33:15Z`: Answer 1: shared
+- `2026-11-14T21:33:42Z`: Answer 2: yes
 
 ---
 
@@ -692,16 +696,22 @@ The SVG package (~/Projects/Scratch/SVG) has its own DisplayList. It cannot yet 
 status: open
 priority: medium
 kind: feature
-labels: effort:m, area:format, needs-design
+labels: effort:m, area:format
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T20:51:00Z
+updated: 2026-11-14T21:32:11Z
 +++
 
 A resolved document expands every use, so repeated content is duplicated instead of drawn from one shared definition.
 
 - `2026-11-14T19:52:23Z`: Related: needed for #37 (SVG lowering to VectorScript).
 - `2026-11-14T20:51:00Z`: Looked at how resolved() expands use. Punting: keeping instances changes what a resolved document is, and that needs a format decision. Resolved styles are baked into each element, but a use can override style and inherits from wherever it sits, so one definition can resolve differently at each use. Questions: (1) Should a resolved document keep defs (of resolved elements) and allow use only when the use adds no style and its inherited style matches what the definition was resolved with, and expand it otherwise? Or should resolve create one resolved definition per distinct (definition, effective style) pair, named for example dot#1, dot#2? (2) Should instancing be on by default, or an option such as resolved(keepingInstances: true), so the current fully flat form stays available? (3) Is a resolved use limited to transform plus at, with no opacity, clip or mask, or may it keep those?
+- `2026-11-14T21:32:10Z`: Question 1 (design): When may a resolved document keep a use as a shared instance: only when the use adds no style and inherits what the definition was resolved with (expanding it otherwise), or by making one resolved definition per distinct definition and style (dot#1, dot#2)?
+- `2026-11-14T21:32:10Z`: Question 2 (decision): Should instancing be the default for resolved(), or an option such as resolved(keepingInstances: true) so the fully flat form stays available?
+- `2026-11-14T21:32:10Z`: Question 3 (decision): May a resolved use carry opacity, clip and mask, or only a transform and at?
+- `2026-11-14T21:33:51Z`: Answer 1: dont care
+- `2026-11-14T21:34:00Z`: Answer 2: dont care
+- `2026-11-14T21:34:08Z`: Answer 3: yes
 
 ---
 
@@ -711,16 +721,19 @@ A resolved document expands every use, so repeated content is duplicated instead
 status: open
 priority: high
 kind: feature
-labels: effort:l, area:interop, needs-design
+labels: effort:l, area:interop
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T20:43:52Z
+updated: 2026-11-14T21:32:11Z
 +++
 
 ModelScript (~/Projects/Scratch/ModelScript) has no textures or UVs and cannot reference VectorScript graphics.
 
 - `2026-11-14T19:52:23Z`: Related: #33 (parameters), which would let ModelScript pass values into textures.
 - `2026-11-14T20:43:52Z`: Investigated ModelScript: meshes carry only per-corner palette colors (palette index plus a shading tag packed into alpha), materials hold opacity, metallic and roughness, and there are no UVs anywhere: not in SwiftMesh solids, CSG, or the GLB writer. Punting: using VectorScript textures first needs a UV and texture-mapping design in ModelScript. Questions: (1) How should UVs be produced: per-primitive mapping, a projection set on the palette entry (planar, box or cylindrical, with scale and offset), or both? (2) Should a palette entry reference a VectorScript file (for example "hull": { "texture": "plating.json5", "size": 512 }) that is rendered and embedded in the .glb as a PNG? (3) Must UVs survive CSG booleans, or is projection after CSG enough?
+- `2026-11-14T21:32:10Z`: Question 1 (design): How should ModelScript produce UVs: per-primitive mapping, a projection set on the palette entry (planar, box or cylindrical, with scale and offset), or both?
+- `2026-11-14T21:32:10Z`: Question 2 (decision): Should a palette entry reference a VectorScript file, rendered and embedded in the .glb as a PNG? For example "hull": { "texture": "plating.json5", "size": 512 }.
+- `2026-11-14T21:32:10Z`: Question 3 (decision): Must UVs survive CSG booleans, or is projecting them after CSG enough?
 
 ---
 
