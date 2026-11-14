@@ -199,7 +199,8 @@ when a line is anchored.
 
 ## Examples
 
-`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`, `images`, `blend-modes`, `markers`, `filters`, `parameters`, `animation`,
+`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`, `images`, `blend-modes`, `markers`, `filters`, `parameters`, `animation`, and the animation demos `spinner`,
+`bouncing-ball` and `conveyor`,
 `structure`, `transforms`, `clipping`, `text` and `viewbox`. It also has some textures: `brick-wall`,
 `circuit-board` and `hazard-panel`.
 

@@ -1,0 +1,36 @@
+// A scrolling texture: a conveyor belt whose pattern moves one tile per loop, so the loop is seamless. Rollers
+// turn at the speed the belt moves. Patterns are tiled in the painted shape's space, so moving the pattern's
+// transform scrolls it without moving the shape.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  animation: { duration: 1, fps: 30 },
+  parameters: {
+    TILE: 32,
+    T: "$TIME / $DURATION",
+    SHIFT: "$T * $TILE",
+    ROLLER: 12,
+    // The roller's rim moves one tile per loop: angle = distance / radius.
+    TURN: "degrees($SHIFT / $ROLLER)"
+  },
+  size: [256, 96],
+  background: "#2b2f33",
+  defs: {
+    roller: { group: [
+        { circle: [0, 0, "$ROLLER"], fill: "#9aa3ab", stroke: "#3d4349", strokeWidth: 1.5 },
+        { line: [0, "-$ROLLER + 2", 0, "$ROLLER - 2"], stroke: "#3d4349", strokeWidth: 2 },
+        { line: ["-$ROLLER + 2", 0, "$ROLLER - 2", 0], stroke: "#3d4349", strokeWidth: 2 }
+      ] }
+  },
+  elements: [
+    { rect: [8, 20, 240, 28], radius: 6,
+      fill: { pattern: { size: ["$TILE", 28], transform: "translate({$SHIFT} 20)", elements: [
+        { rect: [0, 0, "$TILE", 28], fill: "#3a3f45" },
+        { path: "M 4 0 L 16 14 L 4 28 L 10 28 L 22 14 L 10 0 Z", fill: "#f2c230" }
+      ] } },
+      stroke: "#111", strokeWidth: 2 },
+    { use: "roller", transform: "translate(40 66) rotate({$TURN})" },
+    { use: "roller", transform: "translate(128 66) rotate({$TURN})" },
+    { use: "roller", transform: "translate(216 66) rotate({$TURN})" },
+    { text: "CONVEYOR", at: [128, 90], anchor: "middle", font: "Menlo-Bold", fontSize: 9, fill: "#9aa3ab", letterSpacing: 2 }
+  ]
+}

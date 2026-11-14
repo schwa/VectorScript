@@ -1,0 +1,21 @@
+// A loading spinner: eight dots, each brightening a step after the one before it. Each dot reads the same
+// time with its own offset: fract($T - i / 8) runs 0 to 1 once a loop, starting later for each dot.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  animation: { duration: 1.2, fps: 30 },
+  parameters: { T: "$TIME / $DURATION" },
+  size: [128, 128],
+  background: "#1b1d22",
+  elements: [
+    { group: [
+    { circle: [0, -34, "5 + 4 * pow(1 - fract($T - 0 / 8), 3)"], transform: "translate(64 64) rotate(0)", opacity: "0.25 + 0.75 * pow(1 - fract($T - 0 / 8), 3)" },
+    { circle: [0, -34, "5 + 4 * pow(1 - fract($T - 1 / 8), 3)"], transform: "translate(64 64) rotate(45)", opacity: "0.25 + 0.75 * pow(1 - fract($T - 1 / 8), 3)" },
+    { circle: [0, -34, "5 + 4 * pow(1 - fract($T - 2 / 8), 3)"], transform: "translate(64 64) rotate(90)", opacity: "0.25 + 0.75 * pow(1 - fract($T - 2 / 8), 3)" },
+    { circle: [0, -34, "5 + 4 * pow(1 - fract($T - 3 / 8), 3)"], transform: "translate(64 64) rotate(135)", opacity: "0.25 + 0.75 * pow(1 - fract($T - 3 / 8), 3)" },
+    { circle: [0, -34, "5 + 4 * pow(1 - fract($T - 4 / 8), 3)"], transform: "translate(64 64) rotate(180)", opacity: "0.25 + 0.75 * pow(1 - fract($T - 4 / 8), 3)" },
+    { circle: [0, -34, "5 + 4 * pow(1 - fract($T - 5 / 8), 3)"], transform: "translate(64 64) rotate(225)", opacity: "0.25 + 0.75 * pow(1 - fract($T - 5 / 8), 3)" },
+    { circle: [0, -34, "5 + 4 * pow(1 - fract($T - 6 / 8), 3)"], transform: "translate(64 64) rotate(270)", opacity: "0.25 + 0.75 * pow(1 - fract($T - 6 / 8), 3)" },
+    { circle: [0, -34, "5 + 4 * pow(1 - fract($T - 7 / 8), 3)"], transform: "translate(64 64) rotate(315)", opacity: "0.25 + 0.75 * pow(1 - fract($T - 7 / 8), 3)" }
+      ], fill: "#6fb6ff" }
+  ]
+}
