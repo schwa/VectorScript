@@ -64,6 +64,29 @@ struct RendererTests {
     }
 
     @Test
+    func `meet letterboxes and slice crops`() throws {
+        // A 10 x 10 view box with a red left half on a 40 x 20 canvas.
+        let meet = try render("{ size: [40, 20], viewBox: [0, 0, 10, 10], preserveAspectRatio: 'xMidYMid meet', elements: [{ rect: [0, 0, 5, 10], fill: 'red' }] }")
+        #expect(meet[5, 10] == clear)
+        #expect(meet[15, 10] == red)
+        #expect(meet[25, 10] == clear)
+        let slice = try render("{ size: [40, 20], viewBox: [0, 0, 10, 10], preserveAspectRatio: 'xMinYMin slice', elements: [{ rect: [0, 0, 5, 10], fill: 'red' }, { rect: [0, 5, 10, 5], fill: 'blue' }] }")
+        #expect(slice[5, 5] == red)
+        #expect(slice[30, 5] == clear)
+        // The blue lower half starts below the canvas, so none of it shows.
+        #expect(!(0..<40).contains { slice[$0, 19] == blue })
+    }
+
+    @Test
+    func `slice content stays inside the canvas`() throws {
+        let document = try Document(json: Data("{ size: [20, 10], viewBox: [0, 0, 10, 10], preserveAspectRatio: 'xMidYMid slice', elements: [{ rect: [0, 0, 10, 10], fill: 'red' }] }".utf8))
+        let image = try Renderer(document: document).cgImage()
+        #expect(image.width == 20)
+        #expect(image.height == 10)
+        #expect(Bitmap(image)[19, 9] == red)
+    }
+
+    @Test
     func `size override keeps the view box`() throws {
         let document = try Document(json: Data("{ size: [10, 10], elements: [{ rect: [0, 0, 5, 10], fill: 'red' }] }".utf8))
         let bitmap = Bitmap(try Renderer(document: document).cgImage(size: Size(width: 40, height: 40)))

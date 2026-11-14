@@ -8,16 +8,18 @@ public struct Document: Sendable, Equatable, Codable {
     public var size: Size
     // The user-space rectangle that maps onto `size`; [0, 0, width, height] when nil.
     public var viewBox: Rect?
+    public var preserveAspectRatio: AspectRatio
     public var background: Color?
     public var defs: [String: Definition]
     public var elements: [Element]
     // Where the document was read from; relative image paths resolve against it. Not part of the JSON.
     public var baseURL: URL?
 
-    public init(size: Size, viewBox: Rect? = nil, background: Color? = nil, defs: [String: Definition] = [:], elements: [Element] = []) {
+    public init(size: Size, viewBox: Rect? = nil, preserveAspectRatio: AspectRatio = .none, background: Color? = nil, defs: [String: Definition] = [:], elements: [Element] = []) {
         version = Self.currentVersion
         self.size = size
         self.viewBox = viewBox
+        self.preserveAspectRatio = preserveAspectRatio
         self.background = background
         self.defs = defs
         self.elements = elements
@@ -47,13 +49,14 @@ public struct Document: Sendable, Equatable, Codable {
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: AnyKey.self)
-        try container.rejectUnknownKeys(allowed: ["$schema", "version", "size", "viewBox", "background", "defs", "elements"])
+        try container.rejectUnknownKeys(allowed: ["$schema", "version", "size", "viewBox", "preserveAspectRatio", "background", "defs", "elements"])
         version = try container.decodeIfPresent(Int.self, "version") ?? Self.currentVersion
         guard version == Self.currentVersion else {
             throw DocumentError.unsupportedVersion(version)
         }
         size = try container.decode(Size.self, "size")
         viewBox = try container.decodeIfPresent(Rect.self, "viewBox")
+        preserveAspectRatio = try container.decodeIfPresent(AspectRatio.self, "preserveAspectRatio") ?? .none
         background = try container.decodeIfPresent(Color.self, "background")
         defs = try container.decodeIfPresent([String: Definition].self, "defs") ?? [:]
         elements = try container.decode([Element].self, "elements")
@@ -71,6 +74,9 @@ public struct Document: Sendable, Equatable, Codable {
         try container.encode(version, "version")
         try container.encode(size, "size")
         try container.encodeIfPresent(viewBox, "viewBox")
+        if preserveAspectRatio != .none {
+            try container.encode(preserveAspectRatio, "preserveAspectRatio")
+        }
         try container.encodeIfPresent(background, "background")
         if !defs.isEmpty {
             try container.encode(defs, "defs")

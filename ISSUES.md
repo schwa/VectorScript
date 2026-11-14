@@ -623,16 +623,19 @@ Documents are static; nothing can change over time.
 ## 35: No preserveAspectRatio
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:s, area:format
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T21:02:52Z
+closed: 2026-11-14T21:02:52Z
 +++
 
 When viewBox and size have different aspect ratios the content scales non-uniformly, with no way to fit or fill.
+
+- `2026-11-14T21:02:52Z`: Document preserveAspectRatio with SVG syntax; default none keeps the old stretch behavior.
 
 ---
 

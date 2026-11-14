@@ -35,6 +35,11 @@
       "maxItems": 4,
       "description": "[x, y, width, height] of user space mapped onto size"
     },
+    "preserveAspectRatio": {
+      "type": "string",
+      "pattern": "^(none|x(Min|Mid|Max)Y(Min|Mid|Max)( (meet|slice))?)$",
+      "description": "How the viewBox fits size when their aspect ratios differ, as SVG's preserveAspectRatio. Default none: each axis scales on its own."
+    },
     "background": {
       "$ref": "#/$defs/color"
     },

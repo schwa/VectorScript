@@ -72,7 +72,8 @@ Parsing is strict. An unknown key, a second type key on one element, a bad value
 | --- | --- |
 | `version` | `1`. Optional. Other versions are rejected. |
 | `size` | `[width, height]` in points. At scale 1 a point is a pixel. |
-| `viewBox` | `[x, y, width, height]`: the user space that maps onto `size`. Default `[0, 0, width, height]`. Scales each axis separately. |
+| `viewBox` | `[x, y, width, height]`: the user space that maps onto `size`. Default `[0, 0, width, height]`. |
+| `preserveAspectRatio` | How the `viewBox` fits `size` when their aspect ratios differ. The syntax is SVG's: `"none"`, or `"xMidYMid meet"` (any of `xMin`/`xMid`/`xMax` with `YMin`/`YMid`/`YMax`, then `meet` to show all of it or `slice` to fill and crop). Default `none`, which scales each axis separately; SVG's default is `xMidYMid meet`. |
 | `background` | A color. Default transparent. |
 | `defs` | Named paints and elements. |
 | `elements` | The drawing, back to front. |

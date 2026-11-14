@@ -1,5 +1,6 @@
 // viewBox picks the user-space rectangle that fills size. Here a 10 x 10 drawing fills 240 x 120 points.
-// Each axis scales on its own, so circles become ellipses when the aspect ratios differ.
+// By default each axis scales on its own, so circles become ellipses when the aspect ratios differ.
+// preserveAspectRatio: "xMidYMid meet" keeps the circle round and centers it; "xMidYMid slice" fills and crops.
 {
   $schema: "../Schema/vectorscript.schema.json",
   size: [240, 120],

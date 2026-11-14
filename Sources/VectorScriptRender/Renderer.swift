@@ -52,9 +52,10 @@ public struct Renderer: Sendable {
             context.setFillColor(background.cgColor)
             context.fill(bounds)
         }
-        context.translateBy(x: bounds.minX, y: bounds.minY)
-        context.scaleBy(x: bounds.width / viewBox.size.width, y: bounds.height / viewBox.size.height)
-        context.translateBy(x: -viewBox.origin.x, y: -viewBox.origin.y)
+        // Background fills the whole canvas; content stays inside it even when slice overflows.
+        context.clip(to: bounds)
+        let target = Rect(x: bounds.minX, y: bounds.minY, width: bounds.width, height: bounds.height)
+        context.concatenate(document.preserveAspectRatio.matrix(mapping: viewBox, onto: target).cgAffineTransform)
         for element in document.elements {
             try draw(element, in: context)
         }
