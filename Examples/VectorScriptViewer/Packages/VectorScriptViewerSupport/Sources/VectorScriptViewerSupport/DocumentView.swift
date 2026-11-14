@@ -1,4 +1,5 @@
 import SwiftUI
+import VectorScript
 
 public struct DocumentView: View {
     @Bindable var document: VectorScriptDocument
@@ -43,11 +44,11 @@ public struct DocumentView: View {
             SplitLayout {
                 SourceEditor(source: $document.source, errorMessage: preview.errorMessage)
                     .frame(minWidth: 240, idealWidth: 420)
-                Preview(image: preview.image, displayScale: displayScale)
+                PlayablePreview(model: preview, displayScale: displayScale)
                     .frame(minWidth: 240)
             }
         } else {
-            Preview(image: preview.image, displayScale: displayScale)
+            PlayablePreview(model: preview, displayScale: displayScale)
                 .safeAreaInset(edge: .bottom) {
                     if let message = preview.errorMessage {
                         ErrorBanner(message: message)
@@ -108,6 +109,58 @@ struct SourceEditor: View {
                     ErrorBanner(message: errorMessage)
                 }
             }
+    }
+}
+
+// The preview, with play, pause and a time slider when the document is animated.
+struct PlayablePreview: View {
+    @Bindable var model: PreviewModel
+    let displayScale: Double
+
+    var body: some View {
+        Preview(image: model.image, displayScale: displayScale)
+            .safeAreaInset(edge: .bottom) {
+                if let animation = model.animation {
+                    PlaybackBar(model: model, animation: animation)
+                }
+            }
+    }
+}
+
+struct PlaybackBar: View {
+    @Bindable var model: PreviewModel
+    let animation: DocumentAnimation
+
+    var body: some View {
+        HStack {
+            Button(model.isPlaying ? "Pause" : "Play", systemImage: model.isPlaying ? "pause.fill" : "play.fill") {
+                if model.isPlaying {
+                    model.pause()
+                } else {
+                    model.play()
+                }
+            }
+            .labelStyle(.iconOnly)
+            Slider(value: $model.time, in: 0...animation.duration) { editing in
+                if editing {
+                    model.pause()
+                }
+            }
+            Text("\(model.time.formatted(.number.precision(.fractionLength(2)))) / \(animation.duration.formatted(.number.precision(.fractionLength(2)))) s")
+                .monospacedDigit()
+                .foregroundStyle(.secondary)
+        }
+        .padding(8)
+        .background(.bar)
+        // Drives playback at the document's frame rate; paused when not playing.
+        .background {
+            TimelineView(.animation(minimumInterval: 1 / animation.framesPerSecond, paused: !model.isPlaying)) { timeline in
+                Color.clear
+                    .onChange(of: timeline.date) {
+                        model.advance(to: timeline.date)
+                    }
+            }
+        }
     }
 }
 

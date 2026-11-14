@@ -33,6 +33,57 @@ struct PreviewModelTests {
         #expect(model.image != nil)
     }
 
+    let slider = "{ animation: { duration: 2, fps: 10 }, size: [20, 10], elements: [{ rect: ['$TIME * 10', 0, 2, 10], fill: 'red' }] }"
+
+    @Test
+    func `time picks the frame`() throws {
+        let model = PreviewModel()
+        model.displayScale = 1
+        model.update(source: slider, baseURL: nil)
+        #expect(model.animation?.duration == 2)
+        #expect(model.document?.elements[0].content == .shape(.rect(Rect(x: 0, y: 0, width: 2, height: 10), cornerRadius: nil)))
+        model.time = 1.5
+        #expect(model.document?.elements[0].content == .shape(.rect(Rect(x: 15, y: 0, width: 2, height: 10), cornerRadius: nil)))
+    }
+
+    @Test
+    func `playing advances and loops`() throws {
+        let model = PreviewModel()
+        model.update(source: slider, baseURL: nil)
+        let start = Date(timeIntervalSinceReferenceDate: 1000)
+        model.play(at: start)
+        #expect(model.isPlaying)
+        model.advance(to: start.addingTimeInterval(0.5))
+        #expect(abs(model.time - 0.5) < 1e-9)
+        model.advance(to: start.addingTimeInterval(2.25))
+        #expect(abs(model.time - 0.25) < 1e-9)
+        model.pause()
+        model.advance(to: start.addingTimeInterval(3))
+        #expect(abs(model.time - 0.25) < 1e-9)
+    }
+
+    @Test
+    func `a one shot animation stops at the end and replays from the start`() throws {
+        let model = PreviewModel()
+        model.update(source: "{ animation: { duration: 1, loop: false }, size: [4, 4], elements: [] }", baseURL: nil)
+        let start = Date(timeIntervalSinceReferenceDate: 1000)
+        model.play(at: start)
+        model.advance(to: start.addingTimeInterval(5))
+        #expect(model.time == 1)
+        #expect(!model.isPlaying)
+        model.play(at: start)
+        #expect(model.time == 0)
+    }
+
+    @Test
+    func `still documents do not play`() throws {
+        let model = PreviewModel()
+        model.update(source: "{ size: [4, 4], elements: [] }", baseURL: nil)
+        model.play()
+        #expect(!model.isPlaying)
+        #expect(model.animation == nil)
+    }
+
     @Test
     func `a broken source keeps the last image and shows the error`() {
         let model = PreviewModel()

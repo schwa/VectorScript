@@ -623,19 +623,21 @@ Documents cannot declare parameters or use expressions in place of numbers, as M
 ## 34: No animation
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:xl, area:format, has-subtasks
 milestone: later
 depends: 44, 45, 46, 47, 48
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T21:49:48Z
+updated: 2026-11-14T21:57:45Z
+closed: 2026-11-14T21:57:45Z
 +++
 
 Documents are static; nothing can change over time.
 
 - `2026-11-14T21:49:48Z`: Split into #44 (time and animation block), #45 (easing), #46 (render and CLI output), #47 (SwiftUI view), #48 (viewer playback). Keyframe tracks, motion along a path and color interpolation are left for later.
+- `2026-11-14T21:57:46Z`: Done through #44 to #48: time parameters and animation block, easing, animated PNG/GIF/frame output, VectorScriptView playback, viewer playback. Keyframe tracks, motion along a path and color interpolation are not included.
 
 ---
 
@@ -900,16 +902,19 @@ VectorScriptView draws an animated document at time 0 only. Part of #34.
 ## 48: Viewer cannot play animated documents
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:s, area:viewer, subtask
 depends: 47
 created: 2026-11-14T21:49:37Z
-updated: 2026-11-14T21:49:48Z
+updated: 2026-11-14T21:57:45Z
+closed: 2026-11-14T21:57:45Z
 +++
 
 The viewer shows an animated document at time 0 only, with no way to play it or move through time. Part of #34.
+
+- `2026-11-14T21:57:45Z`: Viewer preview has play/pause and a time slider for animated documents, driven by TimelineView at the document's fps. Not run interactively.
 
 ---
 

@@ -73,7 +73,8 @@ Errors name the place in the file: `panel.json5: elements[3].fill: unknown color
 `Examples/VectorScriptViewer` is a document-based macOS and iOS app (OS 27 or later) that shows and edits
 `.json5` and `.json` VectorScript files. The source is on the left and the render is on the right. The render
 changes as you type. When the source has an error, the app shows the error and keeps the last good render. The
-system supplies New, Open, Open Recent, one window per document, autosave, versions, and undo.
+system supplies New, Open, Open Recent, one window per document, autosave, versions, and undo. An animated
+document gets a play button and a time slider under the preview.
 
 ```sh
 xcb build VectorScriptViewer/VectorScriptViewer
