@@ -52,12 +52,13 @@ struct ResolveTests {
     @Test
     func `uses expand with overrides and placement`() throws {
         let resolved = try document(elements: "{ use: 'dot', at: [10, 20], fill: 'blue' }, { use: 'dot' }", defs: "{ dot: { circle: [0, 0, 1], fill: 'red' } }").resolved()
-        guard case .group(let placed) = resolved.elements[0].content, case .group(let plain) = resolved.elements[1].content else {
+        guard case .group(let outer) = resolved.elements[0].content, case .group(let placed) = outer[0].content, case .group(let plain) = resolved.elements[1].content else {
             Issue.record("uses are not groups")
             return
         }
+        #expect(outer[0].transform == Transform(matrix: Matrix(a: 1, b: 0, c: 0, d: 1, tx: 10, ty: 20)))
         #expect(placed[0].style.fill == blue)
-        #expect(resolved.elements[0].transform == Transform(matrix: Matrix(a: 1, b: 0, c: 0, d: 1, tx: 10, ty: 20)))
+        #expect(resolved.elements[0].transform == nil)
         #expect(plain[0].style.fill == red)
         #expect(resolved.elements[1].transform == nil)
     }

@@ -1,0 +1,23 @@
+// Single-line text. at is on the baseline; anchor places the line against it. Text fills, strokes and clips like a path.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [360, 260],
+  background: "#fff",
+  elements: [
+    { line: [180, 0, 180, 140], stroke: "#e33" },
+    { group: [
+        { text: "anchor start", at: [180, 35] },
+        { text: "anchor middle", at: [180, 75], anchor: "middle" },
+        { text: "anchor end", at: [180, 115], anchor: "end" }
+      ], font: "Helvetica", fontSize: 22, fill: "#222" },
+    { line: [20, 115, 340, 115], stroke: "#e335" },
+
+    { text: "Georgia", at: [20, 160], font: "Georgia", fontSize: 26, fill: "#3b8fd9" },
+    { text: "Menlo", at: [200, 160], font: "Menlo-Bold", fontSize: 24, fill: "#4bb06a" },
+    { text: "OUTLINE", at: [20, 205], font: "Helvetica-Bold", fontSize: 34, fill: "none", stroke: "#8a5cc2", strokeWidth: 1.5 },
+    { text: "GRADIENT", at: [200, 205], font: "Helvetica-Bold", fontSize: 30,
+      fill: { linearGradient: { from: [0, 0], to: [0, 1], stops: [[0, "#ffd65a"], [1, "#d9483b"]] } }, stroke: "#5b1a8c", strokeWidth: 1 },
+    { text: "rotated", at: [0, 0], font: "Helvetica-Oblique", fontSize: 18, fill: "#0a8f8f", transform: "translate(290 250) rotate(-15)" },
+    { text: "clipped", at: [20, 248], font: "Helvetica-Bold", fontSize: 36, fill: "#222", clip: { rect: [20, 222, 200, 14] } }
+  ]
+}

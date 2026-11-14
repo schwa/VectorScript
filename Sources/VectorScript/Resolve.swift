@@ -35,12 +35,12 @@ extension Document {
             guard case .element(let definition) = defs[use.name] else {
                 throw .invalid(path: "", message: "no element named '\(use.name)' in defs")
             }
-            let child = try resolve(definition, inherited: inherited, overrides: own)
-            var matrix = element.transform?.matrix ?? .identity
-            if let at = use.at {
-                matrix = matrix * TransformOperation.translate(x: at.x, y: at.y).matrix
+            var child = try resolve(definition, inherited: inherited, overrides: own)
+            // `at` places the definition; the use's clip stays in the use's own space, outside that placement.
+            if let at = use.at, at != .zero {
+                child = Element(.group([child]), transform: Transform(matrix: TransformOperation.translate(x: at.x, y: at.y).matrix))
             }
-            return Element(.group([child]), opacity: element.opacity, transform: matrix == .identity ? nil : Transform(matrix: matrix), clip: element.clip)
+            return Element(.group([child]), opacity: element.opacity, transform: transform, clip: element.clip)
         }
     }
 

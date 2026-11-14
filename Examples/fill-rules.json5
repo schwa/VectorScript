@@ -1,0 +1,15 @@
+// nonzero and evenodd decide which parts of overlapping subpaths are inside.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [320, 160],
+  background: "#fff",
+  defs: {
+    star: { path: "M 70 10 L 105 120 L 12 52 L 128 52 L 35 120 Z", fill: "#3b8fd9", stroke: "#123", strokeWidth: 2 }
+  },
+  elements: [
+    { use: "star", fillRule: "nonzero" },
+    { use: "star", at: [160, 0], fillRule: "evenodd" },
+    { text: "nonzero", at: [70, 150], anchor: "middle", fontSize: 14 },
+    { text: "evenodd", at: [230, 150], anchor: "middle", fontSize: 14 }
+  ]
+}

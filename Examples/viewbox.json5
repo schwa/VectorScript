@@ -1,0 +1,13 @@
+// viewBox picks the user-space rectangle that fills size. Here a 10 x 10 drawing fills 240 x 120 points.
+// Each axis scales on its own, so circles become ellipses when the aspect ratios differ.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [240, 120],
+  viewBox: [0, 0, 10, 10],
+  background: "#203040",
+  elements: [
+    { circle: [5, 5, 4], fill: "#f0a830" },
+    { path: "M 0 10 L 5 6 L 10 10 Z", fill: "#4bb06a" },
+    { line: [0, 5, 10, 5], stroke: "#fff", strokeWidth: 0.1, strokeDash: [0.4, 0.2] }
+  ]
+}

@@ -1,0 +1,29 @@
+// Color syntax: #rgb, #rgba, #rrggbb, #rrggbbaa, CSS names, transparent and none.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [360, 170],
+  background: "#fff",
+  elements: [
+    // A checker strip behind the swatches shows their alpha.
+    { group: [
+        { rect: [0, 90, 360, 40], fill: "#ddd" },
+        { path: "M 0 90 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z M 20 110 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z m 40 0 h 20 v 20 h -20 z", fill: "#999" }
+      ] },
+    { rect: [10, 20, 40, 110], fill: "#e33" },
+    { rect: [60, 20, 40, 110], fill: "#e338" },
+    { rect: [110, 20, 40, 110], fill: "#2a7fd4" },
+    { rect: [160, 20, 40, 110], fill: "#2a7fd480" },
+    { rect: [210, 20, 40, 110], fill: "rebeccapurple" },
+    { rect: [260, 20, 40, 110], fill: "transparent", stroke: "#000" },
+    { rect: [310, 20, 40, 110], fill: "none", stroke: "SeaGreen", strokeWidth: 3 },
+    { group: [
+        { text: "#rgb", at: [30, 155], anchor: "middle" },
+        { text: "#rgba", at: [80, 155], anchor: "middle" },
+        { text: "#rrggbb", at: [130, 155], anchor: "middle" },
+        { text: "+aa", at: [180, 155], anchor: "middle" },
+        { text: "name", at: [230, 155], anchor: "middle" },
+        { text: "transp.", at: [280, 155], anchor: "middle" },
+        { text: "none", at: [330, 155], anchor: "middle" }
+      ], fontSize: 11, fill: "#444" }
+  ]
+}

@@ -1,0 +1,31 @@
+// Transforms: SVG syntax, an ordered list, or one operation. The first operation is the outermost.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [360, 260],
+  background: "#fff",
+  defs: {
+    tile: { group: [ { rect: [0, 0, 40, 40] }, { path: "M 0 0 L 40 0 L 0 40 Z", fill: "#fff6" } ] }
+  },
+  elements: [
+    { use: "tile", fill: "#d9483b", transform: "translate(20 20)" },
+    { use: "tile", fill: "#3b8fd9", transform: "translate(110 40) rotate(30)" },
+    { use: "tile", fill: "#4bb06a", transform: [{ translate: [170, 20] }, { scale: [1.5, 1] }] },
+    { use: "tile", fill: "#f0a830", transform: { matrix: [1, 0.2, 0, 1, 260, 10] } },
+
+    { use: "tile", fill: "#8a5cc2", transform: "translate(20 110) skewX(25)" },
+    { use: "tile", fill: "#0a8f8f", transform: "translate(110 110) skewY(20)" },
+    // rotate(degrees cx cy) turns about a point; here the tile's center.
+    { use: "tile", fill: "#c2185b", transform: "translate(190 110) rotate(45 20 20)" },
+    { use: "tile", fill: "#555", transform: { scale: 0.5 }, at: [540, 220] },
+
+    // Order matters: rotate then translate, and translate then rotate.
+    { rect: [0, 0, 30, 30], fill: "#d9483b88", transform: "translate(60 200) rotate(20)" },
+    { rect: [0, 0, 30, 30], fill: "#3b8fd988", transform: "rotate(20) translate(60 200)" },
+
+    // Nested transforms multiply.
+    { group: [
+        { rect: [0, 0, 20, 20], fill: "#222" },
+        { group: [ { rect: [0, 0, 20, 20], fill: "#f0a830" } ], transform: "translate(20 20) rotate(15)" }
+      ], transform: "translate(250 180) scale(1.5)" }
+  ]
+}

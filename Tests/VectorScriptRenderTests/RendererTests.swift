@@ -132,6 +132,14 @@ struct RendererTests {
     }
 
     @Test
+    func `a use clip ignores at`() throws {
+        let bitmap = try render("{ size: [20, 20], defs: { box: { rect: [0, 0, 20, 20] } }, elements: [{ use: 'box', at: [5, 0], fill: 'red', clip: { rect: [0, 0, 10, 20] } }] }")
+        #expect(bitmap[2, 10] == clear)
+        #expect(bitmap[7, 10] == red)
+        #expect(bitmap[15, 10] == clear)
+    }
+
+    @Test
     func `text draws ink near the baseline`() throws {
         let bitmap = try render("{ size: [100, 40], elements: [{ text: 'HH', at: [10, 30], fontSize: 30, fill: 'red' }] }")
         let inked = (0..<bitmap.width).contains { x in bitmap[x, 20][3] > 0 }

@@ -1,0 +1,29 @@
+// Linear and radial gradients, inline or from defs, on fills and strokes.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [360, 260],
+  background: "#fff",
+  defs: {
+    sunset: { linearGradient: { from: [0, 0], to: [0, 1], stops: [[0, "#ffd65a"], [0.45, "#ff6a3d"], [1, "#5b1a8c"]] } },
+    rainbow: { linearGradient: { stops: [[0, "red"], [0.2, "orange"], [0.4, "yellow"], [0.6, "green"], [0.8, "blue"], [1, "violet"]] } }
+  },
+  elements: [
+    // A named gradient; coordinates are fractions of each shape's bounding box, so it fits any size.
+    { rect: [20, 20, 100, 140], fill: "$sunset" },
+    { circle: [180, 60, 40], fill: "$sunset" },
+
+    // A radial gradient with an off-center focus gives a lit sphere.
+    { circle: [290, 60, 45], fill: { radialGradient: { focus: [0.32, 0.3], stops: [[0, "#fff"], [0.3, "#7ab8f5"], [1, "#0d3a6b"]] } } },
+
+    // units: "user" puts the gradient in absolute coordinates, so it spans several shapes.
+    { group: [
+        { rect: [140, 120, 60, 40] },
+        { rect: [210, 120, 60, 40] },
+        { rect: [280, 120, 60, 40] }
+      ], fill: { linearGradient: { from: [140, 0], to: [340, 0], units: "user", stops: [[0, "#0a8f8f"], [1, "#f0a830"]] } } },
+
+    // Gradients on strokes, and transparent stops.
+    { rect: [30, 190, 140, 50], radius: 10, fill: "none", stroke: "$rainbow", strokeWidth: 8 },
+    { rect: [200, 180, 140, 70], fill: { radialGradient: { radius: 0.7, stops: [[0, "#e33"], [1, "#e330"]] } } }
+  ]
+}

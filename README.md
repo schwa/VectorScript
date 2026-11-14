@@ -120,7 +120,13 @@ Elements in a group take the group's inherited keys unless they set their own. A
 the definition it draws, and that style wins over the definition's style. So one definition can be drawn in
 different colors.
 
-A clip is in the element's own coordinates, after its transform.
+A clip is in the element's own coordinates, after its transform. On a `use`, `at` does not move the clip.
+
+## Examples
+
+`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`,
+`structure`, `transforms`, `clipping`, `text` and `viewbox`. It also has some textures: `brick-wall`,
+`circuit-board` and `hazard-panel`.
 
 ### Paints
 

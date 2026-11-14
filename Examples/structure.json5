@@ -1,0 +1,41 @@
+// Groups pass their style to their children. defs hold reusable elements; use draws them with their own style.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [360, 260],
+  background: "#fff",
+  defs: {
+    ink: "#1d2b3a",
+    // A definition can leave its fill unset, so each use picks a color.
+    pin: { group: [
+        { path: "M 0 0 C -18 -20 -18 -40 0 -40 C 18 -40 18 -20 0 0 Z" },
+        { circle: [0, -27, 6], fill: "#fff" }
+      ], stroke: "$ink", strokeWidth: 1.5 },
+    // Definitions can use other definitions.
+    pinRow: { group: [
+        { use: "pin", at: [0, 0], fill: "#d9483b" },
+        { use: "pin", at: [40, 0], fill: "#f0a830" },
+        { use: "pin", at: [80, 0], fill: "#4bb06a" }
+      ] }
+  },
+  elements: [
+    // Inheritance: the children take fill, stroke and strokeWidth from the group; the last overrides fill.
+    { group: [
+        { rect: [20, 20, 50, 50] },
+        { circle: [105, 45, 25] },
+        { rect: [140, 20, 50, 50], fill: "#d9483b" }
+      ], fill: "#3b8fd9", stroke: "$ink", strokeWidth: 4 },
+
+    // Group opacity composites the group as one: the overlap does not show through.
+    { group: [
+        { circle: [240, 45, 28], fill: "#d9483b" },
+        { circle: [275, 45, 28], fill: "#3b8fd9" }
+      ], opacity: 0.5 },
+    // Opacity per element: the overlap shows.
+    { circle: [240, 110, 28], fill: "#d9483b", opacity: 0.5 },
+    { circle: [275, 110, 28], fill: "#3b8fd9", opacity: 0.5 },
+
+    { use: "pin", at: [40, 150], fill: "#8a5cc2" },
+    { use: "pinRow", at: [100, 150] },
+    { use: "pinRow", at: [100, 240], strokeWidth: 3 }
+  ]
+}

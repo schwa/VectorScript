@@ -1,0 +1,31 @@
+// Stroke width, caps, joins, miter limit, dashes and dash offset.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [360, 300],
+  background: "#fff",
+  elements: [
+    // Caps. The thin red line shows where each line really ends.
+    { group: [
+        { line: [40, 30, 320, 30], strokeCap: "butt" },
+        { line: [40, 60, 320, 60], strokeCap: "round" },
+        { line: [40, 90, 320, 90], strokeCap: "square" }
+      ], stroke: "#333", strokeWidth: 16 },
+    { group: [ { line: [40, 10, 40, 110] }, { line: [320, 10, 320, 110] } ], stroke: "#e33", strokeWidth: 1 },
+
+    // Joins.
+    { group: [
+        { polyline: [[30, 190], [70, 130], [110, 190]], strokeJoin: "miter" },
+        { polyline: [[140, 190], [180, 130], [220, 190]], strokeJoin: "round" },
+        { polyline: [[250, 190], [290, 130], [330, 190]], strokeJoin: "bevel" }
+      ], fill: "none", stroke: "#c60", strokeWidth: 14 },
+
+    // A sharp angle with a high and a low miter limit.
+    { polyline: [[40, 250], [120, 235], [40, 220]], fill: "none", stroke: "#3b8fd9", strokeWidth: 8, strokeMiterLimit: 10 },
+    { polyline: [[160, 250], [240, 235], [160, 220]], fill: "none", stroke: "#3b8fd9", strokeWidth: 8, strokeMiterLimit: 1 },
+
+    // Dashes: the pattern repeats; the offset slides it along the line.
+    { line: [20, 275, 340, 275], stroke: "#4bb06a", strokeWidth: 4, strokeDash: [16, 6, 2, 6] },
+    { line: [20, 290, 340, 290], stroke: "#4bb06a", strokeWidth: 4, strokeDash: [16, 6, 2, 6], strokeDashOffset: 11 },
+    { circle: [300, 235, 25], fill: "none", stroke: "#8a5cc2", strokeWidth: 5, strokeDash: [1, 8], strokeCap: "round" }
+  ]
+}

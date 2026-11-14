@@ -1,0 +1,16 @@
+// Every basic shape. Rect corners take one radius or [rx, ry].
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [320, 200],
+  background: "#f4f1ea",
+  elements: [
+    { rect: [20, 20, 80, 60], fill: "#d9483b" },
+    { rect: [120, 20, 80, 60], radius: 12, fill: "#3b8fd9" },
+    { rect: [220, 20, 80, 60], radius: [30, 12], fill: "#4bb06a" },
+    { circle: [60, 140, 36], fill: "#f0a830" },
+    { ellipse: [160, 140, 50, 28], fill: "#8a5cc2" },
+    { line: [220, 105, 300, 180], stroke: "#222", strokeWidth: 4, strokeCap: "round" },
+    { polyline: [[220, 180], [240, 120], [260, 160], [280, 110], [300, 150]], fill: "none", stroke: "#0a8f8f", strokeWidth: 3, strokeJoin: "round" },
+    { polygon: [[250, 190], [300, 190], [275, 160]], fill: "#22222266" }
+  ]
+}

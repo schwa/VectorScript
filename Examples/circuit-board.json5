@@ -1,0 +1,34 @@
+// A circuit board texture: traces with pads from defs, a chip with pins, and a silkscreen label.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [256, 256],
+  background: "#0f4d2c",
+  defs: {
+    copper: "#d8a844",
+    pad: { group: [ { circle: [0, 0, 6], fill: "$copper" }, { circle: [0, 0, 2.5], fill: "#0b3520" } ] },
+    pin: { rect: [-2, 0, 4, 8], fill: "#c0c4c8" }
+  },
+  elements: [
+    { group: [
+        { path: "M 0 40 H 60 L 80 60 H 160" },
+        { path: "M 0 100 H 40 L 70 130 V 200 L 90 220 H 256" },
+        { path: "M 120 0 V 30 L 140 50 H 220 L 256 86" },
+        { path: "M 256 140 H 200 L 170 170 V 256" },
+        { path: "M 30 256 V 210 L 50 190 H 110" },
+        { path: "M 180 100 H 130 L 110 80" }
+      ], fill: "none", stroke: "$copper", strokeWidth: 4, strokeJoin: "round", strokeCap: "round" },
+    { use: "pad", at: [160, 40] }, { use: "pad", at: [110, 130] }, { use: "pad", at: [220, 50] },
+    { use: "pad", at: [110, 190] }, { use: "pad", at: [110, 80] }, { use: "pad", at: [60, 40] },
+    { group: [
+        { use: "pin", at: [150, 128] }, { use: "pin", at: [150, 188], transform: "rotate(180 150 192)" },
+        { use: "pin", at: [164, 128] }, { use: "pin", at: [164, 188], transform: "rotate(180 164 192)" },
+        { use: "pin", at: [178, 128] }, { use: "pin", at: [178, 188], transform: "rotate(180 178 192)" },
+        { use: "pin", at: [192, 128] }, { use: "pin", at: [192, 188], transform: "rotate(180 192 192)" },
+        { use: "pin", at: [206, 128] }, { use: "pin", at: [206, 188], transform: "rotate(180 206 192)" }
+      ] },
+    { rect: [140, 134, 76, 52], radius: 3, fill: { linearGradient: { from: [0, 0], to: [0, 1], stops: [[0, "#2b2f33"], [1, "#16181a"]] } } },
+    { circle: [149, 143, 3], fill: "#ffffff30" },
+    { text: "VS-01", at: [178, 166], anchor: "middle", font: "Menlo-Bold", fontSize: 12, fill: "#e8e8e8" },
+    { text: "R12", at: [20, 240], font: "Menlo", fontSize: 10, fill: "#ffffffb0" }
+  ]
+}
