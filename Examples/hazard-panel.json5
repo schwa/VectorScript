@@ -1,0 +1,35 @@
+// A worn hazard panel texture: stripes clipped to a plate, bolts from defs, a label.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [256, 256],
+  background: "#2b2f33",
+  defs: {
+    steel: { linearGradient: { from: [0, 0], to: [0, 1], stops: [[0, "#6d757c"], [1, "#3d4349"]] } },
+    bolt: {
+      group: [
+        { circle: [0, 0, 7], fill: { radialGradient: { focus: [0.35, 0.35], stops: [[0, "#d0d4d8"], [1, "#50565c"]] } } },
+        { line: [-4, 0, 4, 0], stroke: "#2b2f33", strokeWidth: 1.5 }
+      ]
+    }
+  },
+  elements: [
+    { rect: [16, 16, 224, 224], radius: 12, fill: "$steel", stroke: "#1d2023", strokeWidth: 2 },
+    {
+      group: [
+        { path: "M 40 60 l 40 0 l -80 140 l -40 0 z" },
+        { path: "M 120 60 l 40 0 l -80 140 l -40 0 z" },
+        { path: "M 200 60 l 40 0 l -80 140 l -40 0 z" },
+        { path: "M 280 60 l 40 0 l -80 140 l -40 0 z" }
+      ],
+      fill: "#f2c230",
+      clip: { rect: [40, 70, 176, 120], radius: 6 }
+    },
+    { rect: [40, 70, 176, 120], radius: 6, fill: "none", stroke: "#111", strokeWidth: 3 },
+    { use: "bolt", at: [36, 36] },
+    { use: "bolt", transform: "translate(220 36) rotate(40)" },
+    { use: "bolt", transform: "translate(36 220) rotate(90)" },
+    { use: "bolt", transform: "translate(220 220) rotate(130)" },
+    { text: "DANGER", at: [128, 222], anchor: "middle", font: "Helvetica-Bold", fontSize: 26, fill: "#f2c230", stroke: "#111", strokeWidth: 1 },
+    { path: "M 30 200 q 20 -8 40 0 t 40 0", fill: "none", stroke: "#00000055", strokeWidth: 2, strokeDash: [4, 3], strokeCap: "round" }
+  ]
+}

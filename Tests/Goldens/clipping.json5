@@ -1,0 +1,8 @@
+{ size: [200, 120], background: "#fff", elements: [
+  { rect: [10, 10, 80, 100], fill: "#36c", clip: { circle: [50, 60, 35] } },
+  { group: [
+      { rect: [100, 10, 90, 50], fill: "#c33" },
+      { rect: [100, 60, 90, 50], fill: "#fc3" }
+    ], clip: { path: "M 100 10 H 190 V 110 H 100 Z M 120 30 H 170 V 90 H 120 Z", fillRule: "evenodd" } },
+  { circle: [50, 60, 35], fill: "none", stroke: "#000", strokeWidth: 1 }
+] }

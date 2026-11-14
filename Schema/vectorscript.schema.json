@@ -1,0 +1,1286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/schwa/VectorScript/vectorscript.schema.json",
+  "title": "VectorScript document",
+  "description": "A JSON vector graphics document. See README.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "size",
+    "elements"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "const": 1
+    },
+    "size": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "[width, height] in points"
+    },
+    "viewBox": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 4,
+      "maxItems": 4,
+      "description": "[x, y, width, height] of user space mapped onto size"
+    },
+    "background": {
+      "$ref": "#/$defs/color"
+    },
+    "defs": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/concretePaint"
+          },
+          {
+            "$ref": "#/$defs/element"
+          }
+        ]
+      }
+    },
+    "elements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/element"
+      }
+    }
+  },
+  "$defs": {
+    "point": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "[x, y]"
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^(#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})|[a-zA-Z]+)$",
+      "description": "#rgb, #rgba, #rrggbb, #rrggbbaa or a CSS color name."
+    },
+    "fillRule": {
+      "enum": [
+        "nonzero",
+        "evenodd"
+      ]
+    },
+    "concretePaint": {
+      "anyOf": [
+        {
+          "const": "none"
+        },
+        {
+          "$ref": "#/$defs/color"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "linearGradient"
+          ],
+          "properties": {
+            "linearGradient": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "stops"
+              ],
+              "properties": {
+                "from": {
+                  "$ref": "#/$defs/point"
+                },
+                "to": {
+                  "$ref": "#/$defs/point"
+                },
+                "stops": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "array",
+                    "prefixItems": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      {
+                        "$ref": "#/$defs/color"
+                      }
+                    ],
+                    "minItems": 2,
+                    "maxItems": 2
+                  }
+                },
+                "units": {
+                  "enum": [
+                    "boundingBox",
+                    "user"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "radialGradient"
+          ],
+          "properties": {
+            "radialGradient": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "stops"
+              ],
+              "properties": {
+                "center": {
+                  "$ref": "#/$defs/point"
+                },
+                "radius": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "focus": {
+                  "$ref": "#/$defs/point"
+                },
+                "stops": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "array",
+                    "prefixItems": [
+                      {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      {
+                        "$ref": "#/$defs/color"
+                      }
+                    ],
+                    "minItems": 2,
+                    "maxItems": 2
+                  }
+                },
+                "units": {
+                  "enum": [
+                    "boundingBox",
+                    "user"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "paint": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^\\$.+",
+          "description": "A paint in defs."
+        },
+        {
+          "$ref": "#/$defs/concretePaint"
+        }
+      ]
+    },
+    "transformOperation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "translate"
+          ],
+          "properties": {
+            "translate": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "[x, y]"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rotate"
+          ],
+          "properties": {
+            "rotate": {
+              "oneOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "description": "[degrees, cx, cy]"
+                }
+              ],
+              "description": "Degrees, clockwise."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scale"
+          ],
+          "properties": {
+            "scale": {
+              "oneOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "description": "[sx, sy]"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "skewX"
+          ],
+          "properties": {
+            "skewX": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "skewY"
+          ],
+          "properties": {
+            "skewY": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "matrix"
+          ],
+          "properties": {
+            "matrix": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 6,
+              "maxItems": 6,
+              "description": "[a, b, c, d, e, f]"
+            }
+          }
+        }
+      ]
+    },
+    "transform": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "SVG transform syntax, e.g. translate(10 20) rotate(45)."
+        },
+        {
+          "$ref": "#/$defs/transformOperation"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/transformOperation"
+          }
+        }
+      ]
+    },
+    "clip": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rect"
+          ],
+          "properties": {
+            "rect": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 4,
+              "maxItems": 4,
+              "description": "[x, y, width, height]"
+            },
+            "radius": {
+              "oneOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "description": "[rx, ry]"
+                }
+              ]
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "circle"
+          ],
+          "properties": {
+            "circle": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3,
+              "description": "[cx, cy, r]"
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ellipse"
+          ],
+          "properties": {
+            "ellipse": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 4,
+              "maxItems": 4,
+              "description": "[cx, cy, rx, ry]"
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "line"
+          ],
+          "properties": {
+            "line": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 4,
+              "maxItems": 4,
+              "description": "[x1, y1, x2, y2]"
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "polyline"
+          ],
+          "properties": {
+            "polyline": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/point"
+              }
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "polygon"
+          ],
+          "properties": {
+            "polygon": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/point"
+              }
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "SVG path data (M L H V C S Q T A Z)."
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            }
+          }
+        }
+      ]
+    },
+    "element": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rect"
+          ],
+          "properties": {
+            "rect": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 4,
+              "maxItems": 4,
+              "description": "[x, y, width, height]"
+            },
+            "radius": {
+              "oneOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "description": "[rx, ry]"
+                }
+              ]
+            },
+            "fill": {
+              "$ref": "#/$defs/paint"
+            },
+            "stroke": {
+              "$ref": "#/$defs/paint"
+            },
+            "strokeWidth": {
+              "type": "number",
+              "minimum": 0
+            },
+            "strokeCap": {
+              "enum": [
+                "butt",
+                "round",
+                "square"
+              ]
+            },
+            "strokeJoin": {
+              "enum": [
+                "miter",
+                "round",
+                "bevel"
+              ]
+            },
+            "strokeMiterLimit": {
+              "type": "number",
+              "minimum": 1
+            },
+            "strokeDash": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "strokeDashOffset": {
+              "type": "number"
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            },
+            "font": {
+              "type": "string",
+              "description": "System font PostScript, family or full name. Default Helvetica."
+            },
+            "fontSize": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "transform": {
+              "$ref": "#/$defs/transform"
+            },
+            "clip": {
+              "$ref": "#/$defs/clip"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "circle"
+          ],
+          "properties": {
+            "circle": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3,
+              "description": "[cx, cy, r]"
+            },
+            "fill": {
+              "$ref": "#/$defs/paint"
+            },
+            "stroke": {
+              "$ref": "#/$defs/paint"
+            },
+            "strokeWidth": {
+              "type": "number",
+              "minimum": 0
+            },
+            "strokeCap": {
+              "enum": [
+                "butt",
+                "round",
+                "square"
+              ]
+            },
+            "strokeJoin": {
+              "enum": [
+                "miter",
+                "round",
+                "bevel"
+              ]
+            },
+            "strokeMiterLimit": {
+              "type": "number",
+              "minimum": 1
+            },
+            "strokeDash": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "strokeDashOffset": {
+              "type": "number"
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            },
+            "font": {
+              "type": "string",
+              "description": "System font PostScript, family or full name. Default Helvetica."
+            },
+            "fontSize": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "transform": {
+              "$ref": "#/$defs/transform"
+            },
+            "clip": {
+              "$ref": "#/$defs/clip"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ellipse"
+          ],
+          "properties": {
+            "ellipse": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 4,
+              "maxItems": 4,
+              "description": "[cx, cy, rx, ry]"
+            },
+            "fill": {
+              "$ref": "#/$defs/paint"
+            },
+            "stroke": {
+              "$ref": "#/$defs/paint"
+            },
+            "strokeWidth": {
+              "type": "number",
+              "minimum": 0
+            },
+            "strokeCap": {
+              "enum": [
+                "butt",
+                "round",
+                "square"
+              ]
+            },
+            "strokeJoin": {
+              "enum": [
+                "miter",
+                "round",
+                "bevel"
+              ]
+            },
+            "strokeMiterLimit": {
+              "type": "number",
+              "minimum": 1
+            },
+            "strokeDash": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "strokeDashOffset": {
+              "type": "number"
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            },
+            "font": {
+              "type": "string",
+              "description": "System font PostScript, family or full name. Default Helvetica."
+            },
+            "fontSize": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "transform": {
+              "$ref": "#/$defs/transform"
+            },
+            "clip": {
+              "$ref": "#/$defs/clip"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "line"
+          ],
+          "properties": {
+            "line": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 4,
+              "maxItems": 4,
+              "description": "[x1, y1, x2, y2]"
+            },
+            "fill": {
+              "$ref": "#/$defs/paint"
+            },
+            "stroke": {
+              "$ref": "#/$defs/paint"
+            },
+            "strokeWidth": {
+              "type": "number",
+              "minimum": 0
+            },
+            "strokeCap": {
+              "enum": [
+                "butt",
+                "round",
+                "square"
+              ]
+            },
+            "strokeJoin": {
+              "enum": [
+                "miter",
+                "round",
+                "bevel"
+              ]
+            },
+            "strokeMiterLimit": {
+              "type": "number",
+              "minimum": 1
+            },
+            "strokeDash": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "strokeDashOffset": {
+              "type": "number"
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            },
+            "font": {
+              "type": "string",
+              "description": "System font PostScript, family or full name. Default Helvetica."
+            },
+            "fontSize": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "transform": {
+              "$ref": "#/$defs/transform"
+            },
+            "clip": {
+              "$ref": "#/$defs/clip"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "polyline"
+          ],
+          "properties": {
+            "polyline": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/point"
+              }
+            },
+            "fill": {
+              "$ref": "#/$defs/paint"
+            },
+            "stroke": {
+              "$ref": "#/$defs/paint"
+            },
+            "strokeWidth": {
+              "type": "number",
+              "minimum": 0
+            },
+            "strokeCap": {
+              "enum": [
+                "butt",
+                "round",
+                "square"
+              ]
+            },
+            "strokeJoin": {
+              "enum": [
+                "miter",
+                "round",
+                "bevel"
+              ]
+            },
+            "strokeMiterLimit": {
+              "type": "number",
+              "minimum": 1
+            },
+            "strokeDash": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "strokeDashOffset": {
+              "type": "number"
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            },
+            "font": {
+              "type": "string",
+              "description": "System font PostScript, family or full name. Default Helvetica."
+            },
+            "fontSize": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "transform": {
+              "$ref": "#/$defs/transform"
+            },
+            "clip": {
+              "$ref": "#/$defs/clip"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "polygon"
+          ],
+          "properties": {
+            "polygon": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/point"
+              }
+            },
+            "fill": {
+              "$ref": "#/$defs/paint"
+            },
+            "stroke": {
+              "$ref": "#/$defs/paint"
+            },
+            "strokeWidth": {
+              "type": "number",
+              "minimum": 0
+            },
+            "strokeCap": {
+              "enum": [
+                "butt",
+                "round",
+                "square"
+              ]
+            },
+            "strokeJoin": {
+              "enum": [
+                "miter",
+                "round",
+                "bevel"
+              ]
+            },
+            "strokeMiterLimit": {
+              "type": "number",
+              "minimum": 1
+            },
+            "strokeDash": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "strokeDashOffset": {
+              "type": "number"
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            },
+            "font": {
+              "type": "string",
+              "description": "System font PostScript, family or full name. Default Helvetica."
+            },
+            "fontSize": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "transform": {
+              "$ref": "#/$defs/transform"
+            },
+            "clip": {
+              "$ref": "#/$defs/clip"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "SVG path data (M L H V C S Q T A Z)."
+            },
+            "fill": {
+              "$ref": "#/$defs/paint"
+            },
+            "stroke": {
+              "$ref": "#/$defs/paint"
+            },
+            "strokeWidth": {
+              "type": "number",
+              "minimum": 0
+            },
+            "strokeCap": {
+              "enum": [
+                "butt",
+                "round",
+                "square"
+              ]
+            },
+            "strokeJoin": {
+              "enum": [
+                "miter",
+                "round",
+                "bevel"
+              ]
+            },
+            "strokeMiterLimit": {
+              "type": "number",
+              "minimum": 1
+            },
+            "strokeDash": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "strokeDashOffset": {
+              "type": "number"
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            },
+            "font": {
+              "type": "string",
+              "description": "System font PostScript, family or full name. Default Helvetica."
+            },
+            "fontSize": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "transform": {
+              "$ref": "#/$defs/transform"
+            },
+            "clip": {
+              "$ref": "#/$defs/clip"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "group"
+          ],
+          "properties": {
+            "group": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/element"
+              }
+            },
+            "fill": {
+              "$ref": "#/$defs/paint"
+            },
+            "stroke": {
+              "$ref": "#/$defs/paint"
+            },
+            "strokeWidth": {
+              "type": "number",
+              "minimum": 0
+            },
+            "strokeCap": {
+              "enum": [
+                "butt",
+                "round",
+                "square"
+              ]
+            },
+            "strokeJoin": {
+              "enum": [
+                "miter",
+                "round",
+                "bevel"
+              ]
+            },
+            "strokeMiterLimit": {
+              "type": "number",
+              "minimum": 1
+            },
+            "strokeDash": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "strokeDashOffset": {
+              "type": "number"
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            },
+            "font": {
+              "type": "string",
+              "description": "System font PostScript, family or full name. Default Helvetica."
+            },
+            "fontSize": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "transform": {
+              "$ref": "#/$defs/transform"
+            },
+            "clip": {
+              "$ref": "#/$defs/clip"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "use"
+          ],
+          "properties": {
+            "use": {
+              "type": "string",
+              "description": "Name of an element in defs."
+            },
+            "at": {
+              "$ref": "#/$defs/point"
+            },
+            "fill": {
+              "$ref": "#/$defs/paint"
+            },
+            "stroke": {
+              "$ref": "#/$defs/paint"
+            },
+            "strokeWidth": {
+              "type": "number",
+              "minimum": 0
+            },
+            "strokeCap": {
+              "enum": [
+                "butt",
+                "round",
+                "square"
+              ]
+            },
+            "strokeJoin": {
+              "enum": [
+                "miter",
+                "round",
+                "bevel"
+              ]
+            },
+            "strokeMiterLimit": {
+              "type": "number",
+              "minimum": 1
+            },
+            "strokeDash": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "strokeDashOffset": {
+              "type": "number"
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            },
+            "font": {
+              "type": "string",
+              "description": "System font PostScript, family or full name. Default Helvetica."
+            },
+            "fontSize": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "transform": {
+              "$ref": "#/$defs/transform"
+            },
+            "clip": {
+              "$ref": "#/$defs/clip"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "text",
+            "at"
+          ],
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "at": {
+              "$ref": "#/$defs/point"
+            },
+            "anchor": {
+              "enum": [
+                "start",
+                "middle",
+                "end"
+              ]
+            },
+            "fill": {
+              "$ref": "#/$defs/paint"
+            },
+            "stroke": {
+              "$ref": "#/$defs/paint"
+            },
+            "strokeWidth": {
+              "type": "number",
+              "minimum": 0
+            },
+            "strokeCap": {
+              "enum": [
+                "butt",
+                "round",
+                "square"
+              ]
+            },
+            "strokeJoin": {
+              "enum": [
+                "miter",
+                "round",
+                "bevel"
+              ]
+            },
+            "strokeMiterLimit": {
+              "type": "number",
+              "minimum": 1
+            },
+            "strokeDash": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "strokeDashOffset": {
+              "type": "number"
+            },
+            "fillRule": {
+              "$ref": "#/$defs/fillRule"
+            },
+            "font": {
+              "type": "string",
+              "description": "System font PostScript, family or full name. Default Helvetica."
+            },
+            "fontSize": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "transform": {
+              "$ref": "#/$defs/transform"
+            },
+            "clip": {
+              "$ref": "#/$defs/clip"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

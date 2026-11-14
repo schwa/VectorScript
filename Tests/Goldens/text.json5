@@ -1,0 +1,8 @@
+{ size: [200, 120], background: "#fff", elements: [
+  { line: [100, 0, 100, 120], stroke: "#ccc" },
+  { text: "Start", at: [100, 30], font: "Helvetica", fontSize: 20 },
+  { text: "Middle", at: [100, 60], anchor: "middle", font: "Helvetica-Bold", fontSize: 20, fill: "#c33" },
+  { text: "End", at: [100, 90], anchor: "end", font: "Georgia", fontSize: 20, fill: "none", stroke: "#33c" },
+  { text: "Gradient", at: [100, 115], anchor: "middle", font: "Helvetica-Bold", fontSize: 22,
+    fill: { linearGradient: { stops: [[0, "#f60"], [1, "#60f"]] } } }
+] }

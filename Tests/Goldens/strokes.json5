@@ -1,0 +1,13 @@
+{ size: [200, 120], background: "#fff", elements: [
+  { group: [
+      { line: [20, 15, 180, 15], strokeCap: "butt" },
+      { line: [20, 35, 180, 35], strokeCap: "round" },
+      { line: [20, 55, 180, 55], strokeCap: "square" }
+    ], stroke: "#333", strokeWidth: 10 },
+  { group: [
+      { polyline: [[20, 110], [45, 75], [70, 110]], strokeJoin: "miter" },
+      { polyline: [[85, 110], [110, 75], [135, 110]], strokeJoin: "round" },
+      { polyline: [[150, 110], [175, 75], [200, 110]], strokeJoin: "bevel" }
+    ], fill: "none", stroke: "#c60", strokeWidth: 8 },
+  { line: [10, 68, 190, 68], stroke: "#06c", strokeWidth: 3, strokeDash: [12, 4, 2, 4], strokeDashOffset: 3 }
+] }

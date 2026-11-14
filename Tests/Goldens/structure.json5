@@ -1,0 +1,19 @@
+{ size: [200, 120], background: "#fff",
+  defs: {
+    ink: "#234",
+    badge: { group: [ { circle: [0, 0, 15] }, { rect: [-6, -6, 12, 12], fill: "#fff" } ] }
+  },
+  elements: [
+    { group: [
+        { rect: [10, 10, 40, 40] },
+        { rect: [30, 30, 40, 40], fill: "#c33" }
+      ], fill: "$ink", stroke: "#000", strokeWidth: 2 },
+    { group: [
+        { rect: [90, 10, 40, 40], fill: "#c33" },
+        { rect: [110, 30, 40, 40], fill: "#33c" }
+      ], opacity: 0.5 },
+    { rect: [160, 10, 30, 60], fill: "#3a3", opacity: 0.4 },
+    { use: "badge", at: [30, 95], fill: "#c33" },
+    { use: "badge", at: [70, 95], fill: "#3a3" },
+    { use: "badge", at: [110, 95] }
+  ] }

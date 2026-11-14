@@ -1,0 +1,8 @@
+[defaults]
+destination = "mac"
+
+[defaults.build]
+scheme = "VectorScript-Package"
+
+[defaults.test]
+scheme = "VectorScript-Package"

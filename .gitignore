@@ -127,3 +127,6 @@ xcuserdata
 
 # Jujutsu
 .jj/
+
+.swiftpm/
+.xcb-cache.json

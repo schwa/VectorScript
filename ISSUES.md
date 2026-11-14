@@ -7,328 +7,396 @@ File format: <https://github.com/schwa/issues-format>
 ## 1: No document model
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 There are no public Swift types for a VectorScript document: canvas (size, optional viewBox, background), version, defs and elements. Types must be public, Sendable, Equatable, have memberwise initialisers, and must not import CoreGraphics.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 2: No strict JSON5 decoding
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 Documents cannot be read from JSON5. Decoding must be strict: unknown keys, more than one type key on an element, and unknown versions are errors. Error messages must name the coding path, for example elements[3].fill.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 3: No JSON encoding of documents
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 Documents cannot be written back to JSON. Decode then encode then decode must give an equal document.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 4: No basic shapes
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 Missing elements: rect (with corner radius), circle, ellipse, line, polyline, polygon. Elements are keyed by type with compact array arguments, for example { circle: [cx, cy, r] }.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 5: No path element
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 Missing the path element, which takes SVG path data: M L H V C S Q T A Z in absolute and relative forms, implicit repeats, SVG number syntax (1-2, .5.5) and arc flags.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 6: No groups
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 Missing the group element: { group: [elements], ... } with its own style, opacity, transform and clip.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 7: No transforms
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 Missing transform on elements. Forms: an SVG transform string, an ordered array of single-operation objects, or one operation object. Operations: translate, rotate (optional centre), scale, skewX, skewY, matrix. Order follows SVG.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 8: No colour parsing
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 Missing colour values: #rgb, #rgba, #rrggbb, #rrggbbaa, CSS named colours and none. Unknown colours are errors.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 9: No gradients
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 Missing linearGradient and radialGradient paints, written inline or in defs. Stops are [offset, colour] pairs. Coordinates are relative to the shape bounding box by default; units: user makes them absolute.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 10: No defs, use or $name references
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 Missing defs (one flat namespace of paints and elements), use (name, optional at, transform, style overrides) and $name paint references. Unresolved references and use cycles are errors.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 11: No style inheritance
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 fill, stroke, stroke properties, fillRule and font properties do not inherit from groups. opacity, transform and clip must not inherit. Defaults: fill black, stroke none.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 12: No stroke properties
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 Missing strokeWidth, strokeCap, strokeJoin, strokeMiterLimit, strokeDash and strokeDashOffset.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 13: No fill rule
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 Missing fillRule: nonzero or evenodd.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 14: No opacity
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 Missing opacity on elements and groups. Group opacity applies to the group as a whole.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 15: No clipping
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 Missing clip on elements and groups, taking a shape or path.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 16: No text element
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 Missing single-line text: { text, at, font, fontSize, anchor }. at is the baseline origin. anchor is start, middle or end. Fonts come from the system; an unknown font is an error. Text fills, strokes and clips like a path.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 17: No resolve pass
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:31Z
+closed: 2026-11-14T19:51:31Z
 +++
 
 There is no way to turn an authored document into a resolved one. A resolved document is valid VectorScript with explicit styles, no references, use expanded and transforms as matrices. resolve() must be pure and live in the portable target.
+
+- `2026-11-14T19:51:31Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 18: No CoreGraphics renderer
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:32Z
+closed: 2026-11-14T19:51:32Z
 +++
 
 Resolved documents cannot be drawn. Missing a VectorScriptRender target that draws into a CGContext and produces CGImage, PNG, JPEG and PDF, with a scale factor and size override.
+
+- `2026-11-14T19:51:32Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 19: No command line tool
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:32Z
+closed: 2026-11-14T19:51:32Z
 +++
 
 Missing the vectorscript executable: render input [-o output] [--scale] [--size WxH] [--format png|pdf|jpeg], and validate input. Format is inferred from the output extension. Errors name the coding path and exit non-zero.
+
+- `2026-11-14T19:51:32Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 20: No JSON Schema
 
 +++
-status: new
+status: closed
 priority: medium
 kind: feature
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:32Z
+closed: 2026-11-14T19:51:32Z
 +++
 
 Missing Schema/vectorscript.schema.json for editor completion. A test must check that the example files validate against it.
+
+- `2026-11-14T19:51:32Z`: Schema added. The validation test runs uvx check-jsonschema and is skipped when uvx is not installed.
 
 ---
 
 ## 21: No golden image tests
 
 +++
-status: new
+status: closed
 priority: medium
 kind: task
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:32Z
+closed: 2026-11-14T19:51:32Z
 +++
 
 Rendering has no regression tests. Expected: Tests/Goldens/*.json with committed PNGs in Tests/GoldenImages, one per feature area, compared with schwa/GoldenImage (ignoreEdgeAAHalos, 60 dB).
+
+- `2026-11-14T19:51:32Z`: Implemented in the initial v1 commit.
 
 ---
 
 ## 22: No format reference or examples
 
 +++
-status: new
+status: closed
 priority: medium
 kind: documentation
 milestone: v1
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:51:32Z
+closed: 2026-11-14T19:51:32Z
 +++
 
 README.md does not describe the format, and there are no files in Examples/. Every example must parse and render in a test.
+
+- `2026-11-14T19:51:32Z`: Implemented in the initial v1 commit.
 
 ---
 

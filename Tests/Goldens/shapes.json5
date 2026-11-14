@@ -1,0 +1,10 @@
+{ size: [200, 120], background: "#fff", elements: [
+  { rect: [10, 10, 50, 40], fill: "#e33" },
+  { rect: [70, 10, 50, 40], radius: 10, fill: "#3a3" },
+  { rect: [130, 10, 60, 40], radius: [20, 8], fill: "#33e" },
+  { circle: [35, 85, 25], fill: "orange" },
+  { ellipse: [100, 85, 35, 20], fill: "purple" },
+  { line: [140, 65, 190, 110], stroke: "#000", strokeWidth: 3 },
+  { polyline: [[140, 110], [150, 70], [165, 100], [180, 70]], fill: "none", stroke: "teal", strokeWidth: 2 },
+  { polygon: [[165, 112], [190, 112], [178, 92]], fill: "#aaa" }
+] }
