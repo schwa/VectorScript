@@ -500,18 +500,20 @@ Raster images cannot be embedded or referenced.
 ## 28: No markers
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:m, area:elements
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T21:08:14Z
+closed: 2026-11-14T21:08:14Z
 +++
 
 Line markers such as arrowheads are not supported.
 
 - `2026-11-14T19:52:23Z`: Related: needed for #37 (SVG lowering to VectorScript).
+- `2026-11-14T21:08:14Z`: markerStart/Mid/End style properties: named or inline element, orient auto/auto-start-reverse/degrees, on path, line, polyline and polygon vertices.
 
 ---
 

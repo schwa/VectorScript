@@ -126,6 +126,7 @@ public struct Renderer: Sendable {
         switch element.content {
         case .shape(let shape):
             try paint(shape.cgPath, style: element.style, in: context)
+            try drawMarkers(on: shape, style: element.style, in: context)
         case .text(let text):
             try paint(try text.cgPath(style: element.style, baseURL: document.baseURL), style: element.style, in: context)
         case .group(let children):

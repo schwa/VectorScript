@@ -116,6 +116,7 @@ Every element can also have these keys:
 | `fontSize` | number. Default 16. | yes |
 | `letterSpacing` | extra points between characters; negative tightens. Default 0. | yes |
 | `fontFile` | a font file (TTF, OTF, TTC), found like an image source. When set, `font` only picks a face in the file, and the first face is used when none matches. Makes text the same on every machine. | yes |
+| `markerStart`, `markerMid`, `markerEnd` | a marker, see below | yes |
 | `opacity` | 0...1, applied to the element as a whole | no |
 | `transform` | see below | no |
 | `clip` | a shape: `{ circle: [...] }`, `{ path: "...", fillRule: "evenodd" }` | no |
@@ -135,6 +136,16 @@ An image's source is a path relative to the document's file, an absolute path, a
 unreadable image is an error when the document is rendered. A document read from data (for example in the
 viewer) has no file URL, so it can only use absolute paths and data URIs.
 
+A marker is an element drawn at the vertices of a `path`, `line`, `polyline` or `polygon`. Other shapes and text
+ignore markers. `markerStart` goes on the first vertex, `markerEnd` on the last, and `markerMid` on every vertex
+between them. A polygon closes back to its start, so its end marker lands there. The value is the name of an
+element in `defs`, `{ name, orient }`, `{ element, orient }` with the element inline, or `"none"` to cancel an
+inherited marker. `orient` is `auto` (the default), `auto-start-reverse`, or a number of degrees. With `auto`,
+the marker's +x axis points along the path; at a middle vertex it points halfway between the incoming and outgoing
+directions. With `auto-start-reverse`, the start marker points backwards, so one arrow shape works at both ends. A
+marker's origin sits on its vertex. It is drawn in user units: it does not scale with the stroke width. Its
+elements start from the default style, and markers are drawn after the shape's fill and stroke.
+
 A mask is a list of elements that sets how much of the element shows. In `luminance` mode (the default), white
 shows the element, black hides it, and gray shows part of it. Transparent mask content also hides the element.
 In `alpha` mode only the opacity of the mask content counts. Like a clip, a mask is in the element's own
@@ -143,7 +154,7 @@ at device resolution, and at 4 pixels per point in PDF output.
 
 ## Examples
 
-`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`, `images`, `blend-modes`,
+`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`, `images`, `blend-modes`, `markers`,
 `structure`, `transforms`, `clipping`, `text` and `viewbox`. It also has some textures: `brick-wall`,
 `circuit-board` and `hazard-panel`.
 

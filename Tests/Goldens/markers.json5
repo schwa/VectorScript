@@ -1,0 +1,11 @@
+{ size: [200, 120], background: "#fff",
+  defs: {
+    arrow: { path: "M 0 0 L -8 -4 L -6 0 L -8 4 Z", fill: "#222" },
+    dot: { circle: [0, 0, 3], fill: "#fc3", stroke: "#222" }
+  },
+  elements: [
+    { line: [15, 20, 185, 20], stroke: "#222", markerStart: { name: "arrow", orient: "auto-start-reverse" }, markerEnd: "arrow" },
+    { polyline: [[15, 100], [55, 50], [95, 80], [135, 40], [185, 90]], fill: "none", stroke: "#36c", strokeWidth: 2,
+      markerStart: "dot", markerMid: "dot", markerEnd: "arrow" },
+    { path: "M 20 110 C 60 70 100 130 140 110", fill: "none", stroke: "#c33", markerEnd: { element: { rect: [-2, -2, 4, 4], fill: "#c33" }, orient: 0 } }
+  ] }

@@ -27,13 +27,25 @@ extension Document {
         }
 
         switch element.content {
-        case .shape:
+        case .shape(let shape):
+            if shape.takesMarkers {
+                effective.markerStart = try resolve(effective.markerStart)
+                effective.markerMid = try resolve(effective.markerMid)
+                effective.markerEnd = try resolve(effective.markerEnd)
+            } else {
+                effective.markerStart = nil
+                effective.markerMid = nil
+                effective.markerEnd = nil
+            }
             effective.font = nil
             effective.fontSize = nil
             effective.letterSpacing = nil
             effective.fontFile = nil
             return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
         case .text:
+            effective.markerStart = nil
+            effective.markerMid = nil
+            effective.markerEnd = nil
             return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
         case .image:
             // Images do not use fill or stroke.
@@ -53,6 +65,24 @@ extension Document {
                 child = Element(.group([child]), transform: Transform(matrix: TransformOperation.translate(x: at.x, y: at.y).matrix))
             }
             return Element(.group([child]), opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
+        }
+    }
+
+    // Marker contents start from the initial style, not from the marked shape.
+    private func resolve(_ marker: Marker?) throws(DocumentError) -> Marker? {
+        guard let marker else {
+            return nil
+        }
+        switch marker.source {
+        case .none:
+            return nil
+        case .element(let element):
+            return Marker(.element(try resolve(element, inherited: .initial, overrides: Style())), orientation: marker.orientation)
+        case .named(let name):
+            guard case .element(let definition) = defs[name] else {
+                throw .invalid(path: "", message: "no element named '\(name)' in defs")
+            }
+            return Marker(.element(try resolve(definition, inherited: .initial, overrides: Style())), orientation: marker.orientation)
         }
     }
 
@@ -131,6 +161,12 @@ extension Document {
                 default:
                     break
                 }
+            }
+            for marker in [style.markerStart, style.markerMid, style.markerEnd].compactMap(\.self) {
+                guard case .element(let content) = marker.source else {
+                    throw fail("marker is not inline")
+                }
+                try checkResolved(content, path: "\(path).marker")
             }
             if case .text = element.content {
                 guard style.font != nil, style.fontSize != nil else {

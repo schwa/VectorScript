@@ -27,6 +27,31 @@ extension Document {
         for (index, child) in (element.mask?.elements ?? []).enumerated() {
             try validate(child, path: "\(path).mask.elements[\(index)]", useStack: useStack, paintStack: paintStack)
         }
+        for (key, marker) in [("markerStart", element.style.markerStart), ("markerMid", element.style.markerMid), ("markerEnd", element.style.markerEnd)] {
+            guard let marker else {
+                continue
+            }
+            switch marker.source {
+            case .none:
+                break
+            case .element(let inline):
+                try validate(inline, path: "\(path).\(key).element", useStack: useStack, paintStack: paintStack)
+            case .named(let name):
+                switch defs[name] {
+                case .element(let definition):
+                    guard !useStack.contains(name) else {
+                        throw .invalid(path: "\(path).\(key)", message: "marker cycle: \((useStack + [name]).joined(separator: " -> "))")
+                    }
+                    if !useStack.isEmpty {
+                        try validate(definition, path: "defs.\(name)", useStack: useStack + [name], paintStack: paintStack)
+                    }
+                case .paint:
+                    throw .invalid(path: "\(path).\(key)", message: "'\(name)' is a paint, not an element")
+                case nil:
+                    throw .invalid(path: "\(path).\(key)", message: "no element named '\(name)' in defs")
+                }
+            }
+        }
         switch element.content {
         case .shape, .text, .image:
             break

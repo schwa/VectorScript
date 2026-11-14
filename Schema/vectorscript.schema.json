@@ -644,6 +644,15 @@
             "fontFile": {
               "type": "string",
               "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
+            },
+            "markerStart": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerMid": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerEnd": {
+              "$ref": "#/$defs/marker"
             }
           }
         },
@@ -736,6 +745,15 @@
             "fontFile": {
               "type": "string",
               "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
+            },
+            "markerStart": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerMid": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerEnd": {
+              "$ref": "#/$defs/marker"
             }
           }
         },
@@ -828,6 +846,15 @@
             "fontFile": {
               "type": "string",
               "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
+            },
+            "markerStart": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerMid": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerEnd": {
+              "$ref": "#/$defs/marker"
             }
           }
         },
@@ -920,6 +947,15 @@
             "fontFile": {
               "type": "string",
               "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
+            },
+            "markerStart": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerMid": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerEnd": {
+              "$ref": "#/$defs/marker"
             }
           }
         },
@@ -1009,6 +1045,15 @@
             "fontFile": {
               "type": "string",
               "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
+            },
+            "markerStart": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerMid": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerEnd": {
+              "$ref": "#/$defs/marker"
             }
           }
         },
@@ -1098,6 +1143,15 @@
             "fontFile": {
               "type": "string",
               "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
+            },
+            "markerStart": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerMid": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerEnd": {
+              "$ref": "#/$defs/marker"
             }
           }
         },
@@ -1185,6 +1239,15 @@
             "fontFile": {
               "type": "string",
               "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
+            },
+            "markerStart": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerMid": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerEnd": {
+              "$ref": "#/$defs/marker"
             }
           }
         },
@@ -1274,6 +1337,15 @@
             "fontFile": {
               "type": "string",
               "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
+            },
+            "markerStart": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerMid": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerEnd": {
+              "$ref": "#/$defs/marker"
             }
           }
         },
@@ -1364,6 +1436,15 @@
             "fontFile": {
               "type": "string",
               "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
+            },
+            "markerStart": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerMid": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerEnd": {
+              "$ref": "#/$defs/marker"
             }
           }
         },
@@ -1461,6 +1542,15 @@
             "fontFile": {
               "type": "string",
               "description": "A font file (TTF, OTF, TTC): a path relative to the document, an absolute path, or a file: URL. When set, font only picks a face in the file."
+            },
+            "markerStart": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerMid": {
+              "$ref": "#/$defs/marker"
+            },
+            "markerEnd": {
+              "$ref": "#/$defs/marker"
             }
           }
         },
@@ -1550,6 +1640,67 @@
         "saturation",
         "color",
         "luminosity"
+      ]
+    },
+    "marker": {
+      "description": "Drawn at path, line, polyline and polygon vertices, origin on the vertex, in user units. none cancels an inherited marker.",
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "none, or the name of an element in defs"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "orient": {
+              "description": "auto (along the path, the default), auto-start-reverse, or degrees",
+              "anyOf": [
+                {
+                  "enum": [
+                    "auto",
+                    "auto-start-reverse"
+                  ]
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "element"
+          ],
+          "properties": {
+            "element": {
+              "$ref": "#/$defs/element"
+            },
+            "orient": {
+              "description": "auto (along the path, the default), auto-start-reverse, or degrees",
+              "anyOf": [
+                {
+                  "enum": [
+                    "auto",
+                    "auto-start-reverse"
+                  ]
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            }
+          }
+        }
       ]
     }
   }

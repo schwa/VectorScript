@@ -155,6 +155,38 @@ struct RendererTests {
     }
 
     @Test
+    func `markers draw at the ends of a line`() throws {
+        let bitmap = try render("{ size: [40, 20], defs: { dot: { rect: [-3, -3, 6, 6], fill: 'red' } }, elements: [{ line: [5, 10, 35, 10], stroke: 'none', markerStart: 'dot', markerEnd: 'dot' }] }")
+        #expect(bitmap[5, 10] == red)
+        #expect(bitmap[35, 10] == red)
+        #expect(bitmap[20, 10] == clear)
+    }
+
+    @Test
+    func `markers turn with the path`() throws {
+        // A bar along +x in the marker's space; on a line going down it should point down.
+        let bitmap = try render("{ size: [20, 40], defs: { bar: { rect: [0, -1, 10, 2], fill: 'red' } }, elements: [{ line: [10, 5, 10, 20], stroke: 'none', markerEnd: 'bar' }] }")
+        #expect(bitmap[10, 26] == red)
+        #expect(bitmap[16, 20] == clear)
+    }
+
+    @Test
+    func `auto start reverse flips the start marker`() throws {
+        let bitmap = try render("{ size: [60, 20], defs: { bar: { rect: [0, -1, 8, 2], fill: 'red' } }, elements: [{ line: [20, 10, 40, 10], stroke: 'none', markerStart: { name: 'bar', orient: 'auto-start-reverse' }, markerEnd: 'bar' }] }")
+        #expect(bitmap[15, 10] == red)
+        #expect(bitmap[25, 10] == clear)
+        #expect(bitmap[45, 10] == red)
+    }
+
+    @Test
+    func `mid markers go on inner vertices only`() throws {
+        let bitmap = try render("{ size: [40, 20], defs: { dot: { rect: [-2, -2, 4, 4], fill: 'red' } }, elements: [{ polyline: [[5, 10], [20, 10], [35, 10]], stroke: 'none', fill: 'none', markerMid: 'dot' }] }")
+        #expect(bitmap[20, 10] == red)
+        #expect(bitmap[5, 10] == clear)
+        #expect(bitmap[35, 10] == clear)
+    }
+
+    @Test
     func `multiply darkens what is behind`() throws {
         // Yellow times cyan is green.
         let bitmap = try render("{ size: [10, 10], elements: [{ rect: [0, 0, 10, 10], fill: '#ffff00' }, { rect: [0, 0, 10, 10], fill: '#00ffff', blendMode: 'multiply' }] }")
