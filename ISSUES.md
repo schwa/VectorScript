@@ -403,42 +403,49 @@ README.md does not describe the format, and there are no files in Examples/. Eve
 ## 23: No pattern fills
 
 +++
-status: new
-priority: medium
+status: open
+priority: high
 kind: feature
+labels: effort:m, area:paint
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 Tiled pattern paints are not supported.
+
+- `2026-11-14T19:52:23Z`: Related: needed for #37 (SVG lowering to VectorScript).
 
 ---
 
 ## 24: No masks
 
 +++
-status: new
+status: open
 priority: medium
 kind: feature
+labels: effort:m, area:paint
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 Luminance and alpha masks are not supported.
+
+- `2026-11-14T19:52:23Z`: Related: needed for #37 (SVG lowering to VectorScript).
 
 ---
 
 ## 25: No blend modes
 
 +++
-status: new
-priority: medium
+status: open
+priority: low
 kind: feature
+labels: effort:s, area:render
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 Elements and groups cannot set a blend mode.
@@ -448,57 +455,67 @@ Elements and groups cannot set a blend mode.
 ## 26: No filters
 
 +++
-status: new
-priority: medium
+status: open
+priority: low
 kind: feature
+labels: effort:l, area:render
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 Filters such as blur and drop shadow are not supported.
+
+- `2026-11-14T19:52:23Z`: Related: needed for #37 (SVG lowering to VectorScript).
 
 ---
 
 ## 27: No raster image element
 
 +++
-status: new
+status: open
 priority: medium
 kind: feature
+labels: effort:m, area:elements
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 Raster images cannot be embedded or referenced.
+
+- `2026-11-14T19:52:23Z`: Related: needed for #37 (SVG lowering to VectorScript).
 
 ---
 
 ## 28: No markers
 
 +++
-status: new
-priority: medium
+status: open
+priority: low
 kind: feature
+labels: effort:m, area:elements
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 Line markers such as arrowheads are not supported.
+
+- `2026-11-14T19:52:23Z`: Related: needed for #37 (SVG lowering to VectorScript).
 
 ---
 
 ## 29: No multi-line text
 
 +++
-status: new
-priority: medium
+status: open
+priority: low
 kind: feature
+labels: effort:m, area:text
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 Text cannot span lines or wrap.
@@ -508,12 +525,13 @@ Text cannot span lines or wrap.
 ## 30: No font files
 
 +++
-status: new
-priority: medium
+status: open
+priority: low
 kind: feature
+labels: effort:s, area:text
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 Text cannot use a font from a file, so output depends on the fonts installed on the machine.
@@ -523,12 +541,13 @@ Text cannot use a font from a file, so output depends on the fonts installed on 
 ## 31: No letter spacing
 
 +++
-status: new
-priority: medium
+status: open
+priority: low
 kind: feature
+labels: effort:xs, area:text
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 Text cannot set letter spacing.
@@ -538,12 +557,13 @@ Text cannot set letter spacing.
 ## 32: No text on a path
 
 +++
-status: new
-priority: medium
+status: open
+priority: low
 kind: feature
+labels: effort:l, area:text
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 Text cannot follow a path.
@@ -553,27 +573,31 @@ Text cannot follow a path.
 ## 33: No parameters or expressions
 
 +++
-status: new
+status: open
 priority: medium
 kind: feature
+labels: effort:l, area:format
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 Documents cannot declare parameters or use expressions in place of numbers, as ModelScript does with $NAME and {expression}.
+
+- `2026-11-14T19:52:23Z`: Related: #39. ModelScript already has $NAME parameters and expressions.
 
 ---
 
 ## 34: No animation
 
 +++
-status: new
-priority: medium
+status: open
+priority: low
 kind: feature
+labels: effort:xl, area:format
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 Documents are static; nothing can change over time.
@@ -583,12 +607,13 @@ Documents are static; nothing can change over time.
 ## 35: No preserveAspectRatio
 
 +++
-status: new
-priority: medium
+status: open
+priority: low
 kind: feature
+labels: effort:s, area:format
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 When viewBox and size have different aspect ratios the content scales non-uniformly, with no way to fit or fill.
@@ -598,72 +623,86 @@ When viewBox and size have different aspect ratios the content scales non-unifor
 ## 36: No SVG export
 
 +++
-status: new
+status: open
 priority: medium
 kind: feature
+labels: effort:m, area:interop
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 A document cannot be converted to an SVG file.
+
+- `2026-11-14T19:52:23Z`: Related: #37 (the opposite direction).
 
 ---
 
 ## 37: SVG cannot lower to VectorScript
 
 +++
-status: new
+status: open
 priority: medium
 kind: feature
+labels: effort:xl, area:interop
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 The SVG package (~/Projects/Scratch/SVG) has its own DisplayList. It cannot yet target resolved VectorScript documents. Blocking gaps: masks, patterns, filters, images, markers and instances.
+
+- `2026-11-14T19:52:23Z`: Related: #23, #24, #26, #27, #28 and #38 are the gaps between VectorScript and SVG's DisplayList.
+- `2026-11-14T19:52:23Z`: Related: #36 (the opposite direction).
 
 ---
 
 ## 38: No instances in resolved documents
 
 +++
-status: new
+status: open
 priority: medium
 kind: feature
+labels: effort:m, area:format
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 A resolved document expands every use, so repeated content is duplicated instead of drawn from one shared definition.
+
+- `2026-11-14T19:52:23Z`: Related: needed for #37 (SVG lowering to VectorScript).
 
 ---
 
 ## 39: ModelScript cannot use VectorScript
 
 +++
-status: new
-priority: medium
+status: open
+priority: high
 kind: feature
+labels: effort:l, area:interop
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 ModelScript (~/Projects/Scratch/ModelScript) has no textures or UVs and cannot reference VectorScript graphics.
+
+- `2026-11-14T19:52:23Z`: Related: #33 (parameters), which would let ModelScript pass values into textures.
 
 ---
 
 ## 40: No SwiftUI renderer
 
 +++
-status: new
-priority: medium
+status: open
+priority: low
 kind: feature
+labels: effort:m, area:render
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:15:39Z
+updated: 2026-11-14T19:52:23Z
 +++
 
 Documents can only be drawn through CoreGraphics; there is no SwiftUI view or GraphicsContext renderer.
