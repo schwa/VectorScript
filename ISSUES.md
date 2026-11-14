@@ -727,16 +727,19 @@ The JSON5 source in the viewer (Examples/VectorScriptViewer) is plain monospaced
 ## 42: Viewer is not a document-based app
 
 +++
-status: open
+status: closed
 priority: medium
 kind: enhancement
 labels: effort:m, area:viewer
 milestone: viewer
 created: 2026-11-14T19:58:49Z
-updated: 2026-11-14T19:58:49Z
+updated: 2026-11-14T20:26:17Z
+closed: 2026-11-14T20:26:17Z
 +++
 
 The viewer (Examples/VectorScriptViewer) is a single WindowGroup with its own open, save and reload handling. There is no File > New, no recent documents, no multiple documents in separate windows, no autosave or versions, and no system handling of unsaved changes when closing a window or quitting.
+
+- `2026-11-14T20:26:17Z`: Viewer now uses DocumentGroup with the Document protocol (OS 27).
 
 ---
 

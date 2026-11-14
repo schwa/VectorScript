@@ -5,9 +5,9 @@ import PackageDescription
 let package = Package(
     name: "VectorScriptViewerSupport",
     platforms: [
-        .iOS(.v26),
-        .macOS(.v26),
-        .visionOS(.v26),
+        .iOS("27.0"),
+        .macOS("27.0"),
+        .visionOS("27.0"),
     ],
     products: [
         .library(name: "VectorScriptViewerSupport", targets: ["VectorScriptViewerSupport"]),

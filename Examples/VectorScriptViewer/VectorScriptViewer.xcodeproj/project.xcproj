@@ -25,6 +25,7 @@
             "Project-Release.xcconfig",
             "Project-Shared.xcconfig",
             "VectorScriptViewer-Debug.xcconfig",
+            "VectorScriptViewer-Info.plist",
             "VectorScriptViewer-Release.xcconfig",
             "VectorScriptViewer-Shared.xcconfig",
           ],
@@ -50,7 +51,7 @@
       "kind": "group",
       "name": "Products",
       "children": [
-        { "path": "<PRODUCTS>/.app", "id": "451594472F64A8DC005F944D", "type": "wrapper.application", "index": false },
+        { "path": "<PRODUCTS>/VectorScriptViewer.app", "id": "451594472F64A8DC005F944D", "type": "wrapper.application", "index": false },
       ],
     },
   ],
@@ -58,7 +59,7 @@
     {
       "name": "VectorScriptViewer",
       "id": "451594462F64A8DC005F944D",
-      "product": "Products/.app",
+      "product": "Products/VectorScriptViewer.app",
       "product-type": "application",
       "specialized-configurations": [
         { "name": "Debug", "file": { "anchor": "Configuration", "relative-path": "VectorScriptViewer-Debug.xcconfig" } },

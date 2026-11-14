@@ -4,8 +4,10 @@ import VectorScriptViewerSupport
 @main
 struct VectorScriptViewerApp: App {
     var body: some Scene {
-        WindowGroup {
-            ViewerView()
+        DocumentGroup { document in
+            DocumentView(document: document)
+        } makeDocument: { _, _ in
+            VectorScriptDocument()
         }
     }
 }

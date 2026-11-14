@@ -1,113 +1,52 @@
 import SwiftUI
-import UniformTypeIdentifiers
 
-public struct ViewerView: View {
-    @State private var model = ViewerModel()
-    @State private var isImporting = false
-    @State private var isDropTargeted = false
-    @State private var showsSource = true
-    @State private var saveError: String?
+public struct DocumentView: View {
+    @Bindable var document: VectorScriptDocument
+    @State private var preview = PreviewModel()
+    @SceneStorage("showsSource") private var showsSource = true
     @Environment(\.displayScale) private var displayScale
+    @Environment(\.undoManager) private var undoManager
 
-    static let contentTypes: [UTType] = [.json, UTType(filenameExtension: "json5") ?? .json]
-
-    public init() {}
+    public init(document: VectorScriptDocument) {
+        self.document = document
+    }
 
     public var body: some View {
         content
             .frame(minWidth: 480, minHeight: 320)
-            .overlay {
-                if isDropTargeted {
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.tint, lineWidth: 3)
-                        .padding(4)
-                }
-            }
-            .navigationTitle(title)
             .toolbar {
                 ToolbarItemGroup {
-                    Button("Open…", systemImage: "folder") {
-                        isImporting = true
-                    }
-                    .keyboardShortcut("o")
-                    Button("Save", systemImage: "square.and.arrow.down") {
-                        save()
-                    }
-                    .keyboardShortcut("s")
-                    .disabled(!model.isDirty)
-                    Button("Revert", systemImage: "arrow.uturn.backward") {
-                        model.reload()
-                    }
-                    .disabled(!model.isDirty)
                     Toggle("Source", systemImage: "curlybraces", isOn: $showsSource)
-                        .disabled(model.url == nil)
-                    ZoomControl(zoom: $model.zoom)
+                    ZoomControl(zoom: $preview.zoom)
                 }
             }
-            .fileImporter(isPresented: $isImporting, allowedContentTypes: Self.contentTypes) { result in
-                if case .success(let url) = result {
-                    model.open(url)
-                }
+            .onChange(of: document.source, initial: true) {
+                preview.update(source: document.source)
             }
-            .dropDestination(for: URL.self) { urls, _ in
-                guard let url = urls.first else {
-                    return false
+            // SwiftUI detects unsaved changes, and so autosaves, through the undo stack.
+            .onChange(of: document.source) { oldValue, _ in
+                undoManager?.registerUndo(withTarget: document) { document in
+                    document.source = oldValue
                 }
-                model.open(url)
-                return true
-            } isTargeted: {
-                isDropTargeted = $0
             }
             .onChange(of: displayScale, initial: true) {
-                model.displayScale = displayScale
+                preview.displayScale = displayScale
             }
-            .alert("Cannot Save", isPresented: .constant(saveError != nil)) {
-                Button("OK") {
-                    saveError = nil
-                }
-            } message: {
-                Text(saveError ?? "")
-            }
-    }
-
-    private var title: String {
-        guard let url = model.url else {
-            return "VectorScript Viewer"
-        }
-        return url.lastPathComponent + (model.isDirty ? " — Edited" : "")
-    }
-
-    private func save() {
-        do {
-            try model.save()
-        } catch {
-            saveError = error.localizedDescription
-        }
     }
 
     @ViewBuilder
     private var content: some View {
-        if model.url == nil {
-            ContentUnavailableView {
-                Label("No Document", systemImage: "scribble.variable")
-            } description: {
-                Text("Open or drop a VectorScript .json or .json5 file. Edit it here or in any editor; the preview follows.")
-            } actions: {
-                Button("Open…") {
-                    isImporting = true
-                }
-            }
-        } else if showsSource {
+        if showsSource {
             SplitLayout {
-                SourceEditor(source: $model.source, errorMessage: model.errorMessage)
+                SourceEditor(source: $document.source, errorMessage: preview.errorMessage)
                     .frame(minWidth: 240, idealWidth: 420)
-                Preview(image: model.image, displayScale: displayScale)
+                Preview(image: preview.image, displayScale: displayScale)
                     .frame(minWidth: 240)
             }
         } else {
-            Preview(image: model.image, displayScale: displayScale)
+            Preview(image: preview.image, displayScale: displayScale)
                 .safeAreaInset(edge: .bottom) {
-                    if let message = model.errorMessage {
+                    if let message = preview.errorMessage {
                         ErrorBanner(message: message)
                     }
                 }
@@ -220,5 +159,5 @@ struct Checkerboard: View {
 }
 
 #Preview {
-    ViewerView()
+    DocumentView(document: VectorScriptDocument())
 }
