@@ -18,19 +18,26 @@ extension Document {
         effective.fill = try resolve(effective.fill)
         effective.stroke = try resolve(effective.stroke)
         let transform = element.transform.map { Transform(matrix: $0.matrix) }
+        var mask = element.mask
+        if let elements = mask?.elements {
+            // Mask contents start from the initial style, not from the masked element.
+            mask?.elements = try elements.map { child throws(DocumentError) in
+                try resolve(child, inherited: .initial, overrides: Style())
+            }
+        }
 
         switch element.content {
         case .shape:
             effective.font = nil
             effective.fontSize = nil
-            return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip)
+            return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask)
         case .text:
-            return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip)
+            return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask)
         case .group(let children):
             let resolvedChildren = try children.map { child throws(DocumentError) in
                 try resolve(child, inherited: effective, overrides: Style())
             }
-            return Element(.group(resolvedChildren), opacity: element.opacity, transform: transform, clip: element.clip)
+            return Element(.group(resolvedChildren), opacity: element.opacity, transform: transform, clip: element.clip, mask: mask)
         case .use(let use):
             guard case .element(let definition) = defs[use.name] else {
                 throw .invalid(path: "", message: "no element named '\(use.name)' in defs")
@@ -40,7 +47,7 @@ extension Document {
             if let at = use.at, at != .zero {
                 child = Element(.group([child]), transform: Transform(matrix: TransformOperation.translate(x: at.x, y: at.y).matrix))
             }
-            return Element(.group([child]), opacity: element.opacity, transform: transform, clip: element.clip)
+            return Element(.group([child]), opacity: element.opacity, transform: transform, clip: element.clip, mask: mask)
         }
     }
 
@@ -82,6 +89,9 @@ extension Document {
             guard transform.operations.count == 1, case .matrix = transform.operations[0] else {
                 throw fail("transform is not one matrix")
             }
+        }
+        for (index, child) in (element.mask?.elements ?? []).enumerated() {
+            try checkResolved(child, path: "\(path).mask.elements[\(index)]")
         }
         let style = element.style
         switch element.content {

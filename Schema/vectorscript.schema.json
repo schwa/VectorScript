@@ -625,6 +625,9 @@
             },
             "clip": {
               "$ref": "#/$defs/clip"
+            },
+            "mask": {
+              "$ref": "#/$defs/mask"
             }
           }
         },
@@ -703,6 +706,9 @@
             },
             "clip": {
               "$ref": "#/$defs/clip"
+            },
+            "mask": {
+              "$ref": "#/$defs/mask"
             }
           }
         },
@@ -781,6 +787,9 @@
             },
             "clip": {
               "$ref": "#/$defs/clip"
+            },
+            "mask": {
+              "$ref": "#/$defs/mask"
             }
           }
         },
@@ -859,6 +868,9 @@
             },
             "clip": {
               "$ref": "#/$defs/clip"
+            },
+            "mask": {
+              "$ref": "#/$defs/mask"
             }
           }
         },
@@ -934,6 +946,9 @@
             },
             "clip": {
               "$ref": "#/$defs/clip"
+            },
+            "mask": {
+              "$ref": "#/$defs/mask"
             }
           }
         },
@@ -1009,6 +1024,9 @@
             },
             "clip": {
               "$ref": "#/$defs/clip"
+            },
+            "mask": {
+              "$ref": "#/$defs/mask"
             }
           }
         },
@@ -1082,6 +1100,9 @@
             },
             "clip": {
               "$ref": "#/$defs/clip"
+            },
+            "mask": {
+              "$ref": "#/$defs/mask"
             }
           }
         },
@@ -1157,6 +1178,9 @@
             },
             "clip": {
               "$ref": "#/$defs/clip"
+            },
+            "mask": {
+              "$ref": "#/$defs/mask"
             }
           }
         },
@@ -1233,6 +1257,9 @@
             },
             "clip": {
               "$ref": "#/$defs/clip"
+            },
+            "mask": {
+              "$ref": "#/$defs/mask"
             }
           }
         },
@@ -1316,10 +1343,35 @@
             },
             "clip": {
               "$ref": "#/$defs/clip"
+            },
+            "mask": {
+              "$ref": "#/$defs/mask"
             }
           }
         }
       ]
+    },
+    "mask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "elements"
+      ],
+      "description": "Elements whose brightness (luminance) or opacity (alpha) sets how much of the element shows. In the element's own coordinates, like clip.",
+      "properties": {
+        "mode": {
+          "enum": [
+            "luminance",
+            "alpha"
+          ]
+        },
+        "elements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/element"
+          }
+        }
+      }
     }
   }
 }

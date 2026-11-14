@@ -423,18 +423,20 @@ Tiled pattern paints are not supported.
 ## 24: No masks
 
 +++
-status: open
+status: closed
 priority: medium
 kind: feature
 labels: effort:m, area:paint
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T20:46:46Z
+closed: 2026-11-14T20:46:46Z
 +++
 
 Luminance and alpha masks are not supported.
 
 - `2026-11-14T19:52:23Z`: Related: needed for #37 (SVG lowering to VectorScript).
+- `2026-11-14T20:46:46Z`: Element mask with luminance or alpha mode, rendered offscreen at device resolution.
 
 ---
 

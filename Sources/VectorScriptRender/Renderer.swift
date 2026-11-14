@@ -9,6 +9,7 @@ public enum RenderError: Error, Equatable, CustomStringConvertible {
     case cannotCreateImage
     case cannotWrite(URL)
     case tooManyPatternTiles(Int)
+    case maskTooLarge(width: Int, height: Int)
 
     public var description: String {
         switch self {
@@ -16,6 +17,7 @@ public enum RenderError: Error, Equatable, CustomStringConvertible {
         case .cannotCreateContext: "cannot create a drawing context"
         case .cannotCreateImage: "cannot create an image"
         case .cannotWrite(let url): "cannot write \(url.path)"
+        case .maskTooLarge(let width, let height): "a mask needs a \(width) x \(height) pixel image, which is too big"
         case .tooManyPatternTiles(let count): "a pattern needs \(count) tiles here (the limit is \(Renderer.maximumPatternTiles)); make its tile bigger"
         }
     }
@@ -97,6 +99,9 @@ public struct Renderer: Sendable {
         if let clip = element.clip {
             context.addPath(clip.shape.cgPath)
             context.clip(using: clip.fillRule.cgFillRule)
+        }
+        if let mask = element.mask {
+            try apply(mask, in: context)
         }
         let opacity = element.opacity ?? 1
         let layered = opacity < 1

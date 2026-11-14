@@ -132,6 +132,45 @@ struct RendererTests {
     }
 
     @Test
+    func `a luminance mask shows white and hides black`() throws {
+        let bitmap = try render("{ size: [20, 10], elements: [{ rect: [0, 0, 20, 10], fill: 'red', mask: { elements: [{ rect: [0, 0, 10, 10], fill: 'white' }, { rect: [10, 0, 10, 10], fill: 'black' }] } }] }")
+        #expect(bitmap[5, 5] == red)
+        #expect(bitmap[15, 5] == clear)
+    }
+
+    @Test
+    func `a gray luminance mask shows part of the element`() throws {
+        let bitmap = try render("{ size: [10, 10], elements: [{ rect: [0, 0, 10, 10], fill: 'red', mask: { elements: [{ rect: [0, 0, 10, 10], fill: '#808080' }] } }] }")
+        let alpha = Int(bitmap[5, 5][3])
+        #expect(abs(alpha - 128) <= 2)
+    }
+
+    @Test
+    func `an alpha mask ignores color`() throws {
+        let bitmap = try render("{ size: [20, 10], elements: [{ rect: [0, 0, 20, 10], fill: 'red', mask: { mode: 'alpha', elements: [{ rect: [0, 0, 10, 10], fill: 'black' }] } }] }")
+        #expect(bitmap[5, 5] == red)
+        #expect(bitmap[15, 5] == clear)
+    }
+
+    @Test
+    func `a mask is in the element's transformed space`() throws {
+        let bitmap = try render("{ size: [40, 20], elements: [{ rect: [0, 0, 20, 20], fill: 'red', transform: 'translate(20 0)', mask: { elements: [{ rect: [0, 0, 10, 20], fill: 'white' }] } }] }")
+        #expect(bitmap[25, 10] == red)
+        #expect(bitmap[35, 10] == clear)
+        #expect(bitmap[5, 10] == clear)
+    }
+
+    @Test
+    func `masks work at scale and in pdf`() throws {
+        let json = "{ size: [20, 10], elements: [{ rect: [0, 0, 20, 10], fill: 'red', mask: { elements: [{ rect: [0, 0, 10, 10], fill: 'white' }] } }] }"
+        let bitmap = try render(json, scale: 3)
+        #expect(bitmap[15, 15] == red)
+        #expect(bitmap[45, 15] == clear)
+        let pdf = try Renderer(document: Document(json: Data(json.utf8))).data(format: .pdf)
+        #expect(pdf.starts(with: Array("%PDF".utf8)))
+    }
+
+    @Test
     func `patterns repeat their tile`() throws {
         // A 10 x 10 tile with a red 5 x 5 square in its top left corner.
         let bitmap = try render("{ size: [40, 20], elements: [{ rect: [0, 0, 40, 20], fill: { pattern: { size: [10, 10], elements: [{ rect: [0, 0, 5, 5], fill: 'red' }] } } }] }")

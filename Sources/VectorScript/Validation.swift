@@ -24,6 +24,9 @@ extension Document {
         if let stroke = element.style.stroke {
             try validate(stroke, path: "\(path).stroke", paintStack: paintStack)
         }
+        for (index, child) in (element.mask?.elements ?? []).enumerated() {
+            try validate(child, path: "\(path).mask.elements[\(index)]", useStack: useStack, paintStack: paintStack)
+        }
         switch element.content {
         case .shape, .text:
             break

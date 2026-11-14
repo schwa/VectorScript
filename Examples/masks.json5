@@ -1,0 +1,35 @@
+// Masks: elements whose brightness (luminance, the default) or opacity (alpha) sets how much of an element
+// shows. White shows it, black hides it, gray shows part of it. A mask is in the element's own coordinates, like a
+// clip, and its elements start from the default style.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [360, 240],
+  background: "#fff",
+  defs: {
+    photo: { group: [
+        { rect: [0, 0, 150, 100], fill: { linearGradient: { from: [0, 0], to: [0, 1], stops: [[0, "#4aa3e0"], [1, "#d9f0ff"]] } } },
+        { circle: [110, 30, 16], fill: "#ffd65a" },
+        { path: "M 0 100 L 40 50 L 70 80 L 100 40 L 150 100 Z", fill: "#2f7d4f" }
+      ] },
+    fade: { linearGradient: { stops: [[0, "white"], [1, "black"]] } }
+  },
+  elements: [
+    // A gradient luminance mask fades the picture out to the right.
+    { use: "photo", transform: "translate(20 20)", mask: { elements: [ { rect: [0, 0, 150, 100], fill: "$fade" } ] } },
+
+    // A soft vignette: a radial gradient from white to black.
+    { use: "photo", transform: "translate(190 20)", mask: { elements: [
+        { rect: [0, 0, 150, 100], fill: { radialGradient: { radius: 0.55, stops: [[0.6, "white"], [1, "black"]] } } }
+      ] } },
+
+    // Text as a mask: only the letters show the picture.
+    { use: "photo", transform: "translate(20 130)", mask: { elements: [
+        { text: "SKY", at: [75, 78], anchor: "middle", font: "Helvetica-Bold", fontSize: 72, fill: "white" }
+      ] } },
+
+    // An alpha mask counts only opacity, so the black stripes show the picture fully and gaps hide it.
+    { use: "photo", transform: "translate(190 130)", mask: { mode: "alpha", elements: [
+        { rect: [0, 0, 150, 100], fill: { pattern: { size: [150, 12], elements: [ { rect: [0, 0, 150, 8], fill: "black" } ] } } }
+      ] } }
+  ]
+}

@@ -115,6 +115,7 @@ Every element can also have these keys:
 | `opacity` | 0...1, applied to the element as a whole | no |
 | `transform` | see below | no |
 | `clip` | a shape: `{ circle: [...] }`, `{ path: "...", fillRule: "evenodd" }` | no |
+| `mask` | `{ mode: "luminance", elements: [...] }`, see below | no |
 
 Elements in a group take the group's inherited keys unless they set their own. A `use` passes its own style to
 the definition it draws, and that style wins over the definition's style. So one definition can be drawn in
@@ -122,9 +123,15 @@ different colors.
 
 A clip is in the element's own coordinates, after its transform. On a `use`, `at` does not move the clip.
 
+A mask is a list of elements that sets how much of the element shows. In `luminance` mode (the default), white
+shows the element, black hides it, and gray shows part of it. Transparent mask content also hides the element.
+In `alpha` mode only the opacity of the mask content counts. Like a clip, a mask is in the element's own
+coordinates. Its elements start from the default style. Luminance is computed from sRGB values. Masks are drawn
+at device resolution, and at 4 pixels per point in PDF output.
+
 ## Examples
 
-`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`,
+`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`,
 `structure`, `transforms`, `clipping`, `text` and `viewbox`. It also has some textures: `brick-wall`,
 `circuit-board` and `hazard-panel`.
 

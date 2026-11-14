@@ -12,17 +12,19 @@ public struct Element: Sendable, Equatable, Codable {
     public var opacity: Double?
     public var transform: Transform?
     public var clip: Clip?
+    public var mask: Mask?
 
-    public init(_ content: Content, style: Style = Style(), opacity: Double? = nil, transform: Transform? = nil, clip: Clip? = nil) {
+    public init(_ content: Content, style: Style = Style(), opacity: Double? = nil, transform: Transform? = nil, clip: Clip? = nil, mask: Mask? = nil) {
         self.content = content
         self.style = style
         self.opacity = opacity
         self.transform = transform
         self.clip = clip
+        self.mask = mask
     }
 
     static let typeKeys: Set<String> = Shape.typeKeys.union(["group", "use", "text"])
-    static let commonKeys: Set<String> = Style.keys.union(["opacity", "transform", "clip"])
+    static let commonKeys: Set<String> = Style.keys.union(["opacity", "transform", "clip", "mask"])
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: AnyKey.self)
@@ -46,6 +48,7 @@ public struct Element: Sendable, Equatable, Codable {
         opacity = try container.decodeIfPresent(Double.self, "opacity")
         transform = try container.decodeIfPresent(Transform.self, "transform")
         clip = try container.decodeIfPresent(Clip.self, "clip")
+        mask = try container.decodeIfPresent(Mask.self, "mask")
         if let opacity, !(0...1).contains(opacity) {
             throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath + [AnyKey("opacity")], debugDescription: "opacity \(formatNumber(opacity)) is outside 0...1"))
         }
@@ -72,5 +75,6 @@ public struct Element: Sendable, Equatable, Codable {
         try container.encodeIfPresent(opacity, "opacity")
         try container.encodeIfPresent(transform, "transform")
         try container.encodeIfPresent(clip, "clip")
+        try container.encodeIfPresent(mask, "mask")
     }
 }
