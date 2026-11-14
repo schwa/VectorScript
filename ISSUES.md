@@ -721,15 +721,19 @@ Documents can only be drawn through CoreGraphics; there is no SwiftUI view or Gr
 ## 41: Viewer source editor has no syntax highlighting
 
 +++
-status: open
+status: closed
 priority: low
 kind: enhancement
 labels: effort:m, area:viewer
 milestone: viewer
 created: 2026-11-14T19:58:49Z
+updated: 2026-11-14T20:54:35Z
+closed: 2026-11-14T20:54:35Z
 +++
 
 The JSON5 source in the viewer (Examples/VectorScriptViewer) is plain monospaced text. Keys, strings, numbers, comments and punctuation all look the same.
+
+- `2026-11-14T20:54:35Z`: JSON5 tokenizer colors keys, strings, $references, color strings, numbers, keywords, comments and punctuation; the editor binds an AttributedString and recolors in place. Not run interactively: selection and typing behavior is untested.
 
 ---
 

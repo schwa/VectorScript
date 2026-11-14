@@ -77,9 +77,27 @@ struct SplitLayout<Content: View>: View {
 struct SourceEditor: View {
     @Binding var source: String
     let errorMessage: String?
+    @State private var text = AttributedString()
 
     var body: some View {
-        TextEditor(text: $source)
+        TextEditor(text: $text)
+            .onChange(of: source, initial: true) {
+                // Undo, revert and file reloads change the source from outside.
+                if String(text.characters) != source {
+                    text = JSON5Highlighter.highlighted(source)
+                }
+            }
+            .onChange(of: text) {
+                let edited = String(text.characters)
+                if edited != source {
+                    source = edited
+                }
+                var recolored = text
+                JSON5Highlighter.highlight(&recolored)
+                if recolored != text {
+                    text = recolored
+                }
+            }
             .font(.body.monospaced())
             .autocorrectionDisabled()
             .scrollContentBackground(.hidden)
