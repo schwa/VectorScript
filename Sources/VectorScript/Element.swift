@@ -4,6 +4,7 @@ public struct Element: Sendable, Equatable, Codable {
         case group([Element])
         case use(Use)
         case text(Text)
+        case image(RasterImage)
     }
 
     public var content: Content
@@ -23,7 +24,7 @@ public struct Element: Sendable, Equatable, Codable {
         self.mask = mask
     }
 
-    static let typeKeys: Set<String> = Shape.typeKeys.union(["group", "use", "text"])
+    static let typeKeys: Set<String> = Shape.typeKeys.union(["group", "use", "text", "image"])
     static let commonKeys: Set<String> = Style.keys.union(["opacity", "transform", "clip", "mask"])
 
     public init(from decoder: any Decoder) throws {
@@ -39,6 +40,14 @@ public struct Element: Sendable, Equatable, Codable {
         case "text":
             allowed.formUnion(["at", "anchor"])
             content = .text(Text(string: try container.decode(String.self, type), at: try container.decode(Point.self, "at"), anchor: try container.decodeIfPresent(TextAnchor.self, "anchor") ?? .start))
+        case "image":
+            // Images have no fill or stroke, so style keys would do nothing.
+            allowed = [type, "at", "size", "opacity", "transform", "clip", "mask"]
+            let image = RasterImage(source: try container.decode(String.self, type), at: try container.decodeIfPresent(Point.self, "at") ?? .zero, size: try container.decodeIfPresent(Size.self, "size"))
+            if let size = image.size, size.width <= 0 || size.height <= 0 {
+                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath + [AnyKey("size")], debugDescription: "an image's size must be positive"))
+            }
+            content = .image(image)
         default:
             allowed.formUnion(Shape.extraKeys(for: type))
             content = .shape(try Shape(type: type, container: container))
@@ -70,6 +79,12 @@ public struct Element: Sendable, Equatable, Codable {
             if text.anchor != .start {
                 try container.encode(text.anchor, "anchor")
             }
+        case .image(let image):
+            try container.encode(image.source, "image")
+            if image.at != .zero {
+                try container.encode(image.at, "at")
+            }
+            try container.encodeIfPresent(image.size, "size")
         }
         try style.encode(to: encoder)
         try container.encodeIfPresent(opacity, "opacity")

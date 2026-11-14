@@ -10,6 +10,7 @@ public enum RenderError: Error, Equatable, CustomStringConvertible {
     case cannotWrite(URL)
     case tooManyPatternTiles(Int)
     case maskTooLarge(width: Int, height: Int)
+    case cannotLoadImage(source: String, reason: String)
 
     public var description: String {
         switch self {
@@ -17,6 +18,7 @@ public enum RenderError: Error, Equatable, CustomStringConvertible {
         case .cannotCreateContext: "cannot create a drawing context"
         case .cannotCreateImage: "cannot create an image"
         case .cannotWrite(let url): "cannot write \(url.path)"
+        case .cannotLoadImage(let source, let reason): "cannot load image '\(source.count > 60 ? source.prefix(60) + "…" : source)': \(reason)"
         case .maskTooLarge(let width, let height): "a mask needs a \(width) x \(height) pixel image, which is too big"
         case .tooManyPatternTiles(let count): "a pattern needs \(count) tiles here (the limit is \(Renderer.maximumPatternTiles)); make its tile bigger"
         }
@@ -123,6 +125,8 @@ public struct Renderer: Sendable {
             for child in children {
                 try draw(child, in: context)
             }
+        case .image(let image):
+            try draw(image, in: context)
         case .use:
             preconditionFailure("Renderer only draws resolved documents")
         }

@@ -33,6 +33,9 @@ extension Document {
             return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask)
         case .text:
             return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask)
+        case .image:
+            // Images do not use fill or stroke.
+            return Element(element.content, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask)
         case .group(let children):
             let resolvedChildren = try children.map { child throws(DocumentError) in
                 try resolve(child, inherited: effective, overrides: Style())
@@ -97,6 +100,8 @@ extension Document {
         switch element.content {
         case .use:
             throw fail("use")
+        case .image:
+            break
         case .group(let children):
             guard style.isEmpty else {
                 throw fail("a group has style")

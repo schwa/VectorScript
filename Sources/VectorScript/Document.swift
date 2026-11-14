@@ -11,6 +11,8 @@ public struct Document: Sendable, Equatable, Codable {
     public var background: Color?
     public var defs: [String: Definition]
     public var elements: [Element]
+    // Where the document was read from; relative image paths resolve against it. Not part of the JSON.
+    public var baseURL: URL?
 
     public init(size: Size, viewBox: Rect? = nil, background: Color? = nil, defs: [String: Definition] = [:], elements: [Element] = []) {
         version = Self.currentVersion
@@ -22,7 +24,7 @@ public struct Document: Sendable, Equatable, Codable {
     }
 
     // Reads JSON5 (so plain JSON too). Errors are `DocumentError`.
-    public init(json: Data) throws {
+    public init(json: Data, baseURL: URL? = nil) throws {
         let decoder = JSONDecoder()
         decoder.allowsJSON5 = true
         do {
@@ -30,10 +32,11 @@ public struct Document: Sendable, Equatable, Codable {
         } catch let error as DecodingError {
             throw DocumentError(error)
         }
+        self.baseURL = baseURL
     }
 
     public init(contentsOf url: URL) throws {
-        try self.init(json: try Data(contentsOf: url))
+        try self.init(json: try Data(contentsOf: url), baseURL: url)
     }
 
     public func jsonData(prettyPrinted: Bool = true) throws -> Data {

@@ -1348,6 +1348,46 @@
               "$ref": "#/$defs/mask"
             }
           }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "image"
+          ],
+          "properties": {
+            "image": {
+              "type": "string",
+              "description": "PNG, JPEG or other ImageIO image: a path relative to the document, an absolute path, a file: URL, or a data:<type>;base64,<data> URI."
+            },
+            "at": {
+              "$ref": "#/$defs/point"
+            },
+            "size": {
+              "type": "array",
+              "description": "[width, height]; default the image's pixel size",
+              "items": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "transform": {
+              "$ref": "#/$defs/transform"
+            },
+            "clip": {
+              "$ref": "#/$defs/clip"
+            },
+            "mask": {
+              "$ref": "#/$defs/mask"
+            }
+          }
         }
       ]
     },

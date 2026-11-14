@@ -477,18 +477,20 @@ Filters such as blur and drop shadow are not supported.
 ## 27: No raster image element
 
 +++
-status: open
+status: closed
 priority: medium
 kind: feature
 labels: effort:m, area:elements
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T20:50:42Z
+closed: 2026-11-14T20:50:42Z
 +++
 
 Raster images cannot be embedded or referenced.
 
 - `2026-11-14T19:52:23Z`: Related: needed for #37 (SVG lowering to VectorScript).
+- `2026-11-14T20:50:42Z`: Image element: relative/absolute/file:/data: sources, at, optional size; opacity, transform, clip and mask apply.
 
 ---
 
@@ -745,6 +747,21 @@ closed: 2026-11-14T20:26:17Z
 The viewer (Examples/VectorScriptViewer) is a single WindowGroup with its own open, save and reload handling. There is no File > New, no recent documents, no multiple documents in separate windows, no autosave or versions, and no system handling of unsaved changes when closing a window or quitting.
 
 - `2026-11-14T20:26:17Z`: Viewer now uses DocumentGroup with the Document protocol (OS 27).
+
+---
+
+## 43: Viewer cannot load images with relative paths
+
++++
+status: open
+priority: medium
+kind: bug
+labels: effort:s, area:viewer
+milestone: viewer
+created: 2026-11-14T20:50:42Z
++++
+
+The viewer (Examples/VectorScriptViewer) parses the document from its source text without a file URL. Image elements with a path relative to the document, such as { image: "assets/bricks.png" }, fail to load with: image 'assets/bricks.png' is relative, but the document has no file URL. Absolute paths and data: URIs work.
 
 ---
 

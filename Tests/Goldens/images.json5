@@ -1,0 +1,7 @@
+{ size: [200, 120], background: "#fff",
+  elements: [
+    { image: "assets/bricks.png", at: [10, 10] },
+    { image: "assets/bricks.png", at: [80, 10], size: [110, 50], opacity: 0.6 },
+    { image: "assets/bricks.png", at: [-32, -32], transform: "translate(45 90) rotate(30)", clip: { circle: [0, 0, 26] } },
+    { rect: [90, 70, 100, 40], fill: { pattern: { size: [16, 16], elements: [ { image: "assets/bricks.png", size: [16, 16] } ] } } }
+  ] }

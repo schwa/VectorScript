@@ -1,0 +1,30 @@
+// Raster images. The source is a path relative to this file, an absolute path, a file: URL, or a data: URI.
+// at is the top left corner; size defaults to the image's pixel size. Opacity, transform, clip and mask apply;
+// fill and stroke do not.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [360, 260],
+  background: "#f4f1ea",
+  defs: {
+    // An image in a pattern tile repeats it.
+    bricks: { pattern: { size: [32, 32], elements: [ { image: "assets/bricks.png", size: [32, 32] } ] } },
+    // A tiny embedded 4 x 4 PNG, tiled.
+    checks: { pattern: { size: [4, 4], elements: [ { image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAABKADAAQAAAABAAAABAAAAADFbP4CAAAAJklEQVQIHWO86WH9nwEI1LYfAVEMTGASiWD8DwQg/i1PG7AwhgoAmDsJXsFYl90AAAAASUVORK5CYII=" } ] } }
+  },
+  elements: [
+    // Natural size, then scaled.
+    { image: "assets/bricks.png", at: [20, 20] },
+    { image: "assets/circuit.jpg", at: [100, 20], size: [100, 100] },
+
+    // Rotated, faded and clipped to a circle.
+    { image: "assets/circuit.jpg", at: [-50, -50], size: [100, 100], transform: "translate(280 70) rotate(15)", opacity: 0.8,
+      clip: { circle: [0, 0, 48] } },
+
+    // Masked with a gradient so it fades out.
+    { image: "assets/circuit.jpg", at: [20, 140], size: [160, 100],
+      mask: { elements: [ { rect: [20, 140, 160, 100], fill: { linearGradient: { stops: [[0.4, "white"], [1, "black"]] } } } ] } },
+
+    { rect: [200, 140, 70, 100], radius: 8, fill: "$bricks", stroke: "#5b2a1d", strokeWidth: 2 },
+    { rect: [280, 140, 60, 100], fill: "$checks" }
+  ]
+}

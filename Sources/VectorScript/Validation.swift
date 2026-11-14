@@ -28,7 +28,7 @@ extension Document {
             try validate(child, path: "\(path).mask.elements[\(index)]", useStack: useStack, paintStack: paintStack)
         }
         switch element.content {
-        case .shape, .text:
+        case .shape, .text, .image:
             break
         case .group(let children):
             for (index, child) in children.enumerated() {

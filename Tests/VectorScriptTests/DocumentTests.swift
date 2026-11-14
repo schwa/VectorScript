@@ -91,7 +91,7 @@ struct DocumentTests {
     @Test(arguments: [
         ("{ circle: [0, 0, 1], fil: 'red' }", "elements[0]: unknown key 'fil'"),
         ("{ circle: [0, 0, 1], rect: [0, 0, 1, 1] }", "elements[0]: an element has more than one type key: circle, rect"),
-        ("{ fill: 'red' }", "elements[0]: an element needs one of: circle, ellipse, group, line, path, polygon, polyline, rect, text, use"),
+        ("{ fill: 'red' }", "elements[0]: an element needs one of: circle, ellipse, group, image, line, path, polygon, polyline, rect, text, use"),
         ("{ circle: [0, 0] }", "elements[0].circle: expected 3 numbers, found 2"),
         ("{ circle: [0, 0, -1] }", "elements[0].circle: a radius cannot be negative"),
         ("{ circle: [0, 0, 1], radius: 2 }", "elements[0]: unknown key 'radius'"),

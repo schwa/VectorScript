@@ -96,6 +96,7 @@ An element has one type key, which holds its main value.
 | group | `{ group: [elements] }` |
 | use | `{ use: "name", at: [x, y] }`: draws the element called `name` in `defs` |
 | text | `{ text: "Hi", at: [x, y], anchor: "middle" }`: one line. `at` is on the baseline; `anchor` is `start`, `middle` or `end` |
+| image | `{ image: "wood.png", at: [x, y], size: [w, h] }`: a bitmap. See below |
 
 Every element can also have these keys:
 
@@ -123,6 +124,13 @@ different colors.
 
 A clip is in the element's own coordinates, after its transform. On a `use`, `at` does not move the clip.
 
+An image's source is a path relative to the document's file, an absolute path, a `file:` URL, or a
+`data:<type>;base64,<data>` URI. The renderer reads any format that ImageIO reads (PNG, JPEG, HEIC and others).
+`at` is the top left corner. `size` defaults to the image's pixel size, in points. An image takes `opacity`,
+`transform`, `clip` and `mask`, but no style keys. To repeat an image, put it in a pattern tile. A missing or
+unreadable image is an error when the document is rendered. A document read from data (for example in the
+viewer) has no file URL, so it can only use absolute paths and data URIs.
+
 A mask is a list of elements that sets how much of the element shows. In `luminance` mode (the default), white
 shows the element, black hides it, and gray shows part of it. Transparent mask content also hides the element.
 In `alpha` mode only the opacity of the mask content counts. Like a clip, a mask is in the element's own
@@ -131,7 +139,7 @@ at device resolution, and at 4 pixels per point in PDF output.
 
 ## Examples
 
-`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`,
+`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`, `images`,
 `structure`, `transforms`, `clipping`, `text` and `viewbox`. It also has some textures: `brick-wall`,
 `circuit-board` and `hazard-panel`.
 
