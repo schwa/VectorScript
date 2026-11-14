@@ -35,6 +35,29 @@ extension StrokeCap {
     }
 }
 
+extension BlendMode {
+    var cgBlendMode: CGBlendMode {
+        switch self {
+        case .normal: .normal
+        case .multiply: .multiply
+        case .screen: .screen
+        case .overlay: .overlay
+        case .darken: .darken
+        case .lighten: .lighten
+        case .colorDodge: .colorDodge
+        case .colorBurn: .colorBurn
+        case .hardLight: .hardLight
+        case .softLight: .softLight
+        case .difference: .difference
+        case .exclusion: .exclusion
+        case .hue: .hue
+        case .saturation: .saturation
+        case .color: .color
+        case .luminosity: .luminosity
+        }
+    }
+}
+
 extension StrokeJoin {
     var cgLineJoin: CGLineJoin {
         switch self {

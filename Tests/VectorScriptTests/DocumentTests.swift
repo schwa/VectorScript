@@ -105,6 +105,17 @@ struct DocumentTests {
     }
 
     @Test
+    func `decodes every blend mode`() throws {
+        for mode in BlendMode.allCases {
+            #expect(try element("{ circle: [0, 0, 1], blendMode: '\(mode.rawValue)' }").blendMode == mode)
+        }
+        #expect(elementFailure("{ circle: [0, 0, 1], blendMode: 'colorDodge' }").hasPrefix("elements[0].blendMode:"))
+        let resolved = try document(elements: "{ group: [{ circle: [0, 0, 1] }], blendMode: 'screen' }").resolved()
+        #expect(resolved.elements[0].blendMode == .screen)
+        #expect(try Document(json: resolved.jsonData()) == resolved)
+    }
+
+    @Test
     func `a bad enum value names its place`() {
         #expect(elementFailure("{ group: [{ circle: [0, 0, 1], strokeCap: 'pointy' }] }").hasPrefix("elements[0].group[0].strokeCap:"))
     }

@@ -14,18 +14,21 @@ public struct Element: Sendable, Equatable, Codable {
     public var transform: Transform?
     public var clip: Clip?
     public var mask: Mask?
+    // Applies to the element as a whole; not inherited.
+    public var blendMode: BlendMode?
 
-    public init(_ content: Content, style: Style = Style(), opacity: Double? = nil, transform: Transform? = nil, clip: Clip? = nil, mask: Mask? = nil) {
+    public init(_ content: Content, style: Style = Style(), opacity: Double? = nil, transform: Transform? = nil, clip: Clip? = nil, mask: Mask? = nil, blendMode: BlendMode? = nil) {
         self.content = content
         self.style = style
         self.opacity = opacity
         self.transform = transform
         self.clip = clip
         self.mask = mask
+        self.blendMode = blendMode
     }
 
     static let typeKeys: Set<String> = Shape.typeKeys.union(["group", "use", "text", "image"])
-    static let commonKeys: Set<String> = Style.keys.union(["opacity", "transform", "clip", "mask"])
+    static let commonKeys: Set<String> = Style.keys.union(["opacity", "transform", "clip", "mask", "blendMode"])
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: AnyKey.self)
@@ -42,7 +45,7 @@ public struct Element: Sendable, Equatable, Codable {
             content = .text(Text(string: try container.decode(String.self, type), at: try container.decode(Point.self, "at"), anchor: try container.decodeIfPresent(TextAnchor.self, "anchor") ?? .start))
         case "image":
             // Images have no fill or stroke, so style keys would do nothing.
-            allowed = [type, "at", "size", "opacity", "transform", "clip", "mask"]
+            allowed = [type, "at", "size", "opacity", "transform", "clip", "mask", "blendMode"]
             let image = RasterImage(source: try container.decode(String.self, type), at: try container.decodeIfPresent(Point.self, "at") ?? .zero, size: try container.decodeIfPresent(Size.self, "size"))
             if let size = image.size, size.width <= 0 || size.height <= 0 {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath + [AnyKey("size")], debugDescription: "an image's size must be positive"))
@@ -58,6 +61,7 @@ public struct Element: Sendable, Equatable, Codable {
         transform = try container.decodeIfPresent(Transform.self, "transform")
         clip = try container.decodeIfPresent(Clip.self, "clip")
         mask = try container.decodeIfPresent(Mask.self, "mask")
+        blendMode = try container.decodeIfPresent(BlendMode.self, "blendMode")
         if let opacity, !(0...1).contains(opacity) {
             throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath + [AnyKey("opacity")], debugDescription: "opacity \(formatNumber(opacity)) is outside 0...1"))
         }
@@ -91,5 +95,6 @@ public struct Element: Sendable, Equatable, Codable {
         try container.encodeIfPresent(transform, "transform")
         try container.encodeIfPresent(clip, "clip")
         try container.encodeIfPresent(mask, "mask")
+        try container.encodeIfPresent(blendMode, "blendMode")
     }
 }

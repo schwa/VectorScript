@@ -443,16 +443,19 @@ Luminance and alpha masks are not supported.
 ## 25: No blend modes
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:s, area:render
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T20:59:06Z
+closed: 2026-11-14T20:59:06Z
 +++
 
 Elements and groups cannot set a blend mode.
+
+- `2026-11-14T20:59:07Z`: blendMode element property with the CSS mix-blend-mode set; the element is drawn in a layer and composited once.
 
 ---
 

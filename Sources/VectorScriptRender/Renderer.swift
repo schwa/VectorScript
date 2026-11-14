@@ -106,10 +106,14 @@ public struct Renderer: Sendable {
             try apply(mask, in: context)
         }
         let opacity = element.opacity ?? 1
-        let layered = opacity < 1
+        let blendMode = element.blendMode ?? .normal
+        // The element draws into a layer, which is composited once with the alpha and blend mode set here.
+        let layered = opacity < 1 || blendMode != .normal
         if layered {
             context.setAlpha(opacity)
+            context.setBlendMode(blendMode.cgBlendMode)
             context.beginTransparencyLayer(auxiliaryInfo: nil)
+            context.setBlendMode(.normal)
         }
         defer {
             if layered {

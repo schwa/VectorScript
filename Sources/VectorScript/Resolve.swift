@@ -31,17 +31,17 @@ extension Document {
             effective.font = nil
             effective.fontSize = nil
             effective.letterSpacing = nil
-            return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask)
+            return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
         case .text:
-            return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask)
+            return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
         case .image:
             // Images do not use fill or stroke.
-            return Element(element.content, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask)
+            return Element(element.content, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
         case .group(let children):
             let resolvedChildren = try children.map { child throws(DocumentError) in
                 try resolve(child, inherited: effective, overrides: Style())
             }
-            return Element(.group(resolvedChildren), opacity: element.opacity, transform: transform, clip: element.clip, mask: mask)
+            return Element(.group(resolvedChildren), opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
         case .use(let use):
             guard case .element(let definition) = defs[use.name] else {
                 throw .invalid(path: "", message: "no element named '\(use.name)' in defs")
@@ -51,7 +51,7 @@ extension Document {
             if let at = use.at, at != .zero {
                 child = Element(.group([child]), transform: Transform(matrix: TransformOperation.translate(x: at.x, y: at.y).matrix))
             }
-            return Element(.group([child]), opacity: element.opacity, transform: transform, clip: element.clip, mask: mask)
+            return Element(.group([child]), opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
         }
     }
 

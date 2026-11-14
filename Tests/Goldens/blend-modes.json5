@@ -1,0 +1,10 @@
+{ size: [200, 120], background: "#fff",
+  elements: [
+    { rect: [0, 0, 200, 120], fill: { linearGradient: { stops: [[0, "#e33"], [0.5, "#3c3"], [1, "#33e"]] } } },
+    { circle: [30, 35, 22], fill: "#fc3", blendMode: "multiply" },
+    { circle: [80, 35, 22], fill: "#fc3", blendMode: "screen" },
+    { circle: [130, 35, 22], fill: "#fc3", blendMode: "difference" },
+    { circle: [175, 35, 22], fill: "#fc3", blendMode: "luminosity" },
+    { group: [ { rect: [20, 70, 70, 40], fill: "#fff" }, { circle: [55, 90, 18], fill: "#000" } ], blendMode: "overlay" },
+    { group: [ { rect: [110, 70, 70, 40], fill: "#888" }, { circle: [145, 90, 18], fill: "#fc3" } ], blendMode: "color-burn", opacity: 0.7 }
+  ] }

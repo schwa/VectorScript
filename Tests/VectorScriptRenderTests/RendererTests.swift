@@ -132,6 +132,34 @@ struct RendererTests {
     }
 
     @Test
+    func `multiply darkens what is behind`() throws {
+        // Yellow times cyan is green.
+        let bitmap = try render("{ size: [10, 10], elements: [{ rect: [0, 0, 10, 10], fill: '#ffff00' }, { rect: [0, 0, 10, 10], fill: '#00ffff', blendMode: 'multiply' }] }")
+        #expect(bitmap[5, 5] == [0, 255, 0, 255])
+    }
+
+    @Test
+    func `screen and difference blend as css does`() throws {
+        let screen = try render("{ size: [10, 10], elements: [{ rect: [0, 0, 10, 10], fill: '#800000' }, { rect: [0, 0, 10, 10], fill: '#008000', blendMode: 'screen' }] }")
+        #expect(screen[5, 5] == [128, 128, 0, 255])
+        let difference = try render("{ size: [10, 10], elements: [{ rect: [0, 0, 10, 10], fill: '#ffffff' }, { rect: [0, 0, 10, 10], fill: '#ff0000', blendMode: 'difference' }] }")
+        #expect(difference[5, 5] == [0, 255, 255, 255])
+    }
+
+    @Test
+    func `a blended group composites as one`() throws {
+        // Inside the group the second rect draws normally over the first; only the result multiplies.
+        let bitmap = try render("{ size: [10, 10], elements: [{ rect: [0, 0, 10, 10], fill: '#ffff00' }, { group: [{ rect: [0, 0, 10, 10], fill: '#ff00ff' }, { rect: [0, 0, 10, 10], fill: '#00ffff' }], blendMode: 'multiply' }] }")
+        #expect(bitmap[5, 5] == [0, 255, 0, 255])
+    }
+
+    @Test
+    func `blend mode and opacity combine`() throws {
+        let bitmap = try render("{ size: [10, 10], elements: [{ rect: [0, 0, 10, 10], fill: '#ffffff' }, { rect: [0, 0, 10, 10], fill: '#000000', blendMode: 'multiply', opacity: 0.5 }] }")
+        #expect(abs(Int(bitmap[5, 5][0]) - 128) <= 1)
+    }
+
+    @Test
     func `a luminance mask shows white and hides black`() throws {
         let bitmap = try render("{ size: [20, 10], elements: [{ rect: [0, 0, 20, 10], fill: 'red', mask: { elements: [{ rect: [0, 0, 10, 10], fill: 'white' }, { rect: [10, 0, 10, 10], fill: 'black' }] } }] }")
         #expect(bitmap[5, 5] == red)

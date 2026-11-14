@@ -1,0 +1,34 @@
+// blendMode: how an element combines with what is behind it. The names and meanings are CSS mix-blend-mode's.
+// The element (a whole group, if it is one) is drawn first and then blended in one step.
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [360, 280],
+  background: "#fff",
+  defs: {
+    // The same backdrop behind every swatch: a hue ramp over a gray ramp.
+    backdrop: { group: [
+        { rect: [0, 0, 80, 50], fill: { linearGradient: { stops: [[0, "#e33"], [0.5, "#3c3"], [1, "#33e"]] } } },
+        { rect: [0, 0, 80, 50], fill: { linearGradient: { from: [0, 0], to: [0, 1], stops: [[0, "#fff0"], [1, "#000a"]] } } }
+      ] },
+    // The source blended over it: a warm disc.
+    source: { circle: [40, 25, 20], fill: { radialGradient: { stops: [[0, "#ffd65a"], [1, "#d9483b"]] } } }
+  },
+  elements: [
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "normal" }, { text: "normal", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(10 10)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "multiply" }, { text: "multiply", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(98 10)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "screen" }, { text: "screen", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(186 10)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "overlay" }, { text: "overlay", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(274 10)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "darken" }, { text: "darken", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(10 78)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "lighten" }, { text: "lighten", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(98 78)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "color-dodge" }, { text: "color-dodge", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(186 78)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "color-burn" }, { text: "color-burn", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(274 78)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "hard-light" }, { text: "hard-light", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(10 146)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "soft-light" }, { text: "soft-light", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(98 146)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "difference" }, { text: "difference", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(186 146)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "exclusion" }, { text: "exclusion", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(274 146)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "hue" }, { text: "hue", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(10 214)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "saturation" }, { text: "saturation", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(98 214)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "color" }, { text: "color", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(186 214)" },
+    { group: [ { use: "backdrop" }, { use: "source", blendMode: "luminosity" }, { text: "luminosity", at: [40, 62], anchor: "middle", fontSize: 9, fill: "#444" } ], transform: "translate(274 214)" }
+  ]
+}

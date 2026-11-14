@@ -118,6 +118,7 @@ Every element can also have these keys:
 | `transform` | see below | no |
 | `clip` | a shape: `{ circle: [...] }`, `{ path: "...", fillRule: "evenodd" }` | no |
 | `mask` | `{ mode: "luminance", elements: [...] }`, see below | no |
+| `blendMode` | how the element combines with what is behind it: `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color`, `luminosity` (as CSS `mix-blend-mode`). A group is drawn first and then blended as one. | no |
 
 Elements in a group take the group's inherited keys unless they set their own. A `use` passes its own style to
 the definition it draws, and that style wins over the definition's style. So one definition can be drawn in
@@ -140,7 +141,7 @@ at device resolution, and at 4 pixels per point in PDF output.
 
 ## Examples
 
-`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`, `images`,
+`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`, `images`, `blend-modes`,
 `structure`, `transforms`, `clipping`, `text` and `viewbox`. It also has some textures: `brick-wall`,
 `circuit-board` and `hazard-panel`.
 
