@@ -10,7 +10,8 @@ ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor
 CODE_SIGN_STYLE = Automatic
 CURRENT_PROJECT_VERSION = 1
 DEVELOPMENT_TEAM = 6E23EP94PG
-ENABLE_APP_SANDBOX = YES
+// Off so documents can load images next to them; the sandbox grants only the open document. A local tool, not shipped.
+ENABLE_APP_SANDBOX = NO
 ENABLE_HARDENED_RUNTIME = YES
 ENABLE_PREVIEWS = YES
 ENABLE_USER_SELECTED_FILES = readwrite

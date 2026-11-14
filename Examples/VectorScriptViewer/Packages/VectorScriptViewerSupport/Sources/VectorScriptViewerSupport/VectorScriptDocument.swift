@@ -17,9 +17,17 @@ public final class VectorScriptDocument: Document {
     public static let writableContentTypes: [UTType] = [.json5, .json]
 
     public var source: String
+    // Gives the file URL, which changes on Save As and is nil until a new document is saved.
+    public let configuration: URLDocumentConfiguration?
 
-    public init(source: String = VectorScriptDocument.starterSource) {
+    public init(source: String = VectorScriptDocument.starterSource, configuration: URLDocumentConfiguration? = nil) {
         self.source = source
+        self.configuration = configuration
+    }
+
+    @MainActor
+    public var fileURL: URL? {
+        configuration?.fileURL
     }
 
     public static let starterSource = """

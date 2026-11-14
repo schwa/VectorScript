@@ -23,16 +23,19 @@ public final class PreviewModel {
     }
 
     private var source: String?
+    private var baseURL: URL?
 
     public init() {}
 
-    public func update(source: String) {
-        guard source != self.source else {
+    // `baseURL` is the document's file, which relative image paths resolve against.
+    public func update(source: String, baseURL: URL?) {
+        guard source != self.source || baseURL != self.baseURL else {
             return
         }
         self.source = source
+        self.baseURL = baseURL
         do {
-            document = try VectorScript.Document(json: Data(source.utf8))
+            document = try VectorScript.Document(json: Data(source.utf8), baseURL: baseURL)
             errorMessage = nil
             render()
         } catch {

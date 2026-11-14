@@ -21,7 +21,10 @@ public struct DocumentView: View {
                 }
             }
             .onChange(of: document.source, initial: true) {
-                preview.update(source: document.source)
+                preview.update(source: document.source, baseURL: document.fileURL)
+            }
+            .onChange(of: document.fileURL) {
+                preview.update(source: document.source, baseURL: document.fileURL)
             }
             // SwiftUI detects unsaved changes, and so autosaves, through the undo stack.
             .onChange(of: document.source) { oldValue, _ in

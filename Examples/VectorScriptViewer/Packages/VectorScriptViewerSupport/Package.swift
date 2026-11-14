@@ -25,7 +25,11 @@ let package = Package(
         ),
         .testTarget(
             name: "VectorScriptViewerSupportTests",
-            dependencies: ["VectorScriptViewerSupport"]
+            dependencies: [
+                "VectorScriptViewerSupport",
+                .product(name: "VectorScript", package: "VectorScript"),
+                .product(name: "VectorScriptRender", package: "VectorScript"),
+            ]
         ),
     ],
     swiftLanguageModes: [.v6]

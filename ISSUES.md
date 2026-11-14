@@ -755,15 +755,19 @@ The viewer (Examples/VectorScriptViewer) is a single WindowGroup with its own op
 ## 43: Viewer cannot load images with relative paths
 
 +++
-status: open
+status: closed
 priority: medium
 kind: bug
 labels: effort:s, area:viewer
 milestone: viewer
 created: 2026-11-14T20:50:42Z
+updated: 2026-11-14T20:53:15Z
+closed: 2026-11-14T20:53:15Z
 +++
 
 The viewer (Examples/VectorScriptViewer) parses the document from its source text without a file URL. Image elements with a path relative to the document, such as { image: "assets/bricks.png" }, fail to load with: image 'assets/bricks.png' is relative, but the document has no file URL. Absolute paths and data: URIs work.
+
+- `2026-11-14T20:53:15Z`: Preview passes the document's file URL as the base URL and re-renders when it changes. macOS app sandbox turned off so sibling image files can be read. iOS still only gets the document itself, so relative images there need absolute paths or data URIs.
 
 ---
 
