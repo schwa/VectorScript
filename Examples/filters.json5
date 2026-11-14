@@ -1,0 +1,33 @@
+// Filters: a list of CSS filter functions applied to an element in order, before its clip, mask, opacity and
+// blend mode. Lengths are user units. Filtered elements are drawn as pixels (4 per point in PDF output).
+{
+  $schema: "../Schema/vectorscript.schema.json",
+  size: [360, 300],
+  background: "#f4f1ea",
+  defs: {
+    badge: { group: [
+        { circle: [0, 0, 26], fill: { radialGradient: { focus: [0.35, 0.3], stops: [[0, "#ffd65a"], [1, "#d9483b"]] } } },
+        { path: "M 0 -14 L 4 -4 L 14 -4 L 6 3 L 9 13 L 0 7 L -9 13 L -6 3 L -14 -4 L -4 -4 Z", fill: "#fff" }
+      ] }
+  },
+  elements: [
+    { use: "badge", at: [45, 45] },
+    { use: "badge", at: [125, 45], filter: { blur: 3 } },
+    { use: "badge", at: [205, 45], filter: { dropShadow: { offset: [4, 6], blur: 4, color: "#0006" } } },
+    { use: "badge", at: [285, 45], filter: [{ blur: 1 }, { dropShadow: { offset: [0, 0], blur: 6, color: "#ffb000" } }] },
+
+    { use: "badge", at: [45, 125], filter: { grayscale: 1 } },
+    { use: "badge", at: [125, 125], filter: { sepia: 1 } },
+    { use: "badge", at: [205, 125], filter: { hueRotate: 140 } },
+    { use: "badge", at: [285, 125], filter: { invert: 1 } },
+
+    { use: "badge", at: [45, 205], filter: { saturate: 2.5 } },
+    { use: "badge", at: [125, 205], filter: { brightness: 0.6 } },
+    { use: "badge", at: [205, 205], filter: { contrast: 0.4 } },
+    { use: "badge", at: [285, 205], filter: [{ grayscale: 1 }, { contrast: 3 }] },
+
+    // A blurred glow behind sharp text.
+    { text: "GLOW", at: [180, 285], anchor: "middle", font: "Helvetica-Bold", fontSize: 34, fill: "#3b8fd9", filter: { blur: 5 } },
+    { text: "GLOW", at: [180, 285], anchor: "middle", font: "Helvetica-Bold", fontSize: 34, fill: "#fff" }
+  ]
+}

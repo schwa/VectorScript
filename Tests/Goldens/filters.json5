@@ -1,0 +1,9 @@
+{ size: [200, 120], background: "#fff",
+  elements: [
+    { rect: [15, 15, 50, 40], fill: "#c33", filter: { blur: 3 } },
+    { rect: [80, 15, 50, 40], fill: "#36c", filter: { dropShadow: { offset: [4, 5], blur: 2, color: "#0008" } } },
+    { rect: [145, 15, 40, 40], fill: "#fc3", transform: "rotate(10 165 35)", filter: [{ hueRotate: 180 }, { dropShadow: { blur: 4, color: "#f0f" } }] },
+    { group: [ { circle: [40, 90, 20], fill: "#c33" }, { circle: [60, 90, 20], fill: "#3c3" } ], filter: { grayscale: 1 } },
+    { circle: [120, 90, 20], fill: "#c33", filter: [{ invert: 1 }, { brightness: 0.8 }] },
+    { circle: [170, 90, 20], fill: "#36c", filter: { sepia: 1 }, opacity: 0.6 }
+  ] }

@@ -658,6 +658,9 @@
               "type": "number",
               "exclusiveMinimum": 0,
               "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+            },
+            "filter": {
+              "$ref": "#/$defs/filterList"
             }
           }
         },
@@ -764,6 +767,9 @@
               "type": "number",
               "exclusiveMinimum": 0,
               "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+            },
+            "filter": {
+              "$ref": "#/$defs/filterList"
             }
           }
         },
@@ -870,6 +876,9 @@
               "type": "number",
               "exclusiveMinimum": 0,
               "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+            },
+            "filter": {
+              "$ref": "#/$defs/filterList"
             }
           }
         },
@@ -976,6 +985,9 @@
               "type": "number",
               "exclusiveMinimum": 0,
               "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+            },
+            "filter": {
+              "$ref": "#/$defs/filterList"
             }
           }
         },
@@ -1079,6 +1091,9 @@
               "type": "number",
               "exclusiveMinimum": 0,
               "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+            },
+            "filter": {
+              "$ref": "#/$defs/filterList"
             }
           }
         },
@@ -1182,6 +1197,9 @@
               "type": "number",
               "exclusiveMinimum": 0,
               "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+            },
+            "filter": {
+              "$ref": "#/$defs/filterList"
             }
           }
         },
@@ -1283,6 +1301,9 @@
               "type": "number",
               "exclusiveMinimum": 0,
               "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+            },
+            "filter": {
+              "$ref": "#/$defs/filterList"
             }
           }
         },
@@ -1386,6 +1407,9 @@
               "type": "number",
               "exclusiveMinimum": 0,
               "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+            },
+            "filter": {
+              "$ref": "#/$defs/filterList"
             }
           }
         },
@@ -1490,6 +1514,9 @@
               "type": "number",
               "exclusiveMinimum": 0,
               "description": "Distance between baselines as a multiple of fontSize. Default 1.2."
+            },
+            "filter": {
+              "$ref": "#/$defs/filterList"
             }
           }
         },
@@ -1607,6 +1634,9 @@
               "type": "number",
               "exclusiveMinimum": 0,
               "description": "Wrap lines at word breaks to fit this many points."
+            },
+            "filter": {
+              "$ref": "#/$defs/filterList"
             }
           }
         },
@@ -1650,6 +1680,9 @@
             },
             "blendMode": {
               "$ref": "#/$defs/blendMode"
+            },
+            "filter": {
+              "$ref": "#/$defs/filterList"
             }
           }
         }
@@ -1755,6 +1788,158 @@
                 }
               ]
             }
+          }
+        }
+      ]
+    },
+    "filter": {
+      "description": "A CSS filter function. Lengths are user units.",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "blur"
+          ],
+          "properties": {
+            "blur": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Gaussian blur radius (standard deviation)"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dropShadow"
+          ],
+          "properties": {
+            "dropShadow": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "offset": {
+                  "$ref": "#/$defs/point"
+                },
+                "blur": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "color": {
+                  "$ref": "#/$defs/color"
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "grayscale"
+          ],
+          "properties": {
+            "grayscale": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sepia"
+          ],
+          "properties": {
+            "sepia": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "invert"
+          ],
+          "properties": {
+            "invert": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "saturate"
+          ],
+          "properties": {
+            "saturate": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "brightness"
+          ],
+          "properties": {
+            "brightness": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "contrast"
+          ],
+          "properties": {
+            "contrast": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "hueRotate"
+          ],
+          "properties": {
+            "hueRotate": {
+              "type": "number",
+              "description": "degrees"
+            }
+          }
+        }
+      ]
+    },
+    "filterList": {
+      "description": "Filters applied in order, before clip, mask, opacity and blend mode.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/filter"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/filter"
           }
         }
       ]

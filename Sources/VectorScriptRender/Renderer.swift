@@ -10,6 +10,7 @@ public enum RenderError: Error, Equatable, CustomStringConvertible {
     case cannotWrite(URL)
     case tooManyPatternTiles(Int)
     case maskTooLarge(width: Int, height: Int)
+    case filterTooLarge(width: Int, height: Int)
     case cannotLoadImage(source: String, reason: String)
     case cannotLoadFont(file: String, reason: String)
 
@@ -21,6 +22,7 @@ public enum RenderError: Error, Equatable, CustomStringConvertible {
         case .cannotWrite(let url): "cannot write \(url.path)"
         case .cannotLoadImage(let source, let reason): "cannot load image '\(source.count > 60 ? source.prefix(60) + "…" : source)': \(reason)"
         case .cannotLoadFont(let file, let reason): "cannot load font file '\(file)': \(reason)"
+        case .filterTooLarge(let width, let height): "a filter needs a \(width) x \(height) pixel image, which is too big"
         case .maskTooLarge(let width, let height): "a mask needs a \(width) x \(height) pixel image, which is too big"
         case .tooManyPatternTiles(let count): "a pattern needs \(count) tiles here (the limit is \(Renderer.maximumPatternTiles)); make its tile bigger"
         }
@@ -123,6 +125,15 @@ public struct Renderer: Sendable {
                 context.endTransparencyLayer()
             }
         }
+        if let filter = element.filter, !filter.filters.isEmpty {
+            try drawFiltered(element, filters: filter.filters, in: context)
+        } else {
+            try drawContent(of: element, in: context)
+        }
+    }
+
+    // The element's own drawing, without its transform, clip, mask, opacity, blend mode or filter.
+    func drawContent(of element: Element, in context: CGContext) throws {
         switch element.content {
         case .shape(let shape):
             try paint(shape.cgPath, style: element.style, in: context)

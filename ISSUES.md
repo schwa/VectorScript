@@ -462,18 +462,20 @@ Elements and groups cannot set a blend mode.
 ## 26: No filters
 
 +++
-status: open
+status: closed
 priority: low
 kind: feature
 labels: effort:l, area:render
 milestone: later
 created: 2026-11-14T19:15:38Z
-updated: 2026-11-14T19:52:23Z
+updated: 2026-11-14T21:16:45Z
+closed: 2026-11-14T21:16:45Z
 +++
 
 Filters such as blur and drop shadow are not supported.
 
 - `2026-11-14T19:52:23Z`: Related: needed for #37 (SVG lowering to VectorScript).
+- `2026-11-14T21:16:45Z`: filter element property: blur, dropShadow, grayscale, sepia, invert, saturate, brightness, contrast, hueRotate (CSS meanings), applied with Core Image before clip, mask, opacity and blend.
 
 ---
 

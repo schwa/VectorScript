@@ -133,6 +133,7 @@ Every element can also have these keys:
 | `transform` | see below | no |
 | `clip` | a shape: `{ circle: [...] }`, `{ path: "...", fillRule: "evenodd" }` | no |
 | `mask` | `{ mode: "luminance", elements: [...] }`, see below | no |
+| `filter` | a filter, or a list of them applied in order. See below | no |
 | `blendMode` | how the element combines with what is behind it: `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color-dodge`, `color-burn`, `hard-light`, `soft-light`, `difference`, `exclusion`, `hue`, `saturation`, `color`, `luminosity` (as CSS `mix-blend-mode`). A group is drawn first and then blended as one. | no |
 
 Elements in a group take the group's inherited keys unless they set their own. A `use` passes its own style to
@@ -164,12 +165,27 @@ In `alpha` mode only the opacity of the mask content counts. Like a clip, a mask
 coordinates. Its elements start from the default style. Luminance is computed from sRGB values. Masks are drawn
 at device resolution, and at 4 pixels per point in PDF output.
 
+A filter changes how an element looks. Each one is an object with one key, and the meanings are those of the CSS
+`filter` functions:
+
+| Filter | Value |
+| --- | --- |
+| `blur` | radius (standard deviation), in user units |
+| `dropShadow` | `{ offset: [dx, dy], blur, color }`; default no offset, no blur, `#00000080` |
+| `grayscale`, `sepia`, `invert` | 0...1; 0 leaves colors alone |
+| `saturate`, `brightness`, `contrast` | 0 or more; 1 leaves colors alone |
+| `hueRotate` | degrees |
+
+Filters apply first, before the element's clip, mask, opacity and blend mode, so a clip cuts off a shadow. A
+filtered element is drawn as pixels: at device resolution in bitmaps, and at 4 pixels per point in PDF output.
+Colors are filtered in sRGB, as CSS does.
+
 Text is laid out by CoreText. Trailing spaces and the letter spacing after a line's last character do not count
 when a line is anchored.
 
 ## Examples
 
-`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`, `images`, `blend-modes`, `markers`,
+`Examples/` has one file for each feature: `shapes`, `paths`, `fill-rules`, `strokes`, `colors`, `gradients`, `patterns`, `masks`, `images`, `blend-modes`, `markers`, `filters`,
 `structure`, `transforms`, `clipping`, `text` and `viewbox`. It also has some textures: `brick-wall`,
 `circuit-board` and `hazard-panel`.
 

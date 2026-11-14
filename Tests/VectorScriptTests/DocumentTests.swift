@@ -121,6 +121,22 @@ struct DocumentTests {
     }
 
     @Test
+    func `decodes filters`() throws {
+        let single = try element("{ circle: [0, 0, 1], filter: { blur: 2 } }")
+        #expect(single.filter == FilterList([.blur(2)]))
+        let list = try element("{ circle: [0, 0, 1], filter: [{ dropShadow: { offset: [1, 2], blur: 3, color: '#0008' } }, { grayscale: 0.5 }, { hueRotate: -30 }] }")
+        #expect(list.filter?.filters.count == 3)
+        #expect(list.filter?.filters[0] == .dropShadow(offset: Point(x: 1, y: 2), blur: 3, color: Color(red: 0, green: 0, blue: 0, alpha: 136.0 / 255)))
+        #expect(elementFailure("{ circle: [0, 0, 1], filter: { blur: -1 } }") == "elements[0].filter.blur: a blur radius cannot be negative")
+        #expect(elementFailure("{ circle: [0, 0, 1], filter: { grayscale: 2 } }") == "elements[0].filter.grayscale: grayscale takes 0...1")
+        #expect(elementFailure("{ circle: [0, 0, 1], filter: { glow: 1 } }").hasPrefix("elements[0].filter: a filter needs one of"))
+        #expect(elementFailure("{ circle: [0, 0, 1], filter: { dropShadow: { spread: 1 } } }") == "elements[0].filter.dropShadow: unknown key 'spread'")
+        let resolved = try document(elements: "{ group: [{ circle: [0, 0, 1] }], filter: [{ blur: 1 }, { sepia: 1 }] }").resolved()
+        #expect(resolved.elements[0].filter?.filters.count == 2)
+        #expect(try Document(json: resolved.jsonData()) == resolved)
+    }
+
+    @Test
     func `decodes every blend mode`() throws {
         for mode in BlendMode.allCases {
             #expect(try element("{ circle: [0, 0, 1], blendMode: '\(mode.rawValue)' }").blendMode == mode)

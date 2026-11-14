@@ -42,20 +42,20 @@ extension Document {
             effective.letterSpacing = nil
             effective.fontFile = nil
             effective.lineHeight = nil
-            return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
+            return resolved(element.content, style: effective)
         case .text:
             effective.markerStart = nil
             effective.markerMid = nil
             effective.markerEnd = nil
-            return Element(element.content, style: effective, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
+            return resolved(element.content, style: effective)
         case .image:
             // Images do not use fill or stroke.
-            return Element(element.content, opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
+            return resolved(element.content, style: Style())
         case .group(let children):
             let resolvedChildren = try children.map { child throws(DocumentError) in
                 try resolve(child, inherited: effective, overrides: Style())
             }
-            return Element(.group(resolvedChildren), opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
+            return resolved(.group(resolvedChildren), style: Style())
         case .use(let use):
             guard case .element(let definition) = defs[use.name] else {
                 throw .invalid(path: "", message: "no element named '\(use.name)' in defs")
@@ -65,7 +65,18 @@ extension Document {
             if let at = use.at, at != .zero {
                 child = Element(.group([child]), transform: Transform(matrix: TransformOperation.translate(x: at.x, y: at.y).matrix))
             }
-            return Element(.group([child]), opacity: element.opacity, transform: transform, clip: element.clip, mask: mask, blendMode: element.blendMode)
+            return resolved(.group([child]), style: Style())
+        }
+
+        // The element with new content and style. Element-wide properties (opacity, clip, blend mode, filter) carry
+        // over as they are.
+        func resolved(_ content: Element.Content, style: Style) -> Element {
+            var result = element
+            result.content = content
+            result.style = style
+            result.transform = transform
+            result.mask = mask
+            return result
         }
     }
 
